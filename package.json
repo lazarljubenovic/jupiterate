@@ -1,0 +1,22 @@
+{
+  "name": "jupiteration",
+  "version": "0.0.1",
+  "description": "An tree-shakable iteration library.",
+  "main": "index.js",
+  "repository": "https://github.com/lazarljubenovic/jupiteration",
+  "author": "Lazar Ljubenović <lazar.ljubenovic.1995@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "test": "ts-mocha -p tsconfig.json tests/**/*.spec.ts"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.5",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.12.7",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2",
+    "ts-mocha": "^6.0.0",
+    "typescript": "^3.7.2"
+  }
+}
