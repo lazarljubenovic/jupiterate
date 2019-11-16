@@ -1,8 +1,35 @@
 import { Operator } from '../core/types'
 import { skip } from './skip'
 
-export function restMap<T> (): Operator<T, [T, any]> {
-  return function (iterable: Iterable<T>) {
+/**
+ * @short
+ * Rest map.
+ *
+ * @categories
+ * operator
+ *
+ * @description
+ * Rest map.
+ *
+ * @since
+ * 0.0.1
+ *
+ * @returns
+ * Operator<T, T[]>
+ *
+ * @example
+ * j.pipe(
+ *   [1, 2, 3, 4],
+ * )
+ * // => [
+ *   [1, [2, 3, 4]],
+ *   [2, [3, 4]],
+ *   [3, [4]],
+ *   [4, []],
+ * ]
+ */
+export function restMap<T> (): Operator<T, any> {
+  return function (iterable: Iterable<T>): Iterable<[T, any]> {
     let i = 1
     const firstIterator = iterable[Symbol.iterator]()
     return {

@@ -1,70 +1,50 @@
 import { Operator } from '../core/types'
 
-export function map<T, V> (mapper: (item: T) => V): Operator<T, V> {
+/**
+ * @short
+ * Transforms each value, *mapping* the iterable to a new one.
+ *
+ * @categories
+ * operator
+ *
+ * @description
+ * Yields all values in the same order as the input, but each value is transformed according to the given function.
+ *
+ * This is similar to `Array#map`.
+ *
+ * @since
+ * 0.0.1
+ *
+ * @parameter
+ * mapper
+ * (t: T, i: number) => U
+ *
+ * @returns
+ * Operator<T, U>
+ *
+ * @example
+ * j.pipe(
+ *   [1, 2, 3],
+ *   j.map(t => t * 10),
+ * )
+ * // => [10, 20, 30]
+ *
+ * @example
+ * j.pipe(
+ *   'jupiterate',
+ *   j.map((c, i) => {
+ *     return i % 2 == 0
+ *       ? c.toUpperCase()
+ *       : c.toLowerCase()
+ *   },
+ * )
+ * // => 'JuPiTeRaTe'
+ */
+export function map<T, V> (mapper: (t: T, i: number) => V): Operator<T, V> {
   return function* (iterable: Iterable<T>): IterableIterator<V> {
+    let index = 0
     for (const item of iterable) {
-      yield mapper(item)
+      yield mapper(item, index++)
     }
   }
-}
-
-
-/**
- * Input:
- * - a
- * - b
- * - c
- * - d
- *
- * Output:
- * - [ a, [b, c, d] ]
- * - [ b, [c, d] ]
- * - [ c, [d] ]
- * - [ d, [] ]
- */
-
-
-/**
- * Input:
- * - a
- * - b
- * - c
- * - d
- *
- *
- * Output, withRepeating: false, count: 2, orderImportant: false
- * - [a, b]   1 1 0 0
- * - [a, c]   1 0 1 0
- * - [a, d]   1 0 0 1
- * - [b, c]   0 1 1 0
- * - [b, d]   0 1 0 1
- * - [c, d]   0 0 1 1
- *
- * Output, withRepeating: true, count: 2, orderImportant: false
- * - [a, a]
- * - [a, b]
- * - [a, c]
- * - [a, d]
- * - [b, b]
- * - [b, c]
- * - [b, d]
- * - [c, c]
- * - [c, d]
- * - [d, d]
- *
- * - sa ponavljanjem
- * - bez
- *
- * - count
- *
- * - redosled vazan
- * - nije
- *
- *
- */
-
-interface Options {
-  withRepeating: boolean
-  count: number
-  orderImportant: boolean
 }
