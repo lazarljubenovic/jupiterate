@@ -1,10 +1,66 @@
 import { j } from '../src'
 import * as chai from 'chai'
 import { qqq } from '../src/utils'
+import { AssertFalse, AssertTrue, IsExact } from 'conditional-type-checks'
 
 const isNumber = (x: unknown): x is number => typeof x == 'number'
+const stringToNumber = (x: string): number => 0
+const numberToString = (x: number): string => ''
+const booleanToNumber = (x: boolean): number => 0
+const booleanToString = (x: boolean): string => ''
+const stringToBoolean = (x: string): boolean => true
+const numberToBoolean = (x: number): boolean => true
 
 describe(`Operators`, () => {
+
+  describe(`inherits types correctly`, () => {
+
+    const input: number[] = []
+
+    it(`works with no operators`, () => {
+      const result = j.pipe(input)
+      type Test1 = AssertTrue<IsExact<typeof result, Iterable<number>>>
+      type Test2 = AssertFalse<IsExact<typeof result, Iterable<string>>>
+    })
+
+    it(`works with one operator`, () => {
+      const result = j.pipe(input, j.map(numberToString))
+      type Test1 = AssertTrue<IsExact<typeof result, Iterable<string>>>
+    })
+
+    it(`works with two operators`, () => {
+      const result = j.pipe(input, j.map(numberToString), j.map(stringToBoolean))
+      type Test1 = AssertTrue<IsExact<typeof result, Iterable<boolean>>>
+    })
+
+    it(`works with 10 operators`, () => {
+      const result = j.pipe(input,
+        j.map(numberToString),
+        j.map(stringToNumber),
+        j.map(numberToBoolean),
+        j.map(booleanToNumber),
+        j.map(numberToBoolean),
+        j.map(booleanToString),
+        j.map(stringToNumber),
+        j.map(numberToBoolean),
+        j.map(booleanToNumber),
+        j.map(numberToBoolean),
+      )
+      type Test1 = AssertTrue<IsExact<typeof result, Iterable<boolean>>>
+    })
+
+    it(`works with one operator as array`, () => {
+      const result = j.pipe(input, [j.map(numberToString)])
+      type Test1 = AssertTrue<IsExact<typeof result, Iterable<string>>>
+      type Test2 = AssertFalse<IsExact<typeof result, Iterable<number>>>
+    })
+
+    it(`works with two operators as array`, () => {
+      const result = j.pipe(input, [j.map(numberToString), j.map(stringToBoolean)])
+      type Test1 = AssertTrue<IsExact<typeof result, Iterable<boolean>>>
+    })
+
+  })
 
   describe(`map`, () => {
 
@@ -228,7 +284,7 @@ describe(`Operators`, () => {
 
   })
 
-  describe(`sortedUnque`, () => {
+  describe(`sortedUnique`, () => {
 
     it(`works`, () => {
       const input = [1, 1, 1, 4, 4, 5, 5, 6, 7, 8, 8, 9, 9, 9]
@@ -383,7 +439,7 @@ describe(`Operators`, () => {
         ['d', 'c'],
         ['d', 'd'],
       ]
-      const actual = j.pipe(input, j.pairs({orderImportant: true, withRepetition: true}))
+      const actual = j.pipe(input, j.pairs({ orderImportant: true, withRepetition: true }))
       chai.assert.deepEqual([...actual], expected)
     })
 

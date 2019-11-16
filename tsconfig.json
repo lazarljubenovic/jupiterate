@@ -1,4 +1,6 @@
 {
+  "exclude": ["tests", "dst"],
+  "include": ["src"],
   "compilerOptions": {
     "target": "esnext",
     "module": "commonjs",
@@ -6,6 +8,8 @@
     "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true
+    "noEmitOnError": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true
   }
 }

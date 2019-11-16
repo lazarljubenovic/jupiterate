@@ -1,71 +1,43 @@
-import { Operator } from '../core/types'
+import { Operator as Op } from '../core/types'
+import { zip as staticZip, zipStrict as staticZipStrict } from '../static/zip'
+import { It, Un } from '../utils/types'
 
-export function zip<T> (): Operator<T, [T]>
-export function zip<T, A> (otherIterable1: Iterable<A>): Operator<T, [T | undefined, A | undefined]>
-export function zip<T, A, B> (otherIterable1: Iterable<A>, otherIterable2: Iterable<B>): Operator<T, [T | undefined, A | undefined, B | undefined]>
-export function zip<T, A, B, C> (otherIterable1: Iterable<A>, otherIterable2: Iterable<B>, otherIterable3: Iterable<C>): Operator<T, [T | undefined, A | undefined, B | undefined, C | undefined]>
-export function zip<T, A, B, C, D> (otherIterable1: Iterable<A>, otherIterable2: Iterable<B>, otherIterable3: Iterable<C>, otherIterable4: Iterable<D>): Operator<T, [T | undefined, A | undefined, B | undefined, C | undefined, D | undefined]>
-export function zip<T> (...otherIterables: Array<Iterable<any>>): Operator<T, Array<any>> {
-  return function (iterable: Iterable<T>): Iterable<Array<any>> {
+
+export function zip<T> (): Op<T, [T]>
+export function zip<T, A> (itA: It<A>): Op<T, [Un<T>, Un<A>]>
+export function zip<T, A, B> (itA: It<A>, itB: It<B>): Op<T, [Un<T>, Un<A>, Un<B>]>
+export function zip<T, A, B, C> (itA: It<A>, itB: It<B>, itC: It<C>): Op<T, [Un<T>, Un<A>, Un<B>, Un<C>]>
+export function zip<T, A, B, C, D> (itA: It<A>, itB: It<B>, itC: It<C>, itD: It<D>): Op<T, [Un<T>, Un<A>, Un<B>, Un<C>, Un<D>]>
+export function zip<T, A, B, C, D, E> (itA: It<A>, itB: It<B>, itC: It<C>, itD: It<D>, itE: It<E>): Op<T, [Un<T>, Un<A>, Un<B>, Un<C>, Un<D>, Un<E>]>
+export function zip<T, A, B, C, D, E, F> (itA: It<A>, itB: It<B>, itC: It<C>, itD: It<D>, itE: It<E>, itF: It<F>): Op<T, [Un<T>, Un<A>, Un<B>, Un<C>, Un<D>, Un<E>, Un<F>]>
+export function zip<T, A, B, C, D, E, F, G> (itA: It<A>, itB: It<B>, itC: It<C>, itD: It<D>, itE: It<E>, itF: It<F>, itG: It<G>): Op<T, [Un<T>, Un<A>, Un<B>, Un<C>, Un<D>, Un<E>, Un<F>, Un<G>]>
+export function zip<T, A, B, C, D, E, F, G, H> (itA: It<A>, itB: It<B>, itC: It<C>, itD: It<D>, itE: It<E>, itF: It<F>, itG: It<G>, itH: It<H>): Op<T, [Un<T>, Un<A>, Un<B>, Un<C>, Un<D>, Un<E>, Un<F>, Un<G>, Un<H>]>
+export function zip<T, A, B, C, D, E, F, G, H, I> (itA: It<A>, itB: It<B>, itC: It<C>, itD: It<D>, itE: It<E>, itF: It<F>, itG: It<G>, itH: It<H>, itI: It<I>): Op<T, [Un<T>, Un<A>, Un<B>, Un<C>, Un<D>, Un<E>, Un<F>, Un<G>, Un<H>, Un<I>]>
+export function zip<T, A, B, C, D, E, F, G, H, I, J> (itA: It<A>, itB: It<B>, itC: It<C>, itD: It<D>, itE: It<E>, itF: It<F>, itG: It<G>, itH: It<H>, itI: It<I>, itJ: It<J>): Op<T, [Un<T>, Un<A>, Un<B>, Un<C>, Un<D>, Un<E>, Un<F>, Un<G>, Un<H>, Un<I>, Un<J>]>
+export function zip (...otherIterables: Array<It<unknown>>): Op<unknown, unknown>
+export function zip (...otherIterables: Array<It<unknown>>): Op<unknown, Array<unknown>> {
+  return function (iterable: It<unknown>): It<Array<unknown>> {
     const iterables = [iterable, ...otherIterables]
-    const iterators = iterables.map(iterable => iterable[Symbol.iterator]())
-    return {
-      [Symbol.iterator] (): Iterator<Array<any>> {
-        return {
-          next (): IteratorResult<Array<any>> {
-            const results = iterators.map(iterator => iterator.next())
-            const areAllDone = results.every(result => result.done)
-            if (areAllDone) {
-              return { done: true, value: undefined }
-            } else {
-              return { done: false, value: results.map(result => result.value) }
-            }
-          },
-        }
-      },
-    }
+    return staticZip(...iterables)
   }
 }
 
-function throwError () {
-  throw new Error(`All iterables given to zipStrict must be of the same length.`)
-}
 
-export function zipStrict<T> (): Operator<T, [T]>
-export function zipStrict<T, A> (otherIterable1: Iterable<A>): Operator<T, [T, A]>
-export function zipStrict<T, A, B> (otherIterable1: Iterable<A>, otherIterable2: Iterable<B>): Operator<T, [T, A, B]>
-export function zipStrict<T, A, B, C> (otherIterable1: Iterable<A>, otherIterable2: Iterable<B>, otherIterable3: Iterable<C>): Operator<T, [T, A, B, C]>
-export function zipStrict<T, A, B, C, D> (otherIterable1: Iterable<A>, otherIterable2: Iterable<B>, otherIterable3: Iterable<C>, otherIterable4: Iterable<D>): Operator<T, [T, A, B, C, D]>
-export function zipStrict<T> (...otherIterables: Array<Iterable<any>>): Operator<T, any> {
-  return function (iterable: Iterable<T>): Iterable<Array<any>> {
+export function zipStrict<T> (): Op<T, [T]>
+export function zipStrict<T, A> (itA: It<A>): Op<T, [T, A]>
+export function zipStrict<T, A, B> (itA: It<A>, itB: It<B>): Op<T, [T, A, B]>
+export function zipStrict<T, A, B, C> (itA: It<A>, itB: It<B>, itC: It<C>): Op<T, [T, A, B, C]>
+export function zipStrict<T, A, B, C, D> (itA: It<A>, itB: It<B>, itC: It<C>, itD: It<D>): Op<T, [T, A, B, C, D]>
+export function zipStrict<T, A, B, C, D, E> (itA: It<A>, itB: It<B>, itC: It<C>, itD: It<D>, itE: It<E>): Op<T, [T, A, B, C, D, E]>
+export function zipStrict<T, A, B, C, D, E, F> (itA: It<A>, itB: It<B>, itC: It<C>, itD: It<D>, itE: It<E>, itF: It<F>): Op<T, [T, A, B, C, D, E, F]>
+export function zipStrict<T, A, B, C, D, E, F, G> (itA: It<A>, itB: It<B>, itC: It<C>, itD: It<D>, itE: It<E>, itF: It<F>, itG: It<G>): Op<T, [T, A, B, C, D, E, F, G]>
+export function zipStrict<T, A, B, C, D, E, F, G, H> (itA: It<A>, itB: It<B>, itC: It<C>, itD: It<D>, itE: It<E>, itF: It<F>, itG: It<G>, itH: It<H>): Op<T, [T, A, B, C, D, E, F, G, H]>
+export function zipStrict<T, A, B, C, D, E, F, G, H, I> (itA: It<A>, itB: It<B>, itC: It<C>, itD: It<D>, itE: It<E>, itF: It<F>, itG: It<G>, itH: It<H>, itI: It<I>): Op<T, [T, A, B, C, D, E, F, G, H, I]>
+export function zipStrict<T, A, B, C, D, E, F, G, H, I, J> (itA: It<A>, itB: It<B>, itC: It<C>, itD: It<D>, itE: It<E>, itF: It<F>, itG: It<G>, itH: It<H>, itI: It<I>, itJ: It<J>): Op<T, [T, A, B, C, D, E, F, G, H, I, J]>
+export function zipStrict (...otherIterables: Array<It<unknown>>): Op<unknown, unknown>
+export function zipStrict (...otherIterables: Array<It<unknown>>): Op<unknown, unknown> {
+  return function (iterable: It<unknown>): It<Array<unknown>> {
     const iterables = [iterable, ...otherIterables]
-    const iterators = iterables.map(iterable => iterable[Symbol.iterator]())
-    return {
-      [Symbol.iterator] (): Iterator<Array<any>> {
-        return {
-          next (): IteratorResult<Array<any>> {
-            let hadOneNotDone = false
-            let hadOneDone = false
-            const values: Array<any> = []
-            for (const iterator of iterators) {
-              const result = iterator.next()
-              if (result.done) {
-                if (hadOneNotDone) throwError()
-                hadOneDone = true
-              } else {
-                if (hadOneDone) throwError()
-                hadOneNotDone = true
-                values.push(result.value)
-              }
-            }
-            if (hadOneDone) {
-              return { done: true, value: undefined }
-            } else {
-              return { done: false, value: values }
-            }
-          },
-        }
-      },
-    }
+    return staticZipStrict(...iterables)
   }
 }
