@@ -22,7 +22,7 @@ export function pipe<A, B, C, D, E, F, G, R> (it: Iterable<A>, opA: Op<A, B>, op
 export function pipe<A, B, C, D, E, F, G, H, R> (it: Iterable<A>, opA: Op<A, B>, opB: Op<B, C>, opC: Op<C, D>, opD: Op<D, E>, opE: Op<E, F>, opF: Op<F, G>, opG: Op<G, H>, e: Ender<H, R>): R
 export function pipe<A, B, C, D, E, F, G, H, I, R> (it: Iterable<A>, opA: Op<A, B>, opB: Op<B, C>, opC: Op<C, D>, opD: Op<D, E>, opE: Op<E, F>, opF: Op<F, G>, opG: Op<G, H>, opH: Op<H, I>, e: Ender<I, R>): R
 export function pipe<A, B, C, D, E, F, G, H, I, J, R> (it: Iterable<A>, opA: Op<A, B>, opB: Op<B, C>, opC: Op<C, D>, opD: Op<D, E>, opE: Op<E, F>, opF: Op<F, G>, opG: Op<G, H>, opH: Op<H, R>, opI: Op<I, J>, e: Ender<J, R>): R
-export function pipe<R> (it: Iterable<R>): Iterable<R>
+export function pipe<R> (it: Iterable<R>, ops: []): Iterable<R>
 export function pipe<A, R> (it: Iterable<A>, ops: [Op<A, R>]): Iterable<R>
 export function pipe<A, B, R> (it: Iterable<A>, ops: [Op<A, B>, Op<B, R>]): Iterable<R>
 export function pipe<A, B, C, R> (it: Iterable<A>, ops: [Op<A, B>, Op<B, C>, Op<C, R>]): Iterable<R>
