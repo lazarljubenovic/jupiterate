@@ -1,7 +1,7 @@
 export { map } from './map'
 export { filter } from './filter'
 export { takeFirst } from './take-first'
-export { skip } from './skip'
+export { skip, skip1, skip2, skip3 } from './skip'
 export { takeWhile } from './take-while'
 export { skipUntil } from './skip-until'
 export { restMap } from './rest-map'

@@ -1,2 +1,2 @@
-export function* empty (): Iterable<unknown> {
+export function* empty<T = unknown> (): Iterable<T> {
 }

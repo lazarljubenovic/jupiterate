@@ -3,6 +3,7 @@
   "include": ["src"],
   "compilerOptions": {
     "target": "esnext",
+    "lib": [],
     "module": "commonjs",
     "outDir": "./dst",
     "rootDir": "./src",

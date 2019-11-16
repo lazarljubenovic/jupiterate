@@ -1,12 +1,22 @@
 import { empty } from './empty'
 
-export function intersection (...iterables: Array<Iterable<unknown>>): Iterable<unknown> {
-  if (iterables.length == 0) return empty()
-  const result = new Set<unknown>()
-  for (const iterable of iterables) {
+export function intersection<T> (...iterables: Array<Iterable<T>>): Iterable<T> {
+  if (iterables.length == 0) return empty<T>()
+  const inAllIterablesUntilNow = new Set<T>(iterables[0])
+
+  for (const iterable of iterables.slice(1)) {
+    const survivors = new Set<T>()
     for (const item of iterable) {
-      result.add(item)
+      if (inAllIterablesUntilNow.has(item)) {
+        survivors.add(item)
+      }
+    }
+    for (const item of inAllIterablesUntilNow) {
+      if (!survivors.has(item)) {
+        inAllIterablesUntilNow.delete(item)
+      }
     }
   }
-  return result
+
+  return inAllIterablesUntilNow
 }

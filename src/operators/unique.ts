@@ -1,6 +1,7 @@
 import { Eq, Operator, Unary } from '../core/types'
 import { compareBy, identity, qqq } from '../utils'
 
+// TODO: eq is not used, fix this.
 export function uniqueWith<T> (eq: Eq<T>): Operator<T, T> {
   return function* (iterable: Iterable<T>): Iterable<T> {
     const prevItems = new Set<T>()
