@@ -1,4 +1,5 @@
 export * from './core'
 export * from './operators'
 import * as g from './generators'
-export { g }
+import * as e from './enders'
+export { g, e }

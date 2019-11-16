@@ -1,0 +1,7 @@
+export { find } from './find'
+export { findIndex } from './find-index'
+export { last } from './last'
+export { nth } from './nth'
+export { some } from './some'
+export { every } from './every'
+export { partition } from './partition'
