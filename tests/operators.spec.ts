@@ -60,6 +60,16 @@ describe(`Operators`, () => {
       type Test1 = AssertTrue<IsExact<typeof result, Iterable<boolean>>>
     })
 
+    it(`works with an ender only`, () => {
+      const result = j.pipe(input, j.e.find(x => x == 1))
+      type Test = AssertTrue<IsExact<typeof result, number | undefined>>
+    })
+
+    it(`works with an operator and an ender`, () => {
+      const result = j.pipe(input, j.map(numberToString), j.e.last())
+      type Test = AssertTrue<IsExact<typeof result, string | undefined>>
+    })
+
   })
 
   describe(`map`, () => {

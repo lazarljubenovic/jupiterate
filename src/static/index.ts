@@ -1,2 +1,7 @@
 export { join } from './join'
 export { just } from './just'
+export { zip, zipStrict } from './zip'
+export { empty } from './empty'
+export { intersection } from './intersection'
+export { size } from './size'
+export { areDisjoint } from './are-disjoint'

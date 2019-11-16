@@ -33,6 +33,16 @@ export function pipe<A, B, C, D, E, F, G, R> (it: Iterable<A>, ops: [Op<A, B>, O
 export function pipe<A, B, C, D, E, F, G, H, R> (it: Iterable<A>, ops: [Op<A, B>, Op<B, C>, Op<C, D>, Op<D, E>, Op<E, F>, Op<F, G>, Op<G, H>, Op<H, R>]): Iterable<R>
 export function pipe<A, B, C, D, E, F, G, H, I, R> (it: Iterable<A>, ops: [Op<A, B>, Op<B, C>, Op<C, D>, Op<D, E>, Op<E, F>, Op<F, G>, Op<G, H>, Op<H, I>, Op<I, R>]): Iterable<R>
 export function pipe<A, B, C, D, E, F, G, H, I, J, R> (it: Iterable<A>, ops: [Op<A, B>, Op<B, C>, Op<C, D>, Op<D, E>, Op<E, F>, Op<F, G>, Op<G, H>, Op<H, R>, Op<I, J>, Op<J, R>]): Iterable<R>
+export function pipe<A, R> (it: Iterable<A>, ops: [Ender<A, R>]): R
+export function pipe<A, B, R> (it: Iterable<A>, ops: [Op<A, B>, Ender<B, R>]): R
+export function pipe<A, B, C, R> (it: Iterable<A>, ops: [Op<A, B>, Op<B, C>, Ender<C, R>]): R
+export function pipe<A, B, C, D, R> (it: Iterable<A>, ops: [Op<A, B>, Op<B, C>, Op<C, D>, Ender<D, R>]): R
+export function pipe<A, B, C, D, E, R> (it: Iterable<A>, ops: [Op<A, B>, Op<B, C>, Op<C, D>, Op<D, E>, Ender<E, R>]): R
+export function pipe<A, B, C, D, E, F, R> (it: Iterable<A>, ops: [Op<A, B>, Op<B, C>, Op<C, D>, Op<D, E>, Op<E, F>, Ender<F, R>]): R
+export function pipe<A, B, C, D, E, F, G, R> (it: Iterable<A>, ops: [Op<A, B>, Op<B, C>, Op<C, D>, Op<D, E>, Op<E, F>, Op<F, G>, Ender<G, R>]): R
+export function pipe<A, B, C, D, E, F, G, H, R> (it: Iterable<A>, ops: [Op<A, B>, Op<B, C>, Op<C, D>, Op<D, E>, Op<E, F>, Op<F, G>, Op<G, H>, Ender<H, R>]): R
+export function pipe<A, B, C, D, E, F, G, H, I, R> (it: Iterable<A>, ops: [Op<A, B>, Op<B, C>, Op<C, D>, Op<D, E>, Op<E, F>, Op<F, G>, Op<G, H>, Op<H, I>, Ender<I, R>]): R
+export function pipe<A, B, C, D, E, F, G, H, I, J, R> (it: Iterable<A>, ops: [Op<A, B>, Op<B, C>, Op<C, D>, Op<D, E>, Op<E, F>, Op<F, G>, Op<G, H>, Op<H, R>, Op<I, J>, Ender<J, R>]): R
 export function pipe (
   iterable: Iterable<any>,
   car?: Op<any, any> | Iterable<Op<any, any>>,

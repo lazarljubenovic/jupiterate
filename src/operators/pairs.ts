@@ -5,7 +5,7 @@ export interface PairOptions {
   orderImportant?: boolean
 }
 
-function* _pairs<T> (iterable: Iterable<T>, { orderImportant, withRepetition }: PairOptions = {}): Iterable<[T, T]> {
+export function* _pairs<T> (iterable: Iterable<T>, { orderImportant, withRepetition }: PairOptions = {}): Iterable<[T, T]> {
   const arr = Array.from(iterable)
   if (orderImportant && !withRepetition) {
     for (let i = 0; i < arr.length; i++) {
@@ -24,7 +24,7 @@ function* _pairs<T> (iterable: Iterable<T>, { orderImportant, withRepetition }: 
   }
 }
 
-export function pairs<T> (options: PairOptions): Operator<T, [T, T]> {
+export function pairs<T> (options: PairOptions = {}): Operator<T, [T, T]> {
   return function (iterable: Iterable<T>): Iterable<[T, T]> {
     return _pairs(iterable, options)
   }

@@ -12,6 +12,6 @@ export { slice } from './slice'
 export { uniqueWith, uniqueBy, unique } from './unique'
 export { sortedUniqueBy, sortedUnique } from './sorted-unique'
 export { zip, zipStrict } from './zip'
-export { pairs } from './pairs'
+export { pairs, _pairs } from './pairs' // TODO: remove later, testing something
 export { tap } from './tap'
 export { flatMap } from './flat-map'
