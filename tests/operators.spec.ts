@@ -298,7 +298,7 @@ describe(`Operators`, () => {
 
     it(`works`, () => {
       const input = [1, 1, 1, 4, 4, 5, 5, 6, 7, 8, 8, 9, 9, 9]
-      const actual = j.pipe(input, j.sortedUnique())
+      const actual = j.pipe(input, j.sortUnique())
       const expected = [1, 4, 5, 6, 7, 8, 9]
       chai.assert.sameOrderedMembers([...actual], expected)
     })

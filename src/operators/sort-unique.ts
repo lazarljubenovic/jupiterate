@@ -1,7 +1,7 @@
 import { Operator, Unary } from '../core/types'
 import { identity } from '../utils'
 
-export function sortedUniqueBy<T, U> (map: Unary<T, U>): Operator<T, T> {
+export function sortUniqueBy<T, U> (map: Unary<T, U>): Operator<T, T> {
   return function* (iterable: Iterable<T>): Iterable<T> {
     let prevItemMapped: U | undefined
     for (const item of iterable) {
@@ -16,8 +16,8 @@ export function sortedUniqueBy<T, U> (map: Unary<T, U>): Operator<T, T> {
   }
 }
 
-const _sortedUnique = sortedUniqueBy(identity)
+const _sortedUnique = sortUniqueBy(identity)
 
-export function sortedUnique<T> (): Operator<T, T> {
+export function sortUnique<T> (): Operator<T, T> {
   return _sortedUnique
 }
