@@ -34,7 +34,8 @@ describe(`Operators`, () => {
     })
 
     it(`works with 10 operators`, () => {
-      const result = j.pipe(input,
+      const result = j.pipe(
+        input,
         j.map(numberToString),
         j.map(stringToNumber),
         j.map(numberToBoolean),
@@ -72,14 +73,77 @@ describe(`Operators`, () => {
 
   })
 
-  describe(`map`, () => {
+  describe(`differenceUsing`, () => {
 
-    it(`maps all values`, () => {
-      const input = [1, 2, 3]
-      const actual = j.pipe(input,
-        j.map(x => x + 1),
-      )
-      const expected = [2, 3, 4]
+    it(`works`, () => {
+      const a = [2, 5, 7, 12, 9, 99]
+      const b = [3, 5, 2, 9, 10, 12, 9, 0, 1]
+      const actual = j.pipe(a, j.differenceUsing(b, qqq))
+      const expected = [7, 99]
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+    it(`works when the first argument is an empty iterable`, () => {
+      const a: number[] = []
+      const b = [1]
+      const actual = j.pipe(a, j.differenceUsing(b, qqq))
+      const expected: number[] = []
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+    it(`works when the second argument is an empty iterable`, () => {
+      const a = [1, 2, 3]
+      const b: number[] = []
+      const actual = j.pipe(a, j.differenceUsing(b, qqq))
+      const expected = [1, 2, 3]
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+    it(`@example 1`, () => {
+      const a = [1, 2, 3, 4, 5]
+      const b = [4, 2, 6]
+      const actual = j.pipe(a, j.differenceUsing(b, qqq))
+      const expected = [1, 3, 5]
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+    it(`@example 2`, () => {
+      const a = [300, 301, 302, 303, 304, 305, 306, 307]
+      const b = [1, 2]
+      const actual = j.pipe(a, j.differenceUsing(b, (t, u) => t % 3 == u))
+      const expected = [300, 303, 306]
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+  })
+
+  describe(`differenceBy`, () => {
+
+    it(`@example 1`, () => {
+      const a = [1, 2, 3, 4, 5]
+      const b = [4, 2, 6]
+      const actual = j.pipe(a, j.differenceBy(b, t => t))
+      const expected = [1, 3, 5]
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+    it(`@example 2`, () => {
+      const a = [300, 301, 302, 303, 304, 305, 306, 307]
+      const b = [1, 2]
+      const actual = j.pipe(a, j.differenceBy(b, t => t % 3))
+      const expected = [300, 303, 306]
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+  })
+
+  describe(`difference`, () => {
+
+    it(`@example 1`, () => {
+      const a = [1, 2, 3, 4, 5]
+      const b = [4, 2, 6]
+      const actual = j.pipe(a, j.difference(b))
+      const expected = [1, 3, 5]
       chai.assert.sameOrderedMembers([...actual], expected)
     })
 
@@ -87,13 +151,46 @@ describe(`Operators`, () => {
 
   describe(`filter`, () => {
 
-    it(`should filter and map`, () => {
+    it(`works and correctly infers the type if used with a guard`, () => {
       const input = [1, 2, null, 3, null, 4]
-      const actual = j.pipe(input,
+      const actual = j.pipe(
+        input,
         j.filter(isNumber),
         j.map(x => x ** 2),
       )
       const expected = [1, 4, 9, 16]
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+    it(`@example 1`, () => {
+      const input = [1, 2, 3, 4, 5]
+      const actual = j.pipe(input, j.filter(x => x % 2 == 0))
+      const expected = [2, 4]
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+    it(`@example 2`, () => {
+      const input = 'abCdEFG'
+      const actual = j.pipe(input, j.filter(x => x.toLowerCase() == x))
+      const expected = 'abd'
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`flatMap`, () => {
+
+  })
+
+  describe(`map`, () => {
+
+    it(`maps all values`, () => {
+      const input = [1, 2, 3]
+      const actual = j.pipe(
+        input,
+        j.map(x => x + 1),
+      )
+      const expected = [2, 3, 4]
       chai.assert.sameOrderedMembers([...actual], expected)
     })
 
@@ -104,7 +201,8 @@ describe(`Operators`, () => {
     it(`should be lazy`, () => {
       const visited: number[] = []
       const input = [-4, -6, -1, 6, -7, -5, 3, 1]
-      const actual = j.pipe(input,
+      const actual = j.pipe(
+        input,
         j.takeWhile(x => {
           visited.push(x)
           return x < 0
@@ -189,18 +287,6 @@ describe(`Operators`, () => {
         chai.assert.isTrue(done, `After "d", done should be true.`)
         chai.assert.isUndefined(value)
       }
-    })
-
-  })
-
-  describe(`differenceWith`, () => {
-
-    it(`works`, () => {
-      const a = [2, 5, 7, 12, 9, 99]
-      const b = [3, 5, 2, 9, 10, 12, 9, 0, 1]
-      const actual = j.pipe(a, j.differenceWith(b, qqq))
-      const expected = [7, 99]
-      chai.assert.sameOrderedMembers([...actual], expected)
     })
 
   })

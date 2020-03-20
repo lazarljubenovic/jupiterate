@@ -5,6 +5,36 @@ const isNumber = (x: unknown): x is number => typeof x == 'number'
 
 describe(`Enders`, () => {
 
+  describe(`contains`, () => {
+
+  })
+
+  describe(`every`, () => {
+
+    it(`returns true when every item satisfies the given condition`, () => {
+      const input = [1, 2, 3]
+      const visited: number[] = []
+      const actual = j.pipe(input, j.e.every(x => {
+        visited.push(x)
+        return x > 0
+      }))
+      chai.assert.isTrue(actual)
+      chai.assert.sameOrderedMembers(visited, [1, 2, 3], `Visited [${visited.join(', ')}] instead of [1, 2, 3].`)
+    })
+
+    it(`returns false when at least one item doesn't satisfy the given condition`, () => {
+      const input = [0, 1, 2, 3]
+      const visited: number[] = []
+      const actual = j.pipe(input, j.e.every(x => {
+        visited.push(x)
+        return x % 2 == 0
+      }))
+      chai.assert.isFalse(actual)
+      chai.assert.sameOrderedMembers(visited, [0, 1], `Visited [${visited.join(', ')}] instead of [0, 1].`)
+    })
+
+  })
+
   describe(`find`, () => {
 
     it(`finds the first matching item`, () => {
@@ -40,6 +70,22 @@ describe(`Enders`, () => {
 
   })
 
+  describe(`forEach`, () => {
+
+  })
+
+  describe(`getSingleOrThrow`, () => {
+
+  })
+
+  describe(`indexOf`, () => {
+
+  })
+
+  describe(`joinAsString`, () => {
+
+  })
+
   describe(`last`, () => {
 
     it(`returns the last item of the iterable`, () => {
@@ -54,6 +100,10 @@ describe(`Enders`, () => {
       const actual = j.pipe(input, j.e.last())
       chai.assert.isUndefined(actual)
     })
+
+  })
+
+  describe(`minMax`, () => {
 
   })
 
@@ -74,6 +124,21 @@ describe(`Enders`, () => {
 
   })
 
+  describe(`partition`, () => {
+
+    it(`returns two iterables`, () => {
+      const input = [1, 2, 3, 'a', 4, 'b', 5, 'c']
+      const [left, right] = j.pipe(input, j.e.partition(isNumber))
+      chai.assert.sameOrderedMembers([...left], [1, 2, 3, 4, 5])
+      chai.assert.sameOrderedMembers([...right], ['a', 'b', 'c'])
+    })
+
+  })
+
+  describe(`size`, () => {
+
+  })
+
   describe(`some`, () => {
 
     it(`returns true when at least one item satisfies the given condition`, () => {
@@ -90,30 +155,11 @@ describe(`Enders`, () => {
 
   })
 
-  describe(`every`, () => {
-
-    it(`returns true when every item satisfies the given condition`, () => {
-      const input = [1, 2, 3]
-      const actual = j.pipe(input, j.e.every(x => x > 0))
-      chai.assert.isTrue(actual)
-    })
-
-    it(`returns false when at least one item doesn't satisfy the given condition`, () => {
-      const input = [1, 2, 3]
-      const actual = j.pipe(input, j.e.every(x => x % 2 == 0))
-      chai.assert.isFalse(actual)
-    })
+  describe(`toArray`, () => {
 
   })
 
-  describe(`partition`, () => {
-
-    it(`returns two iterables`, () => {
-      const input = [1, 2, 3, 'a', 4, 'b', 5, 'c']
-      const [left, right] = j.pipe(input, j.e.partition(isNumber))
-      chai.assert.sameOrderedMembers([...left], [1, 2, 3, 4, 5])
-      chai.assert.sameOrderedMembers([...right], ['a', 'b', 'c'])
-    })
+  describe(`toSet`, () => {
 
   })
 
