@@ -16,7 +16,7 @@ import { Operator } from '../core/types'
  * @since
  * 0.0.1
  *
- * @argument
+ * @parameter
  * predicate
  * (t: T, i: number) => boolean
  * The function applied to each element, used to determine what to do with the value. Respects type guards as well.

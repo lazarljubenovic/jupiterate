@@ -19,7 +19,7 @@ import { Operator } from '../core/types'
  * @sine
  * 0.0.1
  *
- * @argument
+ * @parameter
  * fn
  * (t: T) => Iterable<U>
  *

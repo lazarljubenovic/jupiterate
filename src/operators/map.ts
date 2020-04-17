@@ -15,7 +15,7 @@ import { Operator } from '../core/types'
  * @since
  * 0.0.1
  *
- * @argument
+ * @parameter
  * mapper
  * (t: T, i: number) => U
  *

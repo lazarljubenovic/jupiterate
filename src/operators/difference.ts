@@ -18,12 +18,12 @@ import { compareBy, identity, qqq } from '../utils'
  * @since
  * 0.0.1
  *
- * @argument
+ * @parameter
  * otherIterable
  * Iterable<U>
  * The “second argument” of the difference operator.
  *
- * @argument
+ * @parameter
  * areEqual
  * (t: T, u: U) => boolean
  * The function used to compare yielded values from both iterables to determine their equality.
@@ -79,12 +79,12 @@ export function differenceUsing<T, U = T> (
  * @since
  * 0.0.1
  *
- * @argument
+ * @parameter
  * otherIterable
  * Iterable<U>
  * The “second argument” of the difference operator.
  *
- * @argument
+ * @parameter
  * map
  * (t: T) => any
  * The function used to transform each item before comparing them using strict equality.
@@ -126,7 +126,7 @@ export function differenceBy<T> (otherIterable: Iterable<T>, map: (t: T) => any)
  * @since
  * 0.0.1
  *
- * @argument
+ * @parameter
  * otherIterable
  * Iterable<U>
  * The “second argument” of the difference operator.

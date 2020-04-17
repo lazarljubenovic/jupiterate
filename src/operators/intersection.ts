@@ -18,12 +18,12 @@ import { compareBy, identity, qqq } from '../utils'
  * @since
  * 0.0.1
  *
- * @argument
+ * @parameter
  * otherIterable
  * Iterable<T>
  * The “second argument” of the difference operator.
  *
- * @argument
+ * @parameter
  * areEqual
  * (a: T, b: T) => boolean
  * The function used to compare yielded values from both observables to determine their equality
@@ -82,12 +82,12 @@ export function intersectionUsing<T> (
  * @since
  * 0.0.1
  *
- * @argument
+ * @parameter
  * otherIterable
  * Iterable<T>
  * The “second argument” of the difference operator.
  *
- * @argument
+ * @parameter
  * map
  * (t: T) => any
  * The function used to transform each item before comparing them using strict equality.
@@ -132,7 +132,7 @@ export function intersectionBy<T> (
  * @since
  * 0.0.1
  *
- * @argument
+ * @parameter
  * otherIterable
  * Iterable<T>
  * The “second argument” of the difference operator.

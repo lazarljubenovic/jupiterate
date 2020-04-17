@@ -15,7 +15,7 @@ import { Operator } from '../core/types'
  * @since
  * 0.0.1
  *
- * @argument
+ * @parameter
  * predicate
  * (t: T, i: number) => boolean
  * The function applied to each value until it returns true. The first argument is the value itself; the second one is
