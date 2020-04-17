@@ -67,7 +67,7 @@ export function differenceUsing<T, U = T> (
  * Computes the *difference* with another iterable, guided *by* the provided function to know what to compare.
  *
  * @categories
- * operator trigger
+ * operator accepts-iterable trigger
  *
  * @description
  * Yields values not included in the given iterable, using a custom function to transform the items before comparing
@@ -121,7 +121,7 @@ export function differenceBy<T> (otherIterable: Iterable<T>, map: (t: T) => any)
  * Yields values not included in the given iterable, using strict equality. The order of values is determined by the
  * iterable on which the returned operator is used, ie. the “first argument” (not the argument of this function).
  *
- * This is a specialization of {@link differenceUsing} and of {@link difference}.
+ * This is a specialization of {@link differenceUsing} and of {@link differenceBy}.
  *
  * @since
  * 0.0.1

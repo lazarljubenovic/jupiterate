@@ -10,6 +10,10 @@ function* flatten1<T> (iterable: Iterable<Iterable<T>>): Iterable<T> {
   }
 }
 
+/**
+ * @short
+ *
+ */
 export function flatten<T> (): Operator<Iterable<T>, T>
 export function flatten<T> (depth: 0): Operator<T, T>
 export function flatten<T> (depth: 1): Operator<Iterable<T>, T>
@@ -29,7 +33,7 @@ export function flatten<T> (depth: number = 1): Operator<T, any> {
   return function* (iterable: Iterable<T>): Iterable<any> {
     for (const item of iterable) {
       if (!isIterable(item)) {
-        throw new Error(`Cannot iterate over ${item}.`)
+        throw new TypeError(`Cannot iterate over ${item}.`)
       }
       yield* flatten(depth - 1)(item)
     }

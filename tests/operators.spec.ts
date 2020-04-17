@@ -194,6 +194,24 @@ describe(`Operators`, () => {
       chai.assert.sameOrderedMembers([...actual], expected)
     })
 
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 2, 3],
+        j.map(t => t * 10),
+      )
+      const expected = [10, 20, 30]
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        'jupiteration',
+        j.map((c, i) => i % 2 == 0 ? c.toUpperCase() : c.toLowerCase()),
+      )
+      const expected = 'JuPiTeRaTiOn'
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
   })
 
   describe(`takeWhile`, () => {
@@ -296,7 +314,7 @@ describe(`Operators`, () => {
     it(`works`, () => {
       const a = [1, 2, 3, 4, 5]
       const b = [4, 2, 5, 0, 10, 1]
-      const actual = j.pipe(a, j.intersectionWith(b, qqq))
+      const actual = j.pipe(a, j.intersectionUsing(b, qqq))
       const expected = [1, 2, 4, 5]
       chai.assert.sameOrderedMembers([...actual], expected)
     })
