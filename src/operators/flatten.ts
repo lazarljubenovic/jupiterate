@@ -12,7 +12,47 @@ function* flatten1<T> (iterable: Iterable<Iterable<T>>): Iterable<T> {
 
 /**
  * @short
+ * *Flattens* nested iterables.
  *
+ * @categories
+ * operator
+ *
+ * @description
+ * Yields values from within inner iterables. The iterables are being “unwinded” as many times as the given
+ * depth argument.
+ *
+ * @since
+ * 0.0.1
+ *
+ * @parameter [optional] [default = 1]
+ * depth
+ * number
+ *
+ * @returns
+ * Operator<U, T>
+ *
+ * @example
+ * j.pipe(
+ *   [[1, 2], [3], [4, 5, 6]],
+ *   j.flatten(1),
+ * )
+ * // => [1, 2, 3, 4, 5, 6]
+ *
+ * @example
+ * j.pipe(
+ *   [
+ *     [
+ *       [111, 112],
+ *       [121],
+ *       [131, 132],
+ *     ],
+ *     [
+ *       [211, 212, 213],
+ *     ]
+ *   ],
+ *   j.flatten(1),
+ * )
+ * // => [[111, 112], [121], [131], [211, 212, 213]]
  */
 export function flatten<T> (): Operator<Iterable<T>, T>
 export function flatten<T> (depth: 0): Operator<T, T>
