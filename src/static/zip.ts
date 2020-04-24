@@ -1,6 +1,45 @@
 type It<T> = Iterable<T>
 type Un<T> = T | undefined
 
+/**
+ * @short
+ * Yields tuples of several iterators in parallel, as if *zipping* values together.
+ *
+ * @categories
+ * static
+ *
+ * @description
+ * The first yielded value of all given iterables are yielded as a single tuple from the
+ * resulting iterable. The same happens for the second, third, etc. This happens as long
+ * as at least one iterable has values to yield. `undefined` will be used for missing
+ * values.
+ *
+ * To ensure all iterables are of same size (at runtime), use {@link zipStrict}.
+ *
+ * @since
+ * 0.0.1
+ *
+ * @parameter
+ * ...iterables
+ * Iterable[]
+ * Iterables to zip together.
+ *
+ * @returns
+ * Operator<T, [...U]>
+ *
+ * @example
+ * j.s.zip(
+ *   [1, 2, 3],
+ *   [a, b, c],
+ *   [A, B, C, D],
+ * )
+ * // => [
+ *   [1, a, A],
+ *   [2, b, B],
+ *   [3, c, C],
+ *   [undefined, undefined, D],
+ * ]
+ */
 export function zip (): []
 export function zip<A> (itA: It<A>): It<[Un<A>]>
 export function zip<A, B> (itA: It<A>, itB: It<B>): It<[Un<A>, Un<B>]>

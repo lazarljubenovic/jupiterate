@@ -1,4 +1,4 @@
-import { empty } from './empty'
+import { empty } from '../generators/empty'
 import { join } from './join'
 import { pipe } from '../core'
 import { unique } from '../operators'
