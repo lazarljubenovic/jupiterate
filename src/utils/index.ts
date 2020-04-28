@@ -31,9 +31,9 @@ export function orThrow<T, R extends undefined> (ender: Ender<T, R>): Ender<T, E
   }
 }
 
-export function not<A> (fn: (a: A) => true): (a: A) => false
-export function not<A> (fn: (a: A) => false): (a: A) => true
-export function not<A> (fn: (a: A) => boolean): (a: A) => boolean
+export function not<T extends Array<any>> (fn: (...a: T) => true): (...a: T) => false
+export function not<T extends Array<any>> (fn: (...a: T) => false): (...a: T) => true
+export function not<T extends Array<any>> (fn: (...a: T) => boolean): (...a: T) => boolean
 export function not (fn: (...args: any[]) => boolean): (...args: any[]) => boolean {
   return (...args: any[]) => !fn(...args)
 }

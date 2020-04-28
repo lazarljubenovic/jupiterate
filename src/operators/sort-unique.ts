@@ -16,8 +16,8 @@ export function sortUniqueBy<T, U> (map: Unary<T, U>): Operator<T, T> {
   }
 }
 
-const _sortedUnique = sortUniqueBy(identity)
+const _sortUnique = sortUniqueBy(identity)
 
 export function sortUnique<T> (): Operator<T, T> {
-  return _sortedUnique
+  return _sortUnique
 }
