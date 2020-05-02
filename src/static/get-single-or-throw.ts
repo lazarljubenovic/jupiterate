@@ -1,4 +1,4 @@
-export function geSingleOrThrow<T> (iterable: Iterable<T>): T {
+export function getSingleOrThrow<T> (iterable: Iterable<T>): T {
   let theOnlyItem: T | undefined = undefined
   for (const item of iterable) {
     if (theOnlyItem != null) {
