@@ -20,27 +20,27 @@ export function max (): Ender<number, number> {
 export function extremeBy<T> (compare: (a: number, b: number) => boolean) {
   return function (map: Unary<T, number>): Ender<T, T> {
     return function (iterable: Iterable<T>): T {
-      let min: T | undefined
-      let mappedMin: number | undefined
+      let extreme: T | undefined
+      let mappedExtreme: number | undefined
       for (const item of iterable) {
         const mappedItem = map(item)
-        if (mappedMin == null || compare(mappedItem, mappedMin)) {
-          min = item
-          mappedMin = mappedItem
+        if (mappedExtreme == null || compare(mappedItem, mappedExtreme)) {
+          extreme = item
+          mappedExtreme = mappedItem
         }
       }
-      if (min == null) {
-        throw new Error(`Cannot do minBy on an empty iterable.`)
+      if (extreme == null) {
+        throw new Error(`Cannot do minBy or maxBy on an empty iterable.`)
       }
-      return min
+      return extreme
     }
   }
 }
 
-// export function minBy<T> (map: Unary<T, number>): Ender<T, T> {
-//   return extremeBy(lt)(map)
-// }
-//
-// export function maxBy<T> (map: Unary<T, number>): Ender<T, T> {
-//   return extremeBy(gt)(map)
-// }
+export function minBy<T> (map: Unary<T, number>): Ender<T, T> {
+  return extremeBy<T>(lt)(map)
+}
+
+export function maxBy<T> (map: Unary<T, number>): Ender<T, T> {
+  return extremeBy<T>(gt)(map)
+}
