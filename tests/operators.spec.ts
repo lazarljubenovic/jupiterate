@@ -1,5 +1,5 @@
-import { j } from '../src'
 import * as chai from 'chai'
+import * as j from '../src'
 import { qqq } from '../src/utils'
 import { AssertFalse, AssertTrue, IsExact } from 'conditional-type-checks'
 

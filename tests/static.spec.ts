@@ -1,5 +1,5 @@
 import * as chai from 'chai'
-import { j } from '../src'
+import * as j from '../src'
 
 describe(`Static`, () => {
 

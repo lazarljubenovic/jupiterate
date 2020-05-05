@@ -1,5 +1,5 @@
-import { j } from '../src'
 import * as chai from 'chai'
+import * as j from '../src'
 
 const isNumber = (x: unknown): x is number => typeof x == 'number'
 
