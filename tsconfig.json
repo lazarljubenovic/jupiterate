@@ -3,7 +3,6 @@
   "include": ["src"],
   "compilerOptions": {
     "target": "esnext",
-    "lib": [],
     "module": "commonjs",
     "outDir": "./dst",
     "rootDir": "./src",
@@ -11,6 +10,7 @@
     "esModuleInterop": true,
     "noEmitOnError": true,
     "forceConsistentCasingInFileNames": true,
-    "declaration": true
+    "declaration": true,
+    "moduleResolution": "Node"
   }
 }
