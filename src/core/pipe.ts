@@ -1,6 +1,6 @@
 import { Ender, Operator as Op } from './types'
 import { isIterable } from '../utils'
-import { compose } from './index'
+import { compose } from './compose'
 
 export function pipe<A, R> (it: Iterable<A>, e: Ender<A, R>): R
 export function pipe<A, B, R> (it: Iterable<A>, opA: Op<A, B>, e: Ender<B, R>): R
