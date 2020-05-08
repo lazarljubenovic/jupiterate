@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dst/es6",
+    "module": "ESNext",
+    "target": "ES2015"
+  }
+}

@@ -235,9 +235,37 @@ describe(`Operators`, () => {
 
   })
 
-  describe(`first`, () => {
+  describe(`takeFirst`, () => {
 
-    it(`should work`, () => {
+    it(`gives empty iterable when taking first 0 from a non-empty iterable`, () => {
+      const input = [1, 2, 3, 4, 5]
+      const actual = j.pipe(input, j.takeFirst(0))
+      chai.assert.sameOrderedMembers([...actual], [])
+    })
+
+    it(`gives empty iterable when taking first 0 from an empty iterable`, () => {
+      const actual = j.pipe([], j.takeFirst(0))
+      chai.assert.sameOrderedMembers([...actual], [])
+    })
+
+    it(`gives max possible iterable when trying to take more than available`, () => {
+      const input = [1, 2, 3, 4]
+      const actual = j.pipe(input, j.takeFirst(20))
+      chai.assert.sameOrderedMembers([...actual], [1, 2, 3, 4])
+    })
+
+    it(`gives empty iterable when trying to take a few but the source is empty`, () => {
+      const actual = j.pipe([], j.takeFirst(3))
+      chai.assert.sameOrderedMembers([...actual], [])
+    })
+
+    it(`takes a single value`, () => {
+      const input = [1, 2, 3]
+      const actual = j.pipe(input, j.takeFirst(1))
+      chai.assert.sameOrderedMembers([...actual], [1])
+    })
+
+    it(`works for several`, () => {
       const input = [1, 2, 3, 4, 5, 6, 7]
       const actual = j.pipe(input, j.takeFirst(3))
       const expected = [1, 2, 3]
@@ -362,6 +390,159 @@ describe(`Operators`, () => {
 
   })
 
+  describe(`pairs`, () => {
+
+    it(`works when order is not important, and there's no repetition`, () => {
+      const input = ['a', 'b', 'c', 'd']
+      const expected = [
+        ['a', 'b'],
+        ['a', 'c'],
+        ['a', 'd'],
+        ['b', 'c'],
+        ['b', 'd'],
+        ['c', 'd'],
+      ]
+      const actual = j.pipe(input, j.pairs({ orderImportant: false, withRepetition: false }))
+      chai.assert.deepEqual([...actual], expected)
+    })
+
+    it(`works, when order not important, and there's repetition`, () => {
+      const input = ['a', 'b', 'c', 'd']
+      const expected = [
+        ['a', 'a'],
+        ['a', 'b'],
+        ['a', 'c'],
+        ['a', 'd'],
+        ['b', 'b'],
+        ['b', 'c'],
+        ['b', 'd'],
+        ['c', 'c'],
+        ['c', 'd'],
+        ['d', 'd'],
+      ]
+      const actual = j.pipe(input, j.pairs({ orderImportant: false, withRepetition: true }))
+      chai.assert.deepEqual([...actual], expected)
+    })
+
+    it(`works, when order is important, and there's no repetition`, () => {
+      const input = ['a', 'b', 'c', 'd']
+      const expected = [
+        ['a', 'b'],
+        ['a', 'c'],
+        ['a', 'd'],
+        ['b', 'a'],
+        ['b', 'c'],
+        ['b', 'd'],
+        ['c', 'a'],
+        ['c', 'b'],
+        ['c', 'd'],
+        ['d', 'a'],
+        ['d', 'b'],
+        ['d', 'c'],
+      ]
+      const actual = j.pipe(input, j.pairs({ orderImportant: true, withRepetition: false }))
+      chai.assert.deepEqual([...actual], expected)
+    })
+
+    it(`works, when order is important, and there's repetition`, () => {
+      const input = ['a', 'b', 'c', 'd']
+      const expected = [
+        ['a', 'a'],
+        ['a', 'b'],
+        ['a', 'c'],
+        ['a', 'd'],
+        ['b', 'a'],
+        ['b', 'b'],
+        ['b', 'c'],
+        ['b', 'd'],
+        ['c', 'a'],
+        ['c', 'b'],
+        ['c', 'c'],
+        ['c', 'd'],
+        ['d', 'a'],
+        ['d', 'b'],
+        ['d', 'c'],
+        ['d', 'd'],
+      ]
+      const actual = j.pipe(input, j.pairs({ orderImportant: true, withRepetition: true }))
+      chai.assert.deepEqual([...actual], expected)
+    })
+
+  })
+
+  describe(`pairwise`, () => {
+
+    it(`gives empty iterable for a given empty iterable`, () => {
+      const actual = j.pipe([], j.pairwise())
+      chai.assert.deepEqual([...actual], [])
+    })
+
+    it(`gives empty iterable for a given iterable of size 1`, () => {
+      const actual = j.pipe(['a'], j.pairwise())
+      chai.assert.deepEqual([...actual], [])
+    })
+
+    it(`gives a single pair for a given iterable of size 2`, () => {
+      const actual = j.pipe(['a', 'b'], j.pairwise())
+      chai.assert.deepEqual([...actual], [['a', 'b']])
+    })
+
+    it(`works for 3 items`, () => {
+      const actual = j.pipe(['a', 'b', 'c'], j.pairwise())
+      chai.assert.deepEqual([...actual], [['a', 'b'], ['b', 'c']])
+    })
+
+    it(`works for several items`, () => {
+      const actual = j.pipe(['a', 'b', 'c', 'd', 'e', 'f'], j.pairwise())
+      const expected = [
+        ['a', 'b'],
+        ['b', 'c'],
+        ['c', 'd'],
+        ['d', 'e'],
+        ['e', 'f'],
+      ]
+      chai.assert.deepEqual([...actual], expected)
+    })
+
+  })
+
+  describe(`pairwiseCyclic`, () => {
+
+    it(`gives empty iterable for a given empty iterable`, () => {
+      const actual = j.pipe([], j.pairwiseCyclic())
+      chai.assert.deepEqual([...actual], [])
+    })
+
+    it(`gives a pair of the same item for given iterable of size 1`, () => {
+      const actual = j.pipe(['a'], j.pairwiseCyclic())
+      chai.assert.deepEqual([...actual], [['a', 'a']])
+    })
+
+    it(`gives both pairs for a given iterable of size 2`, () => {
+      const actual = j.pipe(['a', 'b'], j.pairwiseCyclic())
+      chai.assert.deepEqual([...actual], [['a', 'b'], ['b', 'a']])
+    })
+
+    it(`works for 3 items`, () => {
+      const actual = j.pipe(['a', 'b', 'c'], j.pairwiseCyclic())
+      chai.assert.deepEqual([...actual], [['a', 'b'], ['b', 'c'], ['c', 'a']])
+    })
+
+    it(`works for several items`, () => {
+      const actual = j.pipe(['a', 'b', 'c', 'd', 'e', 'f'], j.pairwiseCyclic())
+      const expected = [
+        ['a', 'b'],
+        ['b', 'c'],
+        ['c', 'd'],
+        ['d', 'e'],
+        ['e', 'f'],
+        ['f', 'a'],
+      ]
+      chai.assert.deepEqual([...actual], expected)
+    })
+
+  })
+
   describe(`slice`, () => {
 
     it(`doesn't do anything without any arguments`, () => {
@@ -475,86 +656,6 @@ describe(`Operators`, () => {
       ] as const
       const getActual = () => [...j.pipe(input, j.zipStrict(...iterables))]
       chai.assert.throws(getActual)
-    })
-
-  })
-
-  describe(`pairs`, () => {
-
-    it(`works when order is not important, and there's no repetition`, () => {
-      const input = ['a', 'b', 'c', 'd']
-      const expected = [
-        ['a', 'b'],
-        ['a', 'c'],
-        ['a', 'd'],
-        ['b', 'c'],
-        ['b', 'd'],
-        ['c', 'd'],
-      ]
-      const actual = j.pipe(input, j.pairs({ orderImportant: false, withRepetition: false }))
-      chai.assert.deepEqual([...actual], expected)
-    })
-
-    it(`works, when order not important, and there's repetition`, () => {
-      const input = ['a', 'b', 'c', 'd']
-      const expected = [
-        ['a', 'a'],
-        ['a', 'b'],
-        ['a', 'c'],
-        ['a', 'd'],
-        ['b', 'b'],
-        ['b', 'c'],
-        ['b', 'd'],
-        ['c', 'c'],
-        ['c', 'd'],
-        ['d', 'd'],
-      ]
-      const actual = j.pipe(input, j.pairs({ orderImportant: false, withRepetition: true }))
-      chai.assert.deepEqual([...actual], expected)
-    })
-
-    it(`works, when order is important, and there's no repetition`, () => {
-      const input = ['a', 'b', 'c', 'd']
-      const expected = [
-        ['a', 'b'],
-        ['a', 'c'],
-        ['a', 'd'],
-        ['b', 'a'],
-        ['b', 'c'],
-        ['b', 'd'],
-        ['c', 'a'],
-        ['c', 'b'],
-        ['c', 'd'],
-        ['d', 'a'],
-        ['d', 'b'],
-        ['d', 'c'],
-      ]
-      const actual = j.pipe(input, j.pairs({ orderImportant: true, withRepetition: false }))
-      chai.assert.deepEqual([...actual], expected)
-    })
-
-    it(`works, when order is important, and there's repetition`, () => {
-      const input = ['a', 'b', 'c', 'd']
-      const expected = [
-        ['a', 'a'],
-        ['a', 'b'],
-        ['a', 'c'],
-        ['a', 'd'],
-        ['b', 'a'],
-        ['b', 'b'],
-        ['b', 'c'],
-        ['b', 'd'],
-        ['c', 'a'],
-        ['c', 'b'],
-        ['c', 'c'],
-        ['c', 'd'],
-        ['d', 'a'],
-        ['d', 'b'],
-        ['d', 'c'],
-        ['d', 'd'],
-      ]
-      const actual = j.pipe(input, j.pairs({ orderImportant: true, withRepetition: true }))
-      chai.assert.deepEqual([...actual], expected)
     })
 
   })

@@ -1,24 +1,40 @@
 import { Operator } from '../core/types'
 import { takeFirst } from './take-first'
 
+const EMPTY = Symbol('EMPTY')
+
 export function pairwise<T> (): Operator<T, [T, T]> {
   return function* (iterable: Iterable<T>): Iterable<[T, T]> {
-    let [prev] = takeFirst<T>(1)(iterable)
+    let prev: T
+    let isFirst = true
     for (const value of iterable) {
-      yield [prev, value]
+      if (!isFirst) {
+        yield [prev!, value]
+      }
       prev = value
+      isFirst = false
     }
   }
 }
 
 export function pairwiseCyclic<T> (): Operator<T, [T, T]> {
   return function* (iterable: Iterable<T>): Iterable<[T, T]> {
-    const [first] = takeFirst<T>(1)(iterable)
-    let prev = first
+    let prev: T
+    let first: T
+    let isFirst = true
+    let isNonZero = false
     for (const value of iterable) {
-      yield [prev, value]
+      isNonZero = true
+      if (!isFirst) {
+        yield [prev!, value]
+      } else {
+        first = value
+      }
       prev = value
+      isFirst = false
     }
-    yield [prev, first]
+    if (isNonZero) {
+      yield [prev!, first!]
+    }
   }
 }
