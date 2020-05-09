@@ -7,6 +7,27 @@ describe(`Enders`, () => {
 
   describe(`contains`, () => {
 
+    it(`returns true when an element exists, no comparison given`, () => {
+      const input = [1, 2, 3, 4]
+      const actual = j.pipe(input, j.e.contains(2))
+      chai.assert.isTrue(actual)
+    })
+
+    it(`returns false when no element exists, no comparison given`, () => {
+      const input = [1, 2, 3, 4]
+      const actual = j.pipe(input, j.e.contains(6))
+      chai.assert.isFalse(actual)
+    })
+
+    it(`returns true when an element exists, using the comparator`, () => {
+      const input = [
+        { id: 1, name: 'foo' },
+        { id: 2, name: 'bar' },
+      ]
+      const actual = j.pipe(input, j.e.contains({ id: 1 }, (a, b) => a.id == b.id))
+      chai.assert.isTrue(actual)
+    })
+
   })
 
   describe(`every`, () => {
@@ -147,7 +168,7 @@ describe(`Enders`, () => {
       chai.assert.isTrue(actual)
     })
 
-    it(`retuens false when no item satisfies the given condition`, () => {
+    it(`returns false when no item satisfies the given condition`, () => {
       const input = [1, 2, 3]
       const actual = j.pipe(input, j.e.some(x => x > 10))
       chai.assert.isFalse(actual)
