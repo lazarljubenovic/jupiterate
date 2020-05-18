@@ -2,23 +2,23 @@ import { Ender } from '../core/types'
 
 /**
  * @short
- * *Find* a value according to some criteria.
+ * *Find* a value according to some criteria, *or throw* if nothing is found.
  *
  * @categories
- * ender
+ * ender or-throw
  *
  * @description
  * Check each value yielded from the iterator against the provided condition.
  * The first value which happens to satisfy the condition is returned. If the
- * iterator completes before reaching such value, `undefined` is returned.
+ * iterator completes before reaching such value, an error is thrown.
  *
  * If the provided condition is a type guard, the value of the result will be
  * scoped accordingly.
  *
- * If you expect to find a value, you can use {@link findOrThrow}. To get
- * index of the value instead the value itself, check out {@link findIndex} or
- * {@link findIndexOrThrow}. To find multiple yielded values, use operator
- * {@link filter}.
+ * If you don't want the ender to throw if no yielded value matches the given
+ * criterion, you can use {@link find}. To get an index of the value instead,
+ * see {@link findIndexOrThrow} or {@link findIndex}. To find multiple yielded
+ * values, use operator {@link filter}.
  *
  * @operator
  * condition
@@ -40,7 +40,7 @@ import { Ender } from '../core/types'
  *   [1, 2, 3, 4],
  *   j.e.find(x => x == 6),
  * )
- * // => undefined
+ * // => Error
  *
  * @example
  * j.pipe(
@@ -49,14 +49,15 @@ import { Ender } from '../core/types'
  * )
  * // => 1
  */
-export function find<T, V extends T> (guard: (t: T, i: number) => t is V): Ender<T, V | undefined>
-export function find<T> (condition: (t: T, i: number) => boolean): Ender<T, T | undefined>
-export function find<T> (condition: (t: T, i: number) => boolean): Ender<T, T | undefined> {
-  return function (iterable: Iterable<T>): T | undefined {
+export function findOrThrow<T, V extends T> (guard: (t: T, i: number) => t is V): Ender<T, V>
+export function findOrThrow<T> (condition: (t: T, i: number) => boolean): Ender<T, T>
+export function findOrThrow<T> (condition: (t: T, i: number) => boolean): Ender<T, T> {
+  return function (iterable: Iterable<T>): T {
     let index = 0
     for (const item of iterable) {
       if (condition(item, index)) return item
       index++
     }
+    throw new Error(`Value not found.`) // TODO: Allow customization of what to throw.
   }
 }

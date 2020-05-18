@@ -2,10 +2,10 @@ import { Ender } from '../core/types'
 
 /**
  * @short
- * *Find index* of a value according to some criteria.
+ * *Find index* of a value, *or throw* if nothing is found.
  *
  * @categories
- * ender index
+ * ender index or-throw
  *
  * @description
  * Check each value yielded from the iterator against the provided condition.
@@ -46,13 +46,13 @@ import { Ender } from '../core/types'
  * )
  * // => 3
  */
-export function findIndex<T> (condition: (t: T, i: number) => boolean): Ender<T, number> {
+export function findIndexOrThrow<T> (condition: (t: T, i: number) => boolean): Ender<T, number> {
   return function (iterable: Iterable<T>): number {
     let index = 0
     for (const item of iterable) {
       if (condition(item, index)) return index
       index++
     }
-    return -1
+    throw new Error(`Element not found.`)
   }
 }

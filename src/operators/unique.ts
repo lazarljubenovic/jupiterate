@@ -1,7 +1,7 @@
 import { Eq, Operator, Unary } from '../core/types'
 import { compareBy, identity, qqq } from '../utils'
 
-// TODO: eq is not used, fix this.
+// TODO: eq is not used, fix this... or just get rid of it? can't think of use-case, just leave uniqueBy
 export function uniqueWith<T> (eq: Eq<T>): Operator<T, T> {
   return function* (iterable: Iterable<T>): Iterable<T> {
     const prevItems = new Set<T>()
