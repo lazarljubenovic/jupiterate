@@ -1,5 +1,15 @@
 import { Operator } from '../core/types'
 
+/**
+ * @short
+ * *Concatenate* iterables to the source.
+ *
+ * @categories
+ * operator accepts-iterables
+ *
+ * @description
+ *
+ */
 export function concat<T> (...otherIterables: Array<Iterable<T>>): Operator<T, T> {
   return function* (iterable: Iterable<T>): Iterable<T> {
     yield* iterable
