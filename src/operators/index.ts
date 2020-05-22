@@ -1,5 +1,6 @@
 export { map } from './map'
 export { filter } from './filter'
+export { filterIndex } from './filter-index'
 export { takeFirst } from './take-first'
 export { skip, skip1, skip2, skip3 } from './skip'
 export { takeWhile } from './take-while'

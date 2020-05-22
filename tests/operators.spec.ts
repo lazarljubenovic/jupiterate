@@ -2,6 +2,7 @@ import * as chai from 'chai'
 import * as j from '../src'
 import { qqq } from '../src/utils'
 import { AssertFalse, AssertTrue, IsExact } from 'conditional-type-checks'
+import { max } from '../src/enders'
 
 const isNumber = (x: unknown): x is number => typeof x == 'number'
 const stringToNumber = (x: string): number => 0
@@ -173,6 +174,20 @@ describe(`Operators`, () => {
       const input = 'abCdEFG'
       const actual = j.pipe(input, j.filter(x => x.toLowerCase() == x))
       const expected = 'abd'
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`filterIndex`, () => {
+
+    it(`works`, () => {
+      const input = [-2, -1, 0, 1, 2]
+      const actual = j.pipe(
+        input,
+        j.filterIndex(x => x > 0)
+      )
+      const expected = [3, 4]
       chai.assert.sameOrderedMembers([...actual], [...expected])
     })
 
