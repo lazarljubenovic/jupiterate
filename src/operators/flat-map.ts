@@ -39,6 +39,20 @@ import { Operator } from '../core/types'
  *   j.flatMap(t => t == '!' ? [] : [t, t, t])
  * )
  * // => 'yyyeeesss   nnnooo'
+ *
+ * @example
+ * j.pipe(
+ *   [1, 2, 3],
+ *   j.flatMap(t => [t - 1, t + 1]),
+ * )
+ * // => [0, 2, 1, 3, 2, 4]
+ *
+ * @example
+ * j.pipe(
+ *   [10, 20],
+ *   j.flatMap(t => [1, 2, t]),
+ * )
+ * // => [1, 2, 10, 1, 2, 20]
  */
 export function flatMap<T, U> (fn: (t: T) => Iterable<U>): Operator<T, U> {
   return function* (iterable: Iterable<T>): Iterable<U> {

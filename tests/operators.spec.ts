@@ -2,7 +2,6 @@ import * as chai from 'chai'
 import * as j from '../src'
 import { qqq } from '../src/utils'
 import { AssertFalse, AssertTrue, IsExact } from 'conditional-type-checks'
-import { max } from '../src/enders'
 
 const isNumber = (x: unknown): x is number => typeof x == 'number'
 const stringToNumber = (x: string): number => 0
@@ -12,7 +11,7 @@ const booleanToString = (x: boolean): string => ''
 const stringToBoolean = (x: string): boolean => true
 const numberToBoolean = (x: number): boolean => true
 
-describe(`Operators`, () => {
+describe(`pipe`, () => {
 
   describe(`inherits types correctly`, () => {
 
@@ -70,6 +69,41 @@ describe(`Operators`, () => {
     it(`works with an operator and an ender`, () => {
       const result = j.pipe(input, j.map(numberToString), j.e.last())
       type Test = AssertTrue<IsExact<typeof result, string | undefined>>
+    })
+
+  })
+
+})
+
+describe(`Operators`, () => {
+
+  describe(`concat`, () => {
+
+    it(`concatenates one array`, () => {
+      const actual = j.pipe(
+        [1, 2],
+        j.concat([3, 4]),
+      )
+      const expected = [1, 2, 3, 4]
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
+    it(`concatenates several arrays`, () => {
+      const actual = j.pipe(
+        [1, 2],
+        j.concat([3, 4], [5, 6], [7, 8]),
+      )
+      const expected = [1, 2, 3, 4, 5, 6, 7, 8]
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
+    it(`concatenates an empty array`, () => {
+      const actual = j.pipe(
+        [1, 2],
+        j.concat([] as number[]),
+      )
+      const expected = [1, 2]
+      chai.assert.sameOrderedMembers([...actual], [...expected])
     })
 
   })
@@ -185,7 +219,7 @@ describe(`Operators`, () => {
       const input = [-2, -1, 0, 1, 2]
       const actual = j.pipe(
         input,
-        j.filterIndex(x => x > 0)
+        j.filterIndex(x => x > 0),
       )
       const expected = [3, 4]
       chai.assert.sameOrderedMembers([...actual], [...expected])
@@ -194,6 +228,70 @@ describe(`Operators`, () => {
   })
 
   describe(`flatMap`, () => {
+
+    it(`works`, () => {
+      const input = [1, 2, 3, 4]
+      const actual = j.pipe(
+        input,
+        j.flatMap(n => [n, n ** 2]),
+      )
+      const expected = [1, 1, 2, 4, 3, 9, 4, 16]
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`flatten`, () => {
+
+    describe(`depth 1`, () => {
+
+      it(`flattens inner arrays`, () => {
+        const input = [
+          [1, 2],
+          [3],
+          [4, 5, 6],
+        ]
+        const actual = j.pipe(
+          input,
+          j.flatten(1),
+        )
+        const expected = [1, 2, 3, 4, 5, 6]
+        chai.assert.sameOrderedMembers([...actual], [...expected])
+      })
+
+      it(`it doesn't flatten depth 2 and forth`, () => {
+        type Input = number | Array<Input>
+        const input: Input = [
+          [
+            [1, 2, 3],
+            4,
+            [5, 6]
+          ],
+          [
+            7,
+            8,
+            [9],
+          ],
+          [
+            [10, 11],
+          ]
+        ]
+        const actual = j.pipe(input, j.flatten(1) as any) as any // TODO: type
+        const expected = [
+          [1, 2, 3],
+          4,
+          [5, 6],
+          7,
+          8,
+          [9],
+          [10, 11],
+        ]
+        chai.assert.sameOrderedMembers([...actual], [...expected])
+      })
+
+    })
+
+    it(`no given depth defaults to depth 1`)
 
   })
 

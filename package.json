@@ -15,7 +15,8 @@
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build": "yarn build:cjs && yarn build:esn && yarn build:es6",
     "test": "ts-mocha -p tsconfig.json tests/**/*.spec.ts",
-    "test:w": "ts-mocha -p tsconfig.json tests/**/*.spec.ts -w --watch-extensions ts"
+    "test:w": "ts-mocha -p tsconfig.json tests/**/*.spec.ts -w --watch-extensions ts",
+    "test:c": "nyc --reporter=html --reporter=text --reporter=text-summary yarn test"
   },
   "devDependencies": {
     "@types/chai": "^4.2.5",
@@ -24,6 +25,7 @@
     "chai": "^4.2.0",
     "conditional-type-checks": "^1.0.4",
     "mocha": "^6.2.2",
+    "nyc": "^15.0.1",
     "ts-mocha": "^6.0.0",
     "typescript": "^3.7.2"
   }
