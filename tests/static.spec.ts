@@ -31,4 +31,27 @@ describe(`Static`, () => {
 
   })
 
+  describe(`getSingleOrThrow`, () => {
+
+    it(`works when iterable has a single item`, () => {
+      const actual = j.s.getSingleOrThrow([1])
+      chai.assert.equal(actual, 1)
+    })
+
+    it(`throws when iterable has no items`, () => {
+      const fn = () => {
+        j.s.getSingleOrThrow([])
+      }
+      chai.assert.throws(fn, `Expected exactly one item, but got zero.`)
+    })
+
+    it(`throws when iterable has more than one item`, () => {
+      const fn = () => {
+        j.s.getSingleOrThrow([1, 2])
+      }
+      chai.assert.throws(fn, `Expected only one item, but found more than one.`)
+    })
+
+  })
+
 })
