@@ -137,7 +137,7 @@ describe(`Enders`, () => {
       chai.assert.equal(actual, expected)
     })
 
-    it(`returns undefined when the iterable doesn't have that many itesm`, () => {
+    it(`returns undefined when the iterable doesn't have that many items`, () => {
       const input = ['a', 'b', 'c']
       const actual = j.pipe(input, j.e.nth(99))
       chai.assert.isUndefined(actual)

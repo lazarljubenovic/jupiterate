@@ -50,3 +50,11 @@ export function nth<T> (n: number): Ender<T, T | undefined> {
     return undefined
   }
 }
+
+export function first<T> (): Ender<T, T | undefined> {
+  return nth(0)
+}
+
+export function second<T> (): Ender<T, T | undefined> {
+  return nth(1)
+}
