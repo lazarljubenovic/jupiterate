@@ -12,6 +12,10 @@ export function qqq<T> (a: T, b: T): boolean {
   return a === b
 }
 
+export function fpqqq<T> (a: T): (b: T) => boolean {
+  return (b: T): boolean => a === b
+}
+
 export function compareBy<T, V> (map: (t: T) => V, eq: (a: V, b: V) => boolean) {
   return (a: T, b: T) => eq(map(a), map(b))
 }
