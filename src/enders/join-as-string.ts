@@ -3,6 +3,7 @@ import { joinWith } from '../static'
 
 export function joinAsString<T> (joiner: string): Ender<T, string> {
   return function (iterable: Iterable<T>): string {
-    return String(joinWith(joiner, iterable))
+    const joined = joinWith(joiner, iterable)
+    return Array.from(joined).join('')
   }
 }

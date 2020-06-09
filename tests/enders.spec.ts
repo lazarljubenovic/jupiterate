@@ -105,6 +105,13 @@ describe(`Enders`, () => {
 
   describe(`joinAsString`, () => {
 
+    it(`works`, () => {
+      const input = [1, 2, 3]
+      const actual = j.pipe(input, j.e.joinAsString('-'))
+      const expected = `1-2-3`
+      chai.assert.equal(actual, expected)
+    })
+
   })
 
   describe(`last`, () => {
