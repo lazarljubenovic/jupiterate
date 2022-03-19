@@ -89,6 +89,18 @@ describe(`Operators`, () => {
       chai.assert.sameDeepOrderedMembers([...actual], [...expected])
     })
 
+    it(`throws when chunk size is not an integer`, () => {
+      chai.assert.throws(() => j.chunk(1.5))
+    })
+
+    it(`throws when chunk size is zero`, () => {
+      chai.assert.throws(() => j.chunk(0))
+    })
+
+    it(`throws when chunk size is less than zero`, () => {
+      chai.assert.throws(() => j.chunk(-1))
+    })
+
   })
 
   describe(`concat`, () => {
@@ -257,6 +269,11 @@ describe(`Operators`, () => {
 
   describe(`flatten`, () => {
 
+    it(`throws when depth is less than zero`, () => {
+      const operation = () => [...j.pipe([[1]], j.flatten(-1))]
+      chai.assert.throws(operation)
+    })
+
     describe(`depth 1`, () => {
 
       it(`flattens inner arrays`, () => {
@@ -300,6 +317,16 @@ describe(`Operators`, () => {
           [10, 11],
         ]
         chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+      })
+
+      it(`throws when one of the inner items is not an iterable`, () => {
+        const input = [
+          [1, 2],
+          3,
+          [4, 5],
+        ] as any
+        const operation = () => [...j.pipe(input, j.flatten(1))]
+        chai.assert.throws(operation)
       })
 
     })
@@ -472,7 +499,7 @@ describe(`Operators`, () => {
 
   })
 
-  describe(`intersectionWith`, () => {
+  describe(`intersectionUsing`, () => {
 
     it(`works`, () => {
       const a = [1, 2, 3, 4, 5]
@@ -480,6 +507,31 @@ describe(`Operators`, () => {
       const actual = j.pipe(a, j.intersectionUsing(b, qqq))
       const expected = [1, 2, 4, 5]
       chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+  })
+
+  describe(`intersectionBy`, () => {
+
+    it(`works`, () => {
+      const t = <T> (t: T) => ({ t })
+      const a = [1, 2, 3, 4, 5].map(t)
+      const b = [4, 2, 5, 0, 10, 1].map(t)
+      const actual = j.pipe(a, j.intersectionBy(b, ({ t }) => t))
+      const expected = [1, 2, 4, 5].map(t)
+      chai.assert.sameDeepOrderedMembers([...actual], expected)
+    })
+
+  })
+
+  describe(`intersection`, () => {
+
+    it(`works`, () => {
+      const a = [1, 2, 3, 4, 5]
+      const b = [4, 2, 5, 0, 10, 1]
+      const actual = j.pipe(a, j.intersection(b))
+      const expected = [1, 2, 4, 5]
+      chai.assert.sameDeepOrderedMembers([...actual], expected)
     })
 
   })
@@ -701,6 +753,12 @@ describe(`Operators`, () => {
       chai.assert.sameOrderedMembers([...actual], expected)
     })
 
+    it(`reports an error when an impossible start-end combination is given`, () => {
+      const input = 'abc'
+      const operation = () => [...j.pipe(input, j.slice(2, 1))]
+      chai.assert.throws(operation)
+    })
+
   })
 
   describe(`unique`, () => {
@@ -791,6 +849,37 @@ describe(`Operators`, () => {
       ] as const
       const getActual = () => [...j.pipe(input, j.zipStrict(...iterables))]
       chai.assert.throws(getActual)
+    })
+
+  })
+
+  describe(`reverse`, () => {
+
+    it(`reverses the iterable`, () => {
+      const input = [1, 2, 3, 4]
+      const actual = j.pipe(input, j.reverse())
+      const expected = [4, 3, 2, 1]
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+  })
+
+  describe(`tap`, () => {
+
+    it(`iterates over every item in the iterator and returns the same items`, () => {
+      const input = [1, 'a', true]
+      const collected: Array<{ element: unknown, index: number }> = []
+      const actual = j.pipe(input, j.tap((element, index) => {
+        collected.push({ element, index })
+      }))
+      const expected = [...input]
+      const expectedCollection: Array<{ element: unknown, index: number }> = [
+        { element: 1, index: 0 },
+        { element: 'a', index: 1 },
+        { element: true, index: 2 },
+      ]
+      chai.assert.deepEqual([...actual], expected)
+      chai.assert.deepEqual(collected, expectedCollection)
     })
 
   })

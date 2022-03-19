@@ -3,7 +3,7 @@ import { Ender } from '../core/types'
 
 /**
  * @short
- * Turn iterable *to array*.
+ * Turn an iterable *to an array*.
  *
  * @categories
  * ender
@@ -29,13 +29,13 @@ export function toArray<T> (): Ender<T, Array<T>> {
 
 /**
  * @short
- * Turn iterable *to readonly array*.
+ * Turn an iterable *to a readonly array*.
  *
  * @categories
  * ender
  *
  * @description
- * Creates an array typed as readonly from the source iterable.
+ * Creates an array from the source iterable, typed as a readonly array.
  *
  * @returns
  * Ender<T, ReadonlyArray<T>>

@@ -1,10 +1,10 @@
-import { empty } from '../generators/empty'
-import { join } from './join'
 import { pipe } from '../core'
 import { unique } from '../operators'
+import { empty } from '../generators'
+import { concat } from './concat'
 
 
-export function union (...iterables: Array<Iterable<unknown>>): Iterable<unknown> {
+export function union<T> (...iterables: Array<Iterable<T>>): Iterable<T> {
   if (iterables.length == 0) return empty()
-  return pipe(join(iterables), unique())
+  return pipe(concat(...iterables), unique())
 }

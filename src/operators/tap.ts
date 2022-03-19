@@ -1,11 +1,13 @@
 import { Operator } from '../core/types'
 
 
-export function tap<T> (fn: (t: T) => void): Operator<T, T> {
+export function tap<T> (fn: (t: T, index: number) => void): Operator<T, T> {
   return function *(iterable: Iterable<T>): Iterable<T> {
+    let index = 0
     for (const item of iterable) {
-      fn(item)
+      fn(item, index)
       yield item
+      index++
     }
   }
 }

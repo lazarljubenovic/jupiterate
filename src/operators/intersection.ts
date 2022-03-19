@@ -12,7 +12,7 @@ import { compareBy, identity, qqq } from '../utils'
  * @description
  * Yields values included in the given iterable, using a custom function for the equality check.
  * The order of values is determined by the iterable on which the returned operator is used,
- * ie. the “first argument” (not the argument of this function).
+ * i.e. the “first argument” (not the argument of this function).
  *
  * This is a generalization of {@link intersectionBy} and {@link intersection}.
  *

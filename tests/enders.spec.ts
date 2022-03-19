@@ -268,13 +268,42 @@ describe(`Enders`, () => {
 
   describe(`forEach`, () => {
 
+    it(`iterates over every item in the iterator`, () => {
+      const input = [1, 'a', true]
+      const collected: Array<{ element: unknown, index: number }> = []
+      j.pipe(input, j.e.forEach((element, index) => {
+        collected.push({ element, index })
+      }))
+      const expected: Array<{ element: unknown, index: number }> = [
+        { element: 1, index: 0 },
+        { element: 'a', index: 1 },
+        { element: true, index: 2 },
+      ]
+      chai.assert.deepEqual(collected, expected)
+    })
+
   })
 
   describe(`getSingleOrThrow`, () => {
 
-  })
+    it(`gets the only item in the iterable`, () => {
+      const input = ['a']
+      const actual = j.pipe(input, j.e.getSingleOrThrow())
+      const expected = 'a'
+      chai.assert.equal(actual, expected)
+    })
 
-  describe(`indexOf`, () => {
+    it(`throws when the iterable is empty`, () => {
+      const input = [] as any[]
+      const operation = () => j.pipe(input, j.e.getSingleOrThrow())
+      chai.assert.throws(operation)
+    })
+
+    it(`throws when the iterable has more than one item`, () => {
+      const input = ['a', 'b', 'c']
+      const operation = () => j.pipe(input, j.e.getSingleOrThrow())
+      chai.assert.throws(operation)
+    })
 
   })
 
@@ -340,7 +369,67 @@ describe(`Enders`, () => {
 
   })
 
-  describe(`minMax`, () => {
+  describe(`min`, () => {
+
+    it(`returns the smallest number`, () => {
+      const input = [2, 1, 0, 3]
+      const actual = j.pipe(input, j.e.min())
+      const expected = 0
+      chai.assert.equal(actual, expected)
+    })
+
+    it(`throws on attempt to find min of an empty iterable`, () => {
+      const operation = () => j.pipe([], j.e.min())
+      chai.assert.throws(operation)
+    })
+
+  })
+
+  describe(`max`, () => {
+
+    it(`returns the largest number`, () => {
+      const input = [2, 1, 0, 3]
+      const actual = j.pipe(input, j.e.max())
+      const expected = 3
+      chai.assert.equal(actual, expected)
+    })
+
+    it(`throws on attempt to find max of an empty iterable`, () => {
+      const operation = () => j.pipe([], j.e.max())
+      chai.assert.throws(operation)
+    })
+
+  })
+
+  describe(`minBy`, () => {
+
+    it(`returns the element with the smallest value of the given function`, () => {
+      const input = ['Q', 'W', 'E', 'R', 'T', 'Y']
+      const actual = j.pipe(input, j.e.minBy(char => char.charCodeAt(0)))
+      const expected = 'E'
+      chai.assert.equal(actual, expected)
+    })
+
+    it(`throws on attempt to find min of an empty iterable`, () => {
+      const operation = () => j.pipe([], j.e.minBy(v => v))
+      chai.assert.throws(operation)
+    })
+
+  })
+
+  describe(`maxBy`, () => {
+
+    it(`returns the element with the largest value of the given function`, () => {
+      const input = ['Q', 'W', 'E', 'R', 'T', 'Y']
+      const actual = j.pipe(input, j.e.maxBy(char => char.charCodeAt(0)))
+      const expected = 'Y'
+      chai.assert.equal(actual, expected)
+    })
+
+    it(`throws on attempt to find max of an empty iterable`, () => {
+      const operation = () => j.pipe([], j.e.maxBy(v => v))
+      chai.assert.throws(operation)
+    })
 
   })
 
@@ -374,6 +463,38 @@ describe(`Enders`, () => {
 
   describe(`size`, () => {
 
+    it(`returns 0 for an empty iterable`, () => {
+      const input = [] as any[]
+      const actual = j.pipe(input, j.e.size())
+      const expected = 0
+      chai.assert.equal(actual, expected)
+    })
+
+    it(`counts the elements`, () => {
+      const input = [true, false, true, true]
+      const actual = j.pipe(input, j.e.size())
+      const expected = 4
+      chai.assert.equal(actual, expected)
+    })
+
+  })
+
+  describe(`sum`, () => {
+
+    it(`returns zero for an empty iterator`, () => {
+      const input = [] as number[]
+      const actual = j.pipe(input, j.e.sum())
+      const expected = 0
+      chai.assert.equal(actual, expected)
+    })
+
+    it(`returns the sum of all yielded values`, () => {
+      const input = [2, 1, 0, 3]
+      const actual = j.pipe(input, j.e.sum())
+      const expected = 6
+      chai.assert.equal(actual, expected)
+    })
+
   })
 
   describe(`some`, () => {
@@ -392,11 +513,68 @@ describe(`Enders`, () => {
 
   })
 
+  describe(`count`, () => {
+
+    it(`counts the elements`, () => {
+      const input = [1, 2, 3]
+      const actual = j.pipe(input, j.e.count())
+      const expected = 3
+      chai.assert.equal(actual, expected)
+    })
+
+    it(`counts zero elements for an empty iterable`, () => {
+      const input = [] as unknown[]
+      const actual = j.pipe(input, j.e.count())
+      const expected = 0
+      chai.assert.equal(actual, expected)
+    })
+
+  })
+
   describe(`toArray`, () => {
+
+    it(`creates an empty array from an empty iterable`, () => {
+      const input = [] as unknown[]
+      const actual = j.pipe(input, j.e.toArray())
+      chai.assert.isArray(actual)
+      chai.assert.lengthOf(actual, 0)
+    })
+
+    it(`creates an array`, () => {
+      const input = [1, 2, 3]
+      const actual = j.pipe(input, j.e.toArray())
+      chai.assert.isArray(actual)
+      chai.assert.sameOrderedMembers(actual, [1, 2, 3])
+    })
+
+  })
+
+  describe(`toReadonlyArray`, () => {
+
+    it(`creates an empty array from an empty iterable`, () => {
+      const input = [] as unknown[]
+      const actual = j.pipe(input, j.e.toReadonlyArray())
+      chai.assert.isArray(actual)
+      chai.assert.lengthOf(actual, 0)
+    })
+
+    it(`creates an array`, () => {
+      const input = [1, 2, 3]
+      const actual = j.pipe(input, j.e.toReadonlyArray())
+      chai.assert.isArray(actual)
+      chai.assert.sameOrderedMembers(actual as any, [1, 2, 3])
+    })
 
   })
 
   describe(`toSet`, () => {
+
+    it(`creates an empty set from an empty iterable`, () => {
+      const input = [] as unknown[]
+      const actual = j.pipe(input, j.e.toSet())
+      chai.assert.instanceOf(actual, Set)
+      chai.assert.equal(actual.size, 0)
+    })
 
   })
 

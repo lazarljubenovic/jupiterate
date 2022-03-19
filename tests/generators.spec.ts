@@ -28,6 +28,16 @@ describe(`Generators`, () => {
 
   })
 
+  describe(`from`, () => {
+
+    it(`works for an array`, () => {
+      const actual = j.pipe(j.g.from([1, 2, 3]))
+      const expected = [1, 2, 3]
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
   describe(`unfold`, () => {
 
     it(`works with a single seed`, () => {

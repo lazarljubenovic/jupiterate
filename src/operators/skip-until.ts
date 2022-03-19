@@ -34,7 +34,7 @@ import { Operator } from '../core/types'
  *
  * @example
  * j.pipe(
- *   "  leading spaces,
+ *   "  leading spaces",
  *   j.skipUntil(v => v != ' '),
  * )
  * // => "leading spaces"

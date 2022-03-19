@@ -1,4 +1,5 @@
 import { Ender } from '../core/types'
+import { size } from '../static'
 
 
 /**
@@ -37,12 +38,6 @@ import { Ender } from '../core/types'
  * )
  * // Stack overflow error
  */
-export function count<T> (): Ender<T, number> {
-  return function (iterable: Iterable<T>): number {
-    let count = 0
-    for (const item of iterable) {
-      count++
-    }
-    return count
-  }
+export function count (): Ender<unknown, number> {
+  return size
 }

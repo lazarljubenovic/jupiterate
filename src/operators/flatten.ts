@@ -3,15 +3,6 @@ import { identity, isIterable } from '../utils'
 
 
 /**
- * A separate function as a very common case.
- */
-function *flatten1<T> (iterable: Iterable<Iterable<T>>): Iterable<T> {
-  for (const item of iterable) {
-    yield *item
-  }
-}
-
-/**
  * @short
  * *Flattens* nested iterables.
  *
@@ -70,9 +61,9 @@ export function flatten<T> (depth: number): Operator<T, any>
 export function flatten<T> (depth: number = 1): Operator<T, any> {
   if (depth < 0) throw new RangeError(`depth must be >= 0`)
   if (depth == 0) return identity
-  if (depth == 1) return flatten1 as any
   return function *(iterable: Iterable<T>): Iterable<any> {
     for (const item of iterable) {
+      console.log(item)
       if (!isIterable(item)) {
         throw new TypeError(`Cannot iterate over ${item}.`)
       }

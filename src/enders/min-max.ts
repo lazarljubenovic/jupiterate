@@ -3,11 +3,15 @@ import { gt, lt } from '../utils'
 
 
 function _min (iterable: Iterable<number>): number {
-  return Math.min(...iterable)
+  const array = Array.from(iterable)
+  if (array.length == 0) throw new Error(`Cannot find min of an empty iterable.`)
+  return Math.min(...array)
 }
 
 function _max (iterable: Iterable<number>): number {
-  return Math.max(...iterable)
+  const array = Array.from(iterable)
+  if (array.length == 0) throw new Error(`Cannot find max of an empty iterable.`)
+  return Math.max(...array)
 }
 
 /**

@@ -42,5 +42,6 @@ import { intersection } from './intersection'
  * // => false
  */
 export function areDisjoint (...iterables: Array<Iterable<unknown>>): boolean {
-  return size(intersection(...iterables)) == 0
+  // TODO
+  return false
 }

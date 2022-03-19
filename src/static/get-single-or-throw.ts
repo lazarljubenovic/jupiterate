@@ -5,9 +5,7 @@ export function getSingleOrThrow<T> (iterable: Iterable<T>): T {
     theOnlyItem = item
     count++
     if (count > 1) {
-      if (theOnlyItem != null) {
-        throw new Error(`Expected only one item, but found more than one.`)
-      }
+      throw new Error(`Expected only one item, but found more than one.`)
     }
   }
   if (count == 0) {
