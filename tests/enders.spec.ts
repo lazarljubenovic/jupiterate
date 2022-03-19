@@ -289,6 +289,40 @@ describe(`Enders`, () => {
 
   })
 
+  describe(`first`, () => {
+
+    it(`returns the first item`, () => {
+      const input = [1, 2, 3]
+      const actual = j.pipe(input, j.e.first())
+      const expected = 1
+      chai.assert.equal(actual, expected)
+    })
+
+    it(`returns undefined when empty iterable`, () => {
+      const input = [] as number[]
+      const actual = j.pipe(input, j.e.first())
+      chai.assert.isUndefined(actual)
+    })
+
+  })
+
+  describe(`firstOrThrow`, () => {
+
+    it(`returns the first item`, () => {
+      const input = [1, 2, 3]
+      const actual = j.pipe(input, j.e.firstOrThrow())
+      const expected = 1
+      chai.assert.equal(actual, expected)
+    })
+
+    it(`returns undefined when empty iterable`, () => {
+      const input = [] as number[]
+      const operation = () => j.pipe(input, j.e.firstOrThrow())
+      chai.assert.throws(operation)
+    })
+
+  })
+
   describe(`last`, () => {
 
     it(`returns the last item of the iterable`, () => {
