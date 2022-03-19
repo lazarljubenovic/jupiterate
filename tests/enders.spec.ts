@@ -74,10 +74,62 @@ describe(`Enders`, () => {
 
   })
 
+  describe(`findOrThrow`, () => {
+
+    it(`returns the value of the first matching item`, () => {
+      const input = ['a', 'b', 'c', 'c', 'd']
+      const actual = j.pipe(input, j.e.findOrThrow(x => x == 'c'))
+      const expected = 'c'
+      chai.assert.equal(actual, expected)
+    })
+
+    it(`throws if no matching item is found`, () => {
+      const input = ['a', 'b', 'c']
+      const operation = () => j.pipe(input, j.e.findOrThrow(x => x == 'g'))
+      chai.assert.throws(operation)
+    })
+
+  })
+
+  describe(`findLast`, () => {
+
+    it(`returns the value of the last matching item`, () => {
+      const input = ['a', 'b', 'c1', 'c2', 'd']
+      const actual = j.pipe(input, j.e.findLast(x => x.startsWith('c')))
+      const expected = 'c2'
+      chai.assert.equal(actual, expected)
+    })
+
+    it(`returns undefined when no matching item is found`, () => {
+      const input = ['a', 'b', 'c']
+      const actual = j.pipe(input, j.e.findLast(x => x == 'g'))
+      const expected = undefined
+      chai.assert.equal(actual, expected)
+    })
+
+  })
+
+  describe(`findLastOrThrow`, () => {
+
+    it(`returns the value of the last matching item`, () => {
+      const input = ['a', 'b', 'c1', 'c2', 'd']
+      const actual = j.pipe(input, j.e.findLastOrThrow(x => x.startsWith('c')))
+      const expected = 'c2'
+      chai.assert.equal(actual, expected)
+    })
+
+    it(`throws when no matching item is found`, () => {
+      const input = ['a', 'b', 'c']
+      const operation = () => j.pipe(input, j.e.findLastOrThrow(x => x == 'g'))
+      chai.assert.throws(operation)
+    })
+
+  })
+
   describe(`findIndex`, () => {
 
     it(`returns the index of the first matching item`, () => {
-      const input = ['a', 'b', 'c', 'd']
+      const input = ['a', 'b', 'c', 'c', 'd']
       const actual = j.pipe(input, j.e.findIndex(x => x == 'c'))
       const expected = 2
       chai.assert.equal(actual, expected)
@@ -88,6 +140,128 @@ describe(`Enders`, () => {
       const actual = j.pipe(input, j.e.findIndex(x => x == 'g'))
       const expected = -1
       chai.assert.equal(actual, expected)
+    })
+
+  })
+
+  describe(`findIndexOrThrow`, () => {
+
+    it(`returns the index of the first matching item`, () => {
+      const input = ['a', 'b', 'c', 'c', 'd']
+      const actual = j.pipe(input, j.e.findIndexOrThrow(x => x == 'c'))
+      const expected = 2
+      chai.assert.equal(actual, expected)
+    })
+
+    it(`returns -1 when no matching item is found`, () => {
+      const input = ['a', 'b', 'c']
+      const operation = () => j.pipe(input, j.e.findIndexOrThrow(x => x == 'g'))
+      chai.assert.throws(operation)
+    })
+
+  })
+
+  describe(`findLastIndex`, () => {
+
+    it(`returns the index of the last matching item`, () => {
+      const input = ['a', 'b', 'c', 'c', 'd']
+      const actual = j.pipe(input, j.e.findLastIndex(x => x == 'c'))
+      const expected = 3
+      chai.assert.equal(actual, expected)
+    })
+
+    it(`returns -1 when no matching item is found`, () => {
+      const input = ['a', 'b', 'c']
+      const actual = j.pipe(input, j.e.findLastIndex(x => x == 'g'))
+      const expected = -1
+      chai.assert.equal(actual, expected)
+    })
+
+  })
+
+  describe(`findLastIndexOrThrow`, () => {
+
+    it(`returns the index of the last matching item`, () => {
+      const input = ['a', 'b', 'c1', 'c2', 'd']
+      const actual = j.pipe(input, j.e.findLastIndexOrThrow(x => x.startsWith('c')))
+      const expected = 3
+      chai.assert.equal(actual, expected)
+    })
+
+    it(`throws when no matching item is found`, () => {
+      const input = ['a', 'b', 'c']
+      const operation = () => j.pipe(input, j.e.findLastIndexOrThrow(x => x == 'g'))
+      chai.assert.throws(operation)
+    })
+
+  })
+
+  describe(`findWithIndex`, () => {
+
+    it(`returns the value and index of the first matching item`, () => {
+      const input = ['a', 'b', 'c1', 'c2', 'd']
+      const actual = j.pipe(input, j.e.findWithIndex(x => x.startsWith('c')))
+      const expected = { value: 'c1', index: 2 }
+      chai.assert.deepEqual(actual, expected)
+    })
+
+    it(`returns null when no matching item is found`, () => {
+      const input = ['a', 'b', 'c']
+      const actual = j.pipe(input, j.e.findWithIndex(x => x == 'g'))
+      const expected = null
+      chai.assert.deepEqual(actual, expected)
+    })
+
+  })
+
+  describe(`findWithIndexOrThrow`, () => {
+
+    it(`returns the value and index of the first matching item`, () => {
+      const input = ['a', 'b', 'c1', 'c2', 'd']
+      const actual = j.pipe(input, j.e.findWithIndexOrThrow(x => x.startsWith('c')))
+      const expected = { value: 'c1', index: 2 }
+      chai.assert.deepEqual(actual, expected)
+    })
+
+    it(`returns -1 when no matching item is found`, () => {
+      const input = ['a', 'b', 'c']
+      const operation = () => j.pipe(input, j.e.findWithIndexOrThrow(x => x == 'g'))
+      chai.assert.throws(operation)
+    })
+
+  })
+
+  describe(`findLastWithIndex`, () => {
+
+    it(`returns the value and index of the last matching item`, () => {
+      const input = ['a', 'b', 'c1', 'c2', 'd']
+      const actual = j.pipe(input, j.e.findLastWithIndex(x => x.startsWith('c')))
+      const expected = { value: 'c2', index: 3 }
+      chai.assert.deepEqual(actual, expected)
+    })
+
+    it(`returns null when no matching item is found`, () => {
+      const input = ['a', 'b', 'c']
+      const actual = j.pipe(input, j.e.findLastWithIndex(x => x == 'g'))
+      const expected = null
+      chai.assert.deepEqual(actual, expected)
+    })
+
+  })
+
+  describe(`findLastWithIndexOrThrow`, () => {
+
+    it(`returns the index of the last matching item`, () => {
+      const input = ['a', 'b', 'c1', 'c2', 'd']
+      const actual = j.pipe(input, j.e.findLastWithIndexOrThrow(x => x.startsWith('c')))
+      const expected = { value: 'c2', index: 3 }
+      chai.assert.deepEqual(actual, expected)
+    })
+
+    it(`throws when no matching item is found`, () => {
+      const input = ['a', 'b', 'c']
+      const operation = () => j.pipe(input, j.e.findLastWithIndexOrThrow(x => x == 'g'))
+      chai.assert.throws(operation)
     })
 
   })

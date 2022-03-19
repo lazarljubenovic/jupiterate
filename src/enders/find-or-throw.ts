@@ -18,8 +18,9 @@ import { Ender } from '../core/types'
  *
  * If you don't want the ender to throw if no yielded value matches the given
  * criterion, you can use {@link find}. To get an index of the value instead,
- * see {@link findIndexOrThrow} or {@link findIndex}. To find multiple yielded
- * values, use operator {@link filter}.
+ * see {@link findIndexOrThrow} or {@link findIndex}. To get the last value
+ * instead, see {@link findLastOrThrow}. To find multiple yielded values, see
+ * the {@link filter} operator.
  *
  * @operator
  * condition
