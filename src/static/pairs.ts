@@ -129,7 +129,10 @@ export interface PairOptions {
  * //   [4, 4],
  * // ]
  */
-export function* pairs<T> (iterable: Iterable<T>, { orderImportant, withRepetition }: PairOptions = {}): Iterable<[T, T]> {
+export function *pairs<T> (
+  iterable: Iterable<T>,
+  { orderImportant, withRepetition }: PairOptions = {},
+): Iterable<[T, T]> {
   const arr = Array.from(iterable)
   if (orderImportant && !withRepetition) {
     for (let i = 0; i < arr.length; i++) {

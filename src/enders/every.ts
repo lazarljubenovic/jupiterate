@@ -1,5 +1,6 @@
 import { Ender } from '../core/types'
 
+
 /**
  * @short
  * Check if *every* value satisfies a condition.

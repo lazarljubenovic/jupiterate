@@ -1,5 +1,6 @@
 import { Ender } from '../core/types'
 
+
 /**
  * @short
  * Get *last* value.

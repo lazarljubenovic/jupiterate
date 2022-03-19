@@ -1,5 +1,6 @@
 import { Ender } from '../core/types'
 
+
 /**
  * @short
  * Check if the given predicate holds for *some* yielded values.

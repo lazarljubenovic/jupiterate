@@ -3,6 +3,7 @@ import * as j from '../src'
 import { qqq } from '../src/utils'
 import { AssertFalse, AssertTrue, IsExact } from 'conditional-type-checks'
 
+
 const isNumber = (x: unknown): x is number => typeof x == 'number'
 const stringToNumber = (x: string): number => 0
 const numberToString = (x: number): string => ''
@@ -76,6 +77,19 @@ describe(`pipe`, () => {
 })
 
 describe(`Operators`, () => {
+
+  describe(`chunk`, () => {
+
+    it(`creates chunks of size 2`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4, 5, 6, 7],
+        j.chunk(2),
+      )
+      const expected = [[1, 2], [3, 4], [5, 6], [7]]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
 
   describe(`concat`, () => {
 
@@ -264,7 +278,7 @@ describe(`Operators`, () => {
           [
             [1, 2, 3],
             4,
-            [5, 6]
+            [5, 6],
           ],
           [
             7,
@@ -273,7 +287,7 @@ describe(`Operators`, () => {
           ],
           [
             [10, 11],
-          ]
+          ],
         ]
         const actual = j.pipe(input, j.flatten(1))
         const expected = [

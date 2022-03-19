@@ -1,6 +1,7 @@
 import { Operator } from '../core/types'
 import { PairOptions, pairs as staticPairs } from '../static/pairs'
 
+
 /**
  * @short
  * @param options

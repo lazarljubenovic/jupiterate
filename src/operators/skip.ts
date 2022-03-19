@@ -1,6 +1,7 @@
 import { compose } from '../core'
 import { skipUntil } from './skip-until'
 
+
 /**
  * @short
  * *Skip* first few elements.

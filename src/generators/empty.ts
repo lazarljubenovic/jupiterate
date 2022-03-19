@@ -15,5 +15,5 @@
  * j.g.empty()
  * // => []
  */
-export function* empty<T> (): Iterable<T> {
+export function *empty<T> (): Iterable<T> {
 }

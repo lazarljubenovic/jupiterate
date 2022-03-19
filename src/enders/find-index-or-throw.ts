@@ -1,5 +1,6 @@
 import { Ender } from '../core/types'
 
+
 /**
  * @short
  * *Find index* of a value, *or throw* if nothing is found.

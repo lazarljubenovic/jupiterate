@@ -1,4 +1,5 @@
-import { empty } from '../generators/empty'
+import { empty } from '../generators'
+
 
 export function intersection<T> (...iterables: Array<Iterable<T>>): Iterable<T> {
   if (iterables.length == 0) return empty<T>()

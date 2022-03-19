@@ -1,5 +1,6 @@
 import { Operator } from '../core/types'
 
+
 /**
  * @short
  * Applies a *filter* and gets *indexes* of matching valuers.
@@ -37,7 +38,7 @@ import { Operator } from '../core/types'
  * // => [0, 1, 3]
  */
 export function filterIndex<T> (predicate: (t: T, i: number) => boolean): Operator<T, number> {
-  return function* (iterable: Iterable<T>): IterableIterator<number> {
+  return function *(iterable: Iterable<T>): IterableIterator<number> {
     let i = 0
     for (const item of iterable) {
       if (predicate(item, i)) {

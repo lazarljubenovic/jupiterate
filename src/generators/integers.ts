@@ -32,7 +32,7 @@
  * j.g.integers(5, 8)
  * // => [5, 6, 7]
  */
-export function* integers (start: number = 0, end: number = Infinity): IterableIterator<number> {
+export function *integers (start: number = 0, end: number = Infinity): IterableIterator<number> {
   let n = start
   while (n < end) {
     yield n++

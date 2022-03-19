@@ -23,6 +23,6 @@
  * j.g.from([1, 2, 3])
  * // => [1, 2, 3]
  */
-export function* from<T> (iterable: Iterable<T>): Iterable<T> {
-  yield* iterable
+export function *from<T> (iterable: Iterable<T>): Iterable<T> {
+  yield *iterable
 }

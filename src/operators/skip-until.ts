@@ -1,5 +1,6 @@
 import { Operator } from '../core/types'
 
+
 /**
  * @short
  * *Skips* first few elements, *until* a matching one is found.
@@ -39,7 +40,7 @@ import { Operator } from '../core/types'
  * // => "leading spaces"
  */
 export function skipUntil<T> (predicate: (t: T, i: number) => boolean): Operator<T, T> {
-  return function* (iterable: Iterable<T>): IterableIterator<T> {
+  return function *(iterable: Iterable<T>): IterableIterator<T> {
     let index = 0
     let isFound = false
     for (const item of iterable) {

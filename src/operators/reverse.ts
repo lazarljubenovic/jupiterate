@@ -1,5 +1,6 @@
 import { Operator } from '../core/types'
 
+
 /**
  * @short
  * *Reverse* the iterable.

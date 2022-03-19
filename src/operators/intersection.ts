@@ -1,6 +1,7 @@
 import { Operator } from '../core/types'
 import { compareBy, identity, qqq } from '../utils'
 
+
 /**
  * @short
  * Compute *intersection* with another iterable, *using* the provided equality operator.
@@ -50,7 +51,7 @@ export function intersectionUsing<T> (
   eq: (a: T, b: T) => boolean,
 ): Operator<T, T> {
   const otherItems: Set<T> = new Set(otherIterable)
-  return function* (iterable: Iterable<T>): Iterable<T> {
+  return function *(iterable: Iterable<T>): Iterable<T> {
     outer: for (const item of iterable) {
       for (const otherItem of otherItems) {
         if (eq(otherItem, item)) {
@@ -111,7 +112,8 @@ export function intersectionUsing<T> (
  */
 export function intersectionBy<T> (
   otherIterable: Iterable<T>,
-  map: (t: T) => any): Operator<T, T> {
+  map: (t: T) => any,
+): Operator<T, T> {
   return intersectionUsing(otherIterable, compareBy(map, qqq))
 }
 

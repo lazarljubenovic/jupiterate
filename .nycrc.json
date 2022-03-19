@@ -1,7 +1,11 @@
 {
-  "extension": [".ts"],
+  "extension": [
+    ".ts"
+  ],
   "check-coverage": true,
-  "include": ["src/**"],
+  "include": [
+    "src/**"
+  ],
   "statements": 100,
   "branches": 100,
   "functions": 100,

@@ -1,6 +1,7 @@
 import { Ender } from '../core/types'
 import { qqq } from '../utils'
 
+
 /**
  * @short
  * Check if iterable *contains* the given value.

@@ -1,5 +1,5 @@
 import { Ender } from '../core/types'
-import { identity } from '../utils'
+
 
 /**
  * @short

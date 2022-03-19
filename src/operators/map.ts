@@ -1,5 +1,6 @@
 import { Operator } from '../core/types'
 
+
 /**
  * @short
  * Transforms each value, *mapping* the iterable to a new one.
@@ -41,7 +42,7 @@ import { Operator } from '../core/types'
  * // => 'JuPiTeRaTe'
  */
 export function map<T, V> (mapper: (t: T, i: number) => V): Operator<T, V> {
-  return function* (iterable: Iterable<T>): IterableIterator<V> {
+  return function *(iterable: Iterable<T>): IterableIterator<V> {
     let index = 0
     for (const item of iterable) {
       yield mapper(item, index++)

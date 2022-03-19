@@ -2,6 +2,7 @@ import { Ender } from '../core/types'
 import { findIndex } from './find-index'
 import { fpqqq } from '../utils'
 
+
 /**
  * @short
  * Get *index of* a value.

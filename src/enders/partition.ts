@@ -2,6 +2,7 @@ import { Ender } from '../core/types'
 import { filter } from '../operators'
 import { not } from '../utils'
 
+
 /**
  * @short
  * Create two *partitions* based on a condition.

@@ -1,6 +1,7 @@
 import { Operator } from '../core/types'
 import { compareBy, identity, qqq } from '../utils'
 
+
 /**
  * @short
  * Computes the *difference* with another iterable, *using* the provided equality operator.
@@ -50,7 +51,7 @@ export function differenceUsing<T, U = T> (
   areEqual: (t: T, u: U) => boolean,
 ): Operator<T, T> {
   const otherItems: Set<U> = new Set(otherIterable)
-  return function* (iterable: Iterable<T>): Iterable<T> {
+  return function *(iterable: Iterable<T>): Iterable<T> {
     outer: for (const item of iterable) {
       for (const otherItem of otherItems) {
         if (areEqual(item, otherItem)) {

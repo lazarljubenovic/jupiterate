@@ -1,6 +1,7 @@
 import { Ender } from '../core/types'
 import { getSingleOrThrow as staticGetSingleOrThrow } from '../static/get-single-or-throw'
 
+
 /**
  * @short
  * *Get* the only *single* value from iterable; *throw* if unexpected size.

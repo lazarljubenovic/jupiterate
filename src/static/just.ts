@@ -1,3 +1,3 @@
-export function* just<T> (item: T): Iterable<T> {
+export function *just<T> (item: T): Iterable<T> {
   yield item
 }

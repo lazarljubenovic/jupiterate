@@ -1,6 +1,7 @@
 import { Ender } from '../core/types'
 import { size as staticSize } from '../static/size'
 
+
 /**
  * @short
  * Get the *size* of an iterable.

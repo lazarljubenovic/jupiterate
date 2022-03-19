@@ -1,6 +1,7 @@
 import { size } from './size'
 import { intersection } from './intersection'
 
+
 /**
  * @short
  * Check if iterables are *disjoint*.
@@ -32,7 +33,7 @@ import { intersection } from './intersection'
  * )
  * // => true
  *
- * @exampl
+ * @example
  * j.s.areDisjoint(
  *   [1, 2, 3],
  *   [3, 4, 5],

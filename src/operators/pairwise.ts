@@ -1,5 +1,5 @@
 import { Operator } from '../core/types'
-import { takeFirst } from './take-first'
+
 
 /**
  * @short
@@ -34,7 +34,7 @@ import { takeFirst } from './take-first'
  * // => []
  */
 export function pairwise<T> (): Operator<T, [T, T]> {
-  return function* (iterable: Iterable<T>): Iterable<[T, T]> {
+  return function *(iterable: Iterable<T>): Iterable<[T, T]> {
     let prev: T
     let isFirst = true
     for (const value of iterable) {
@@ -79,7 +79,7 @@ export function pairwise<T> (): Operator<T, [T, T]> {
  * // => [[1, 1]]
  */
 export function pairwiseCyclic<T> (): Operator<T, [T, T]> {
-  return function* (iterable: Iterable<T>): Iterable<[T, T]> {
+  return function *(iterable: Iterable<T>): Iterable<[T, T]> {
     let prev: T
     let first: T
     let isFirst = true

@@ -1,6 +1,7 @@
 import { Operator } from '../core/types'
 import { skip } from './skip'
 
+
 /**
  * @short
  * Rest map.

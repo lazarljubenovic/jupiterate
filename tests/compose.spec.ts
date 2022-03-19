@@ -1,6 +1,7 @@
 import * as chai from 'chai'
 import * as j from '../src'
 
+
 describe(`compose`, () => {
 
   it(`works with no functions`, () => {

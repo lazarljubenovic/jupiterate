@@ -1,6 +1,7 @@
 import { Ender, Unary } from '../core/types'
 import { gt, lt } from '../utils'
 
+
 function _min (iterable: Iterable<number>): number {
   return Math.min(...iterable)
 }

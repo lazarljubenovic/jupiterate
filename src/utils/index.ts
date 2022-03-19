@@ -1,5 +1,6 @@
 import { Ender } from '../core/types'
 
+
 export function noop () {
   // empty
 }
