@@ -398,6 +398,15 @@ describe(`Operators`, () => {
 
   })
 
+  describe(`skip`, () => {
+    it(`should work`, () => {
+      const input = [1, 2, 3, 4]
+      const actual = j.pipe(input, j.skip(2))
+      const expected = [3, 4]
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+  })
+
   describe(`skipUntil`, () => {
 
     it(`should work`, () => {
@@ -409,13 +418,15 @@ describe(`Operators`, () => {
 
   })
 
-  describe(`skip`, () => {
+  describe(`skipWhile`, () => {
+
     it(`should work`, () => {
-      const input = [1, 2, 3, 4]
-      const actual = j.pipe(input, j.skip(2))
-      const expected = [3, 4]
+      const input = [1, 2, 5, 3, 0, 6, 3, 2, 1]
+      const actual = j.pipe(input, j.skipWhile(x => x > 0))
+      const expected = [0, 6, 3, 2, 1]
       chai.assert.sameOrderedMembers([...actual], expected)
     })
+
   })
 
   describe(`restMap`, () => {
