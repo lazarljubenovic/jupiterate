@@ -400,4 +400,15 @@ describe(`Enders`, () => {
 
   })
 
+  describe(`toObject`, () => {
+
+    it(`works`, () => {
+      const input: Array<readonly [string, number]> = [['a', 1], ['b', 2]]
+      const actual = j.pipe(input, j.e.toObject())
+      const expected = { a: 1, b: 2 }
+      chai.assert.deepEqual(actual, expected)
+    })
+
+  })
+
 })

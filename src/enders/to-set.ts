@@ -9,7 +9,7 @@ import { Ender } from '../core/types'
  * ender
  *
  * @description
- * Creates an array from the source iterable.
+ * Creates a set from the source iterable.
  *
  * @returns
  * Ender<T, Array<T>>
