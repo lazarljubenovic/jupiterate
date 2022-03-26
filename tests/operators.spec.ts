@@ -884,4 +884,33 @@ describe(`Operators`, () => {
 
   })
 
+  describe(`sortWith`, () => {
+
+    it(`works`, () => {
+      const input = [5, 3, 4, 1, 2]
+      const actual = j.pipe(input, j.sortWith((a, b) => a - b))
+      const expected = [1, 2, 3, 4, 5]
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+  })
+
+  describe(`sortBy`, () => {
+
+    it(`works with a function`, () => {
+      const input = [{ x: 1, y: 2 }, { x: 5, y: 3 }, { x: 2, y: 1 }]
+      const actual = j.pipe(input, j.sortBy(item => item.x, 'desc'))
+      const expected = [{ x: 5, y: 3 }, { x: 2, y: 1 }, { x: 1, y: 2 }]
+      chai.assert.sameDeepOrderedMembers([...actual], expected)
+    })
+
+    it(`works with a prop`, () => {
+      const input = [{ x: 1, y: 2 }, { x: 5, y: 3 }, { x: 2, y: 1 }]
+      const actual = j.pipe(input, j.sortBy('y', 'asc'))
+      const expected = [{ x: 2, y: 1 }, { x: 1, y: 2 }, { x: 5, y: 3 }]
+      chai.assert.sameDeepOrderedMembers([...actual], expected)
+    })
+
+  })
+
 })
