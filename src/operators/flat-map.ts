@@ -22,7 +22,7 @@ import { Operator } from '../core/types'
  *
  * @parameter
  * fn
- * (t: T) => Iterable<U>
+ * (t: T, index: number) => Iterable<U>
  *
  * @returns
  * Operator<T, U>
@@ -55,10 +55,11 @@ import { Operator } from '../core/types'
  * )
  * // => [1, 2, 10, 1, 2, 20]
  */
-export function flatMap<T, U> (fn: (t: T) => Iterable<U>): Operator<T, U> {
+export function flatMap<T, U> (fn: (t: T, index: number) => Iterable<U>): Operator<T, U> {
   return function *(iterable: Iterable<T>): Iterable<U> {
+    let index = 0
     for (const item of iterable) {
-      yield *fn(item)
+      yield *fn(item, index++)
     }
   }
 }
