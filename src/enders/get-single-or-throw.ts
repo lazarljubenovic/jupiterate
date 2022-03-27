@@ -1,5 +1,5 @@
 import { Ender } from '../core/types'
-import { getSingleOrThrow as staticGetSingleOrThrow } from '../static/get-single-or-throw'
+import { getSingleOrThrow as staticGetSingleOrThrow, GetSingleOrThrowErrorFactory } from '../static/get-single-or-throw'
 
 
 /**
@@ -12,6 +12,8 @@ import { getSingleOrThrow as staticGetSingleOrThrow } from '../static/get-single
  * @description
  * If the iterable's length is 1, its only yielded value is returned.
  * Otherwise, an Error is thrown.
+ *
+ * To throw custom errors, use the optional parameter.
  *
  * @returns
  * Ender<T, T>
@@ -37,6 +39,8 @@ import { getSingleOrThrow as staticGetSingleOrThrow } from '../static/get-single
  * )
  * // => throws
  */
-export function getSingleOrThrow<T> (): Ender<T, T> {
-  return staticGetSingleOrThrow
+export function getSingleOrThrow<T> (
+  errorFactory?: GetSingleOrThrowErrorFactory,
+): Ender<T, T> {
+  return iterable => staticGetSingleOrThrow(iterable, errorFactory)
 }
