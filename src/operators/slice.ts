@@ -14,7 +14,7 @@ import { Operator } from '../core/types'
  * is applied to.
  *
  * If `start` or `end` are out of range, they will be capped to `0` and the
- * length of an observable. Therefore, to take all values until the end, use
+ * length of an iterable. Therefore, to take all values until the end, use
  * `Infinity` for `end`.
  *
  * If `start` is greater than `end`, the function will throw and the operator.

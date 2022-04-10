@@ -14,7 +14,7 @@ export interface PairOptions {
  * 0.0.1
  *
  * @description
- * Collects yielded values from an iterable into pairs.
+ * Collects yielded values from an iterable into Pairs.
  *
  * By default, two pairs whose values are swapped (eg. [1, 2] and [2, 1]) are
  * considered equivalent, and hence only one is included in the resulting
@@ -33,8 +33,8 @@ export interface PairOptions {
  * @parameter
  * pairOptions.orderImportant
  * boolean
- * Determines if pairs should be treated as ordered pairs or sets.
- * When true, pairs will be repeated in a different order. When false, no two pairs
+ * Determines if Pairs should be treated as ordered Pairs or sets.
+ * When true, Pairs will be repeated in a different order. When false, no two Pairs
  * will have the same items.
  *
  * @parameter
@@ -51,7 +51,7 @@ export interface PairOptions {
  *   withRepetition: false,
  * }
  * const it = [1, 2, 3, 4]
- * j.s.pairs(it, opts)
+ * j.Pairs(it, opts)
  * // => [
  * //   [1, 2],
  * //   [1, 3],
@@ -67,7 +67,7 @@ export interface PairOptions {
  *   withRepetition: true,
  * }
  * const it = [1, 2, 3, 4]
- * j.s.pairs(it, opts)
+ * j.Pairs(it, opts)
  * // => [
  * //   [1, 1],
  * //   [1, 2],
@@ -87,7 +87,7 @@ export interface PairOptions {
  *   withRepetition: false,
  * }
  * const it = [1, 2, 3, 4]
- * j.s.pairs(it, opts)
+ * j.Pairs(it, opts)
  * // => [
  * //   [1, 2],
  * //   [1, 3],
@@ -109,7 +109,7 @@ export interface PairOptions {
  *   withRepetition: true,
  * }
  * const it = [1, 2, 3, 4]
- * j.s.pairs(it, opts)
+ * j.Pairs(it, opts)
  * // => [
  * //   [1, 1],
  * //   [1, 2],
@@ -129,9 +129,9 @@ export interface PairOptions {
  * //   [4, 4],
  * // ]
  */
-export function *pairs<T> (
+export function *Pairs<T> (
   iterable: Iterable<T>,
-  { orderImportant, withRepetition }: PairOptions = {},
+  { orderImportant = false, withRepetition = false }: PairOptions = {},
 ): Iterable<[T, T]> {
   const arr = Array.from(iterable)
   if (orderImportant && !withRepetition) {

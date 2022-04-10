@@ -1,5 +1,5 @@
 import { Operator } from '../core/types'
-import { joinWith as staticJoinWith } from '../static/join-with'
+import { JoinWith as staticJoinWith } from '../static/join-with'
 
 
 /**

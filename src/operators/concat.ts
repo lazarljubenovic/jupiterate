@@ -9,8 +9,8 @@ import { Operator } from '../core/types'
  * operator accepts-iterables
  *
  * @description
- * Prolongs the source iterable by yielding values from provided observables,
- * in order.
+ * Prolongs the source iterable by yielding values from provided iterables,
+ * in the order they're given.
  *
  * @parameter
  * ...otherIterables
@@ -23,14 +23,14 @@ import { Operator } from '../core/types'
  * @example
  * j.pipe(
  *   [1, 2],
- *   j.concat([3, 4]),
+ *   j.Concat([3, 4]),
  * )
  * // => [1, 2, 3, 4]
  *
  * @example
  * j.pipe(
  *   [1],
- *   j.concat([2], [3], [4]),
+ *   j.Concat([2], [3], [4]),
  * )
  * // => [1, 2, 3, 4]
  */

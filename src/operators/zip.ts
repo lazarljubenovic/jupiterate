@@ -1,5 +1,5 @@
 import { Operator as Op } from '../core/types'
-import { zip as staticZip, zipStrict as staticZipStrict } from '../static/zip'
+import { Zip as staticZip, ZipStrict as staticZipStrict } from '../static/zip'
 import { It, Un } from '../utils/types'
 
 
