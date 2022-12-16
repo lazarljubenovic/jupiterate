@@ -1,5 +1,5 @@
 import { Operator } from '../core/types'
-import { PairOptions, pairs as staticPairs } from '../static/pairs'
+import { PairOptions, Pairs as staticPairs } from '../static/pairs'
 
 
 /**

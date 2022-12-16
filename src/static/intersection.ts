@@ -1,8 +1,8 @@
-import { empty } from '../generators'
+import { Empty } from './empty'
 
 
-export function intersection<T> (...iterables: Array<Iterable<T>>): Iterable<T> {
-  if (iterables.length == 0) return empty<T>()
+export function Intersection<T> (...iterables: Array<Iterable<T>>): Iterable<T> {
+  if (iterables.length == 0) return Empty<T>()
   const inAllIterablesUntilNow = new Set<T>(iterables[0])
 
   for (const iterable of iterables.slice(1)) {

@@ -1,7 +1,7 @@
 {
   "name": "jupiterate",
   "version": "0.0.1",
-  "description": "An tree-shakable iteration library.",
+  "description": "A tree-shakable iteration library.",
   "main": "dst/cjs/index.js",
   "module": "dst/es6/index.js",
   "types": "dst/es6/index.d.ts",
@@ -20,13 +20,13 @@
   },
   "devDependencies": {
     "@types/chai": "^4.3.0",
-    "@types/mocha": "^9.1.0",
-    "@types/node": "^17.0.21",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.11.15",
     "chai": "^4.3.6",
     "conditional-type-checks": "^1.0.4",
-    "mocha": "^9.2.2",
+    "mocha": "^10.2.0",
     "nyc": "^15.0.1",
-    "ts-mocha": "^9.0.2",
-    "typescript": "^4.6.2"
+    "ts-mocha": "^10.0.0",
+    "typescript": "4.9.4"
   }
 }

@@ -62,13 +62,13 @@ describe(`pipe`, () => {
       type Test1 = AssertTrue<IsExact<typeof result, Iterable<boolean>>>
     })
 
-    it(`works with an ender only`, () => {
-      const result = j.pipe(input, j.e.find(x => x == 1))
+    it(`works with a finalizer only`, () => {
+      const result = j.pipe(input, j.andFinally((j.Find<number>), x => x == 1))
       type Test = AssertTrue<IsExact<typeof result, number | undefined>>
     })
 
-    it(`works with an operator and an ender`, () => {
-      const result = j.pipe(input, j.map(numberToString), j.e.last())
+    it(`works with an operator and a finalizer`, () => {
+      const result = j.pipe(input, j.map(numberToString), j.andFinally(j.Last))
       type Test = AssertTrue<IsExact<typeof result, string | undefined>>
     })
 
@@ -524,7 +524,7 @@ describe(`Operators`, () => {
 
   })
 
-  describe(`intersection`, () => {
+  describe(`Intersection`, () => {
 
     it(`works`, () => {
       const a = [1, 2, 3, 4, 5]
@@ -560,7 +560,7 @@ describe(`Operators`, () => {
         ],
       ]
       const actual = j.pipe(input, j.flatten(2))
-      const expected = j.g.integers(1, 10)
+      const expected = j.Integers(1, 10)
       chai.assert.sameDeepOrderedMembers([...actual], [...expected])
     })
 
@@ -571,13 +571,13 @@ describe(`Operators`, () => {
     it(`works`, () => {
       const input = [1, [2, 3, [4, 5, [6, 7, [8]]], 9]]
       const actual = j.pipe(input, j.flattenDeep())
-      const expected = j.g.integers(1, 10)
+      const expected = j.Integers(1, 10)
       chai.assert.sameDeepOrderedMembers([...actual], [...expected])
     })
 
   })
 
-  describe(`pairs`, () => {
+  describe(`Pairs`, () => {
 
     it(`works when order is not important, and there's no repetition`, () => {
       const input = ['a', 'b', 'c', 'd']
@@ -652,6 +652,20 @@ describe(`Operators`, () => {
         ['d', 'd'],
       ]
       const actual = j.pipe(input, j.pairs({ orderImportant: true, withRepetition: true }))
+      chai.assert.deepEqual([...actual], expected)
+    })
+
+    it(`chooses “order not important” and “no repetition” when no options are given`, () => {
+      const input = ['a', 'b', 'c']
+      const expected = [
+        ['a', 'b'],
+        ['a', 'c'],
+        ['b', 'a'],
+        ['b', 'c'],
+        ['c', 'a'],
+        ['c', 'b'],
+      ]
+      const actual = j.pipe(input, j.pairs())
       chai.assert.deepEqual([...actual], expected)
     })
 
@@ -790,12 +804,12 @@ describe(`Operators`, () => {
       const iterables = [
         ['a', 'b', 'c'],
         [10, 20, 30],
-        [true, true, true],
+        [true, false, true],
       ] as const
       const actual = j.pipe(input, j.zip(...iterables))
       const expected = [
         [1, 'a', 10, true],
-        [2, 'b', 20, true],
+        [2, 'b', 20, false],
         [3, 'c', 30, true],
       ]
       chai.assert.deepEqual([...actual], [...expected])
@@ -829,12 +843,12 @@ describe(`Operators`, () => {
       const iterables = [
         ['a', 'b', 'c'],
         [10, 20, 30],
-        [true, true, true],
+        [true, false, true],
       ] as const
       const actual = j.pipe(input, j.zipStrict(...iterables))
       const expected = [
         [1, 'a', 10, true],
-        [2, 'b', 20, true],
+        [2, 'b', 20, false],
         [3, 'c', 30, true],
       ]
       chai.assert.deepEqual([...actual], [...expected])
@@ -880,6 +894,24 @@ describe(`Operators`, () => {
       ]
       chai.assert.deepEqual([...actual], expected)
       chai.assert.deepEqual(collected, expectedCollection)
+    })
+
+  })
+
+  describe(`sort`, () => {
+
+    it(`works for ascending order`, () => {
+      const input = [1, 3, 2, 5, 4]
+      const actual = j.pipe(input, j.sort('asc'))
+      const expected = [1, 2, 3, 4, 5]
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+    it(`works for descending order`, () => {
+      const input = [1, 3, 2, 5, 4]
+      const actual = j.pipe(input, j.sort('desc'))
+      const expected = [5, 4, 3, 2, 1]
+      chai.assert.sameOrderedMembers([...actual], expected)
     })
 
   })

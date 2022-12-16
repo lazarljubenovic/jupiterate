@@ -1,5 +1,5 @@
-import { size } from './size'
-import { intersection } from './intersection'
+import { Size } from './size'
+import { Intersection } from './intersection'
 
 
 /**
@@ -12,7 +12,7 @@ import { intersection } from './intersection'
  * @description
  * Returns true if all given iterables are disjoint. Otherwise, returns false.
  *
- * Two sets are disjoint if their intersection is an empty set.
+ * Two sets are disjoint if their Intersection is an empty set.
  *
  * @since
  * 0.0.1
@@ -26,7 +26,7 @@ import { intersection } from './intersection'
  * boolean
  *
  * @example
- * j.s.areDisjoint(
+ * j.s.AreDisjoint(
  *   [1, 2, 3],
  *   [4, 5, 6],
  *   [7, 8, 9],
@@ -34,14 +34,14 @@ import { intersection } from './intersection'
  * // => true
  *
  * @example
- * j.s.areDisjoint(
+ * j.s.AreDisjoint(
  *   [1, 2, 3],
  *   [3, 4, 5],
  *   [5, 6, 7],
  * )
  * // => false
  */
-export function areDisjoint (...iterables: Array<Iterable<unknown>>): boolean {
+export function AreDisjoint (...iterables: Array<Iterable<unknown>>): boolean {
   // TODO
   return false
 }

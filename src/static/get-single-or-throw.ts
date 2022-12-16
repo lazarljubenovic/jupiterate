@@ -13,7 +13,35 @@ const DEFAULT_ERROR_FACTORY = (reason: GetSingleOrThrowErrorReason) => {
   }
 }
 
-export function getSingleOrThrow<T> (
+/**
+ * @short
+ * *Get* the only *single* value from iterable; *throw* if unexpected size.
+ *
+ * @categories
+ * static
+ *
+ * @description
+ * If the iterable's length is 1, its only yielded value is returned.
+ * Otherwise, an Error is thrown.
+ *
+ * To throw custom errors, use the optional parameter.
+ *
+ * @returns
+ * T
+ *
+ * @example
+ * j.GetSingleOrThrow([21])
+ * // => 21
+ *
+ * @example
+ * j.GetSingleOrThrow([])
+ * // => throws
+ *
+ * @example
+ * j.GetSingleOrThrow([1, 2, 3])
+ * // => throws
+ */
+export function GetSingleOrThrow<T> (
   iterable: Iterable<T>,
   errorFactory: GetSingleOrThrowErrorFactory = DEFAULT_ERROR_FACTORY,
 ): T {

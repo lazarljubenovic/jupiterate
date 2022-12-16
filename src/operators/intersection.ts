@@ -4,7 +4,7 @@ import { compareBy, identity, qqq } from '../utils'
 
 /**
  * @short
- * Compute *intersection* with another iterable, *using* the provided equality operator.
+ * Compute *Intersection* with another iterable, *using* the provided equality operator.
  *
  * @categories
  * operator accepts-iterable quality-function trigger
@@ -27,7 +27,7 @@ import { compareBy, identity, qqq } from '../utils'
  * @parameter
  * areEqual
  * (a: T, b: T) => boolean
- * The function used to compare yielded values from both observables to determine their equality
+ * The function used to compare yielded values from both iterables to determine their equality
  *
  * @returns
  * Operator<T, T>
