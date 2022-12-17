@@ -41,13 +41,13 @@ describe(`Generators`, () => {
   describe(`Unfold`, () => {
 
     it(`works with a single seed`, () => {
-      const actual = j.pipe(j.Unfold(x => x * 2, 1), j.takeFirst(8))
+      const actual = j.pipe(j.Unfold(1, x => x * 2), j.takeFirst(8))
       const expected = [1, 2, 4, 8, 16, 32, 64, 128]
       chai.assert.sameOrderedMembers([...actual], expected)
     })
 
     it(`works with two seeds`, () => {
-      const actual = j.pipe(j.Unfold((a, b) => a + b, 1, 1), j.takeFirst(8))
+      const actual = j.pipe(j.Unfold(1, 1, (a, b) => a + b), j.takeFirst(8))
       const expected = [1, 1, 2, 3, 5, 8, 13, 21]
       chai.assert.sameOrderedMembers([...actual], expected)
     })

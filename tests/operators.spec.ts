@@ -386,6 +386,16 @@ describe(`Operators`, () => {
 
   })
 
+  describe(`takeUntil`, () => {
+
+    it(`works`, () => {
+      const input = [1, 2, 3, 2, 3, 2, 1]
+      const actual = j.pipe(input, j.takeUntil(x => x == 3))
+      chai.assert.sameOrderedMembers([...actual], [1, 2])
+    })
+
+  })
+
   describe(`takeFirst`, () => {
 
     it(`gives empty iterable when taking first 0 from a non-empty iterable`, () => {
@@ -577,7 +587,7 @@ describe(`Operators`, () => {
 
   })
 
-  describe(`Pairs`, () => {
+  describe(`pairs`, () => {
 
     it(`works when order is not important, and there's no repetition`, () => {
       const input = ['a', 'b', 'c', 'd']
@@ -656,14 +666,14 @@ describe(`Operators`, () => {
     })
 
     it(`chooses “order not important” and “no repetition” when no options are given`, () => {
-      const input = ['a', 'b', 'c']
+      const input = ['a', 'b', 'c', 'd']
       const expected = [
         ['a', 'b'],
         ['a', 'c'],
-        ['b', 'a'],
+        ['a', 'd'],
         ['b', 'c'],
-        ['c', 'a'],
-        ['c', 'b'],
+        ['b', 'd'],
+        ['c', 'd'],
       ]
       const actual = j.pipe(input, j.pairs())
       chai.assert.deepEqual([...actual], expected)
