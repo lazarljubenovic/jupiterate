@@ -1,5 +1,6 @@
 import * as chai from 'chai'
 import * as j from '../src'
+import exp = require('constants')
 
 
 const isNumber = (x: unknown): x is number => typeof x == 'number'
@@ -753,6 +754,54 @@ describe(`Static`, () => {
       const actual = j.WithoutLast([1, 2, 3, 4])
       const expected = [1, 2, 3]
       chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+  })
+
+  describe(`Reduce`, () => {
+
+    it(`sums up an array of numbers`, () => {
+      const actual = j.Reduce([1, 2, 3, 4], (sum, value) => sum + value)
+      const expected = 10
+      chai.assert.equal(actual, expected)
+    })
+
+    it(`acknowledges the seed`, () => {
+      const actual = j.Reduce([1], (sum, value) => sum + value, 999)
+      const expected = 1000
+      chai.assert.equal(actual, expected)
+    })
+
+    it(`throws when it tries reducing an empty iterable without a given seed`, () => {
+      let input = [] as number[]
+      const operation = () => j.Reduce(input, (sum, value) => sum + value)
+      chai.assert.throws(operation)
+    })
+
+    it(`simply returns the seed when the iterable is empty`, () => {
+      const actual = j.Reduce([], (sum, value) => sum + value, 2103)
+      const expected = 2103
+      chai.assert.equal(actual, expected)
+    })
+
+    it(`passes in the correct index when seed is given`, () => {
+      const indexes = [] as number[]
+      j.Reduce([100, 101, 102], (sum, value, index) => {
+        indexes.push(index)
+        return sum + value
+      }, 0)
+      const expected = [0, 1, 2]
+      chai.assert.sameOrderedMembers(indexes, expected)
+    })
+
+    it(`passes in the correct index when seed is not given`, () => {
+      const indexes = [] as number[]
+      j.Reduce([100, 101, 102], (sum, value, index) => {
+        indexes.push(index)
+        return sum + value
+      })
+      const expected = [1, 2]
+      chai.assert.sameOrderedMembers(indexes, expected)
     })
 
   })
