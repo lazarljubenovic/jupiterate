@@ -466,49 +466,6 @@ describe(`Operators`, () => {
 
   })
 
-  describe(`restMap`, () => {
-
-    it(`should work`, () => {
-      const input = ['a', 'b', 'c', 'd']
-      const actual = j.pipe(input, j.restMap())
-      const iterator = actual[Symbol.iterator]()
-      {
-        const { done, value } = iterator.next()
-        chai.assert.isFalse(done, `Done for "a" should be false.`)
-        chai.assert.equal(value.length, 2)
-        chai.assert.equal(value[0], 'a')
-        chai.assert.sameOrderedMembers([...value[1]], ['b', 'c', 'd'])
-      }
-      {
-        const { done, value } = iterator.next()
-        chai.assert.isFalse(done, `Done for "b" should be false.`)
-        chai.assert.equal(value.length, 2)
-        chai.assert.equal(value[0], 'b')
-        chai.assert.sameOrderedMembers([...value[1]], ['c', 'd'])
-      }
-      {
-        const { done, value } = iterator.next()
-        chai.assert.isFalse(done, `Done for "c" should be false.`)
-        chai.assert.equal(value.length, 2)
-        chai.assert.equal(value[0], 'c')
-        chai.assert.sameOrderedMembers([...value[1]], ['d'])
-      }
-      {
-        const { done, value } = iterator.next()
-        chai.assert.isFalse(done, `Done for "d" should be false.`)
-        chai.assert.equal(value.length, 2)
-        chai.assert.equal(value[0], 'd')
-        chai.assert.sameOrderedMembers([...value[1]], [])
-      }
-      {
-        const { done, value } = iterator.next()
-        chai.assert.isTrue(done, `After "d", done should be true.`)
-        chai.assert.isUndefined(value)
-      }
-    })
-
-  })
-
   describe(`intersectionUsing`, () => {
 
     it(`works`, () => {

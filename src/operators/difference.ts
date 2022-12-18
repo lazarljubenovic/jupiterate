@@ -11,7 +11,7 @@ import { compareBy, identity, qqq } from '../utils'
  *
  * @description
  * Yields values not included in the given iterable, using a custom function for the equality check between items. The
- * order of values is determined by the iterable on which the returned operator is used, ie. the “first argument” (not
+ * order of values is determined by the iterable on which the returned operator is used, i.e. the “first argument” (not
  * the argument of this function).
  *
  * This is a generalization of {@link differenceBy} and {@link difference}.
@@ -51,7 +51,7 @@ export function differenceUsing<T, U = T> (
   areEqual: (t: T, u: U) => boolean,
 ): Operator<T, T> {
   const otherItems: Set<U> = new Set(otherIterable)
-  return function *(iterable: Iterable<T>): Iterable<T> {
+  return function *(iterable: Iterable<T>): IterableIterator<T> {
     outer: for (const item of iterable) {
       for (const otherItem of otherItems) {
         if (areEqual(item, otherItem)) {

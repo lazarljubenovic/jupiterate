@@ -56,7 +56,7 @@ import { Operator } from '../core/types'
  * // => [1, 2, 10, 1, 2, 20]
  */
 export function flatMap<T, U> (fn: (t: T, index: number) => Iterable<U>): Operator<T, U> {
-  return function *(iterable: Iterable<T>): Iterable<U> {
+  return function *(iterable: Iterable<T>): IterableIterator<U> {
     let index = 0
     for (const item of iterable) {
       yield *fn(item, index++)

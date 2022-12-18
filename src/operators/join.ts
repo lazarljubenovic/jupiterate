@@ -32,7 +32,7 @@ import { JoinWith as staticJoinWith } from '../static/join-with'
  * // => [1, 0, 2, 0, 3]
  */
 export function join<T, U> (joiner: U): Operator<T, T | U> {
-  return function (iterable: Iterable<T>): Iterable<T | U> {
+  return function (iterable: Iterable<T>): IterableIterator<T | U> {
     return staticJoinWith(joiner, iterable)
   }
 }

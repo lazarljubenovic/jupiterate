@@ -1,3 +1,5 @@
+import { ItIt } from '../utils/types'
+
 type It<T> = Iterable<T>
 type Opt<T> = T | undefined
 
@@ -47,18 +49,17 @@ type Opt<T> = T | undefined
  *   [undefined, undefined,         D],
  * ]
  */
-export function Zip (): []
-export function Zip<A> (itA: It<A>): It<[Opt<A>]>
-export function Zip<A, B> (itA: It<A>, itB: It<B>): It<[Opt<A>, Opt<B>]>
-export function Zip<A, B, C> (itA: It<A>, itB: It<B>, itC: It<C>): It<[Opt<A>, Opt<B>, Opt<C>]>
-export function Zip<A, B, C, D> (itA: It<A>, itB: It<B>, itC: It<C>, itD: It<D>): It<[Opt<A>, Opt<B>, Opt<C>, Opt<D>]>
+export function Zip<A> (itA: It<A>): ItIt<[Opt<A>]>
+export function Zip<A, B> (itA: It<A>, itB: It<B>): ItIt<[Opt<A>, Opt<B>]>
+export function Zip<A, B, C> (itA: It<A>, itB: It<B>, itC: It<C>): ItIt<[Opt<A>, Opt<B>, Opt<C>]>
+export function Zip<A, B, C, D> (itA: It<A>, itB: It<B>, itC: It<C>, itD: It<D>): ItIt<[Opt<A>, Opt<B>, Opt<C>, Opt<D>]>
 export function Zip<A, B, C, D, E> (
   itA: It<A>,
   itB: It<B>,
   itC: It<C>,
   itD: It<D>,
   itE: It<E>,
-): It<[Opt<A>, Opt<B>, Opt<C>, Opt<D>, Opt<E>]>
+): ItIt<[Opt<A>, Opt<B>, Opt<C>, Opt<D>, Opt<E>]>
 export function Zip<A, B, C, D, E, F> (
   itA: It<A>,
   itB: It<B>,
@@ -66,7 +67,7 @@ export function Zip<A, B, C, D, E, F> (
   itD: It<D>,
   itE: It<E>,
   itF: It<F>,
-): It<[Opt<A>, Opt<B>, Opt<C>, Opt<D>, Opt<E>, Opt<F>]>
+): ItIt<[Opt<A>, Opt<B>, Opt<C>, Opt<D>, Opt<E>, Opt<F>]>
 export function Zip<A, B, C, D, E, F, G> (
   itA: It<A>,
   itB: It<B>,
@@ -75,7 +76,7 @@ export function Zip<A, B, C, D, E, F, G> (
   itE: It<E>,
   itF: It<F>,
   itG: It<G>,
-): It<[Opt<A>, Opt<B>, Opt<C>, Opt<D>, Opt<E>, Opt<F>, Opt<G>]>
+): ItIt<[Opt<A>, Opt<B>, Opt<C>, Opt<D>, Opt<E>, Opt<F>, Opt<G>]>
 export function Zip<A, B, C, D, E, F, G, H> (
   itA: It<A>,
   itB: It<B>,
@@ -85,7 +86,7 @@ export function Zip<A, B, C, D, E, F, G, H> (
   itF: It<F>,
   itG: It<G>,
   itH: It<H>,
-): It<[Opt<A>, Opt<B>, Opt<C>, Opt<D>, Opt<E>, Opt<F>, Opt<G>, Opt<H>]>
+): ItIt<[Opt<A>, Opt<B>, Opt<C>, Opt<D>, Opt<E>, Opt<F>, Opt<G>, Opt<H>]>
 export function Zip<A, B, C, D, E, F, G, H, I> (
   itA: It<A>,
   itB: It<B>,
@@ -96,7 +97,7 @@ export function Zip<A, B, C, D, E, F, G, H, I> (
   itG: It<G>,
   itH: It<H>,
   itI: It<I>,
-): It<[Opt<A>, Opt<B>, Opt<C>, Opt<D>, Opt<E>, Opt<F>, Opt<G>, Opt<H>, Opt<I>]>
+): ItIt<[Opt<A>, Opt<B>, Opt<C>, Opt<D>, Opt<E>, Opt<F>, Opt<G>, Opt<H>, Opt<I>]>
 export function Zip<A, B, C, D, E, F, G, H, I, J> (
   itA: It<A>,
   itB: It<B>,
@@ -108,39 +109,37 @@ export function Zip<A, B, C, D, E, F, G, H, I, J> (
   itH: It<H>,
   itI: It<I>,
   itJ: It<J>,
-): It<[Opt<A>, Opt<B>, Opt<C>, Opt<D>, Opt<E>, Opt<F>, Opt<G>, Opt<H>, Opt<I>, Opt<J>]>
-export function Zip (...iterables: Array<It<unknown>>): It<Array<unknown>>
-export function Zip (...iterables: Array<It<unknown>>): It<Array<unknown>> {
+): ItIt<[Opt<A>, Opt<B>, Opt<C>, Opt<D>, Opt<E>, Opt<F>, Opt<G>, Opt<H>, Opt<I>, Opt<J>]>
+export function Zip (...iterables: Array<It<unknown>>): ItIt<Array<unknown>>
+export function Zip (...iterables: Array<It<unknown>>): ItIt<Array<unknown>> {
   const iterators = iterables.map(iterable => iterable[Symbol.iterator]())
   return {
-    [Symbol.iterator] (): Iterator<Array<any>> {
-      return {
-        next (): IteratorResult<Array<any>> {
-          const results = iterators.map(iterator => iterator.next())
-          const areAllDone = results.every(result => result.done)
-          if (areAllDone) {
-            return { done: true, value: undefined }
-          } else {
-            return { done: false, value: results.map(result => result.value) }
-          }
-        },
+    next (): IteratorResult<Array<any>> {
+      const results = iterators.map(iterator => iterator.next())
+      const areAllDone = results.every(result => result.done)
+      if (areAllDone) {
+        return { done: true, value: undefined }
+      } else {
+        return { done: false, value: results.map(result => result.value) }
       }
+    },
+    [Symbol.iterator] () {
+      return this
     },
   }
 }
 
-export function ZipStrict (): []
-export function ZipStrict<A> (itA: It<A>): It<[A]>
-export function ZipStrict<A, B> (itA: It<A>, itB: It<B>): It<[A, B]>
-export function ZipStrict<A, B, C> (itA: It<A>, itB: It<B>, itC: It<C>): It<[A, B, C]>
-export function ZipStrict<A, B, C, D> (itA: It<A>, itB: It<B>, itC: It<C>, itD: It<D>): It<[A, B, C, D]>
+export function ZipStrict<A> (itA: It<A>): ItIt<[A]>
+export function ZipStrict<A, B> (itA: It<A>, itB: It<B>): ItIt<[A, B]>
+export function ZipStrict<A, B, C> (itA: It<A>, itB: It<B>, itC: It<C>): ItIt<[A, B, C]>
+export function ZipStrict<A, B, C, D> (itA: It<A>, itB: It<B>, itC: It<C>, itD: It<D>): ItIt<[A, B, C, D]>
 export function ZipStrict<A, B, C, D, E> (
   itA: It<A>,
   itB: It<B>,
   itC: It<C>,
   itD: It<D>,
   itE: It<E>,
-): It<[A, B, C, D, E]>
+): ItIt<[A, B, C, D, E]>
 export function ZipStrict<A, B, C, D, E, F> (
   itA: It<A>,
   itB: It<B>,
@@ -148,7 +147,7 @@ export function ZipStrict<A, B, C, D, E, F> (
   itD: It<D>,
   itE: It<E>,
   itF: It<F>,
-): It<[A, B, C, D, E, F]>
+): ItIt<[A, B, C, D, E, F]>
 export function ZipStrict<A, B, C, D, E, F, G> (
   itA: It<A>,
   itB: It<B>,
@@ -157,7 +156,7 @@ export function ZipStrict<A, B, C, D, E, F, G> (
   itE: It<E>,
   itF: It<F>,
   itG: It<G>,
-): It<[A, B, C, D, E, F, G]>
+): ItIt<[A, B, C, D, E, F, G]>
 export function ZipStrict<A, B, C, D, E, F, G, H> (
   itA: It<A>,
   itB: It<B>,
@@ -167,7 +166,7 @@ export function ZipStrict<A, B, C, D, E, F, G, H> (
   itF: It<F>,
   itG: It<G>,
   itH: It<H>,
-): It<[A, B, C, D, E, F, G, H]>
+): ItIt<[A, B, C, D, E, F, G, H]>
 export function ZipStrict<A, B, C, D, E, F, G, H, I> (
   itA: It<A>,
   itB: It<B>,
@@ -178,7 +177,7 @@ export function ZipStrict<A, B, C, D, E, F, G, H, I> (
   itG: It<G>,
   itH: It<H>,
   itI: It<I>,
-): It<[A, B, C, D, E, F, G, H, I]>
+): ItIt<[A, B, C, D, E, F, G, H, I]>
 export function ZipStrict<A, B, C, D, E, F, G, H, I, J> (
   itA: It<A>,
   itB: It<B>,
@@ -190,35 +189,34 @@ export function ZipStrict<A, B, C, D, E, F, G, H, I, J> (
   itH: It<H>,
   itI: It<I>,
   itJ: It<J>,
-): It<[A, B, C, D, E, F, G, H, I, J]>
-export function ZipStrict (...iterables: Array<It<unknown>>): It<Array<unknown>>
-export function ZipStrict (...iterables: Array<It<unknown>>): It<Array<unknown>> {
+): ItIt<[A, B, C, D, E, F, G, H, I, J]>
+export function ZipStrict (...iterables: Array<It<unknown>>): ItIt<Array<unknown>>
+export function ZipStrict (...iterables: Array<It<unknown>>): ItIt<Array<unknown>> {
   const iterators = iterables.map(iterable => iterable[Symbol.iterator]())
   return {
-    [Symbol.iterator] (): Iterator<Array<any>> {
-      return {
-        next (): IteratorResult<Array<any>> {
-          let hadOneNotDone = false
-          let hadOneDone = false
-          const values: Array<any> = []
-          for (const iterator of iterators) {
-            const result = iterator.next()
-            if (result.done) {
-              if (hadOneNotDone) throwError()
-              hadOneDone = true
-            } else {
-              if (hadOneDone) throwError()
-              hadOneNotDone = true
-              values.push(result.value)
-            }
-          }
-          if (hadOneDone) {
-            return { done: true, value: undefined }
-          } else {
-            return { done: false, value: values }
-          }
-        },
+    next (): IteratorResult<Array<any>> {
+      let hadOneNotDone = false
+      let hadOneDone = false
+      const values: Array<any> = []
+      for (const iterator of iterators) {
+        const result = iterator.next()
+        if (result.done) {
+          if (hadOneNotDone) throwError()
+          hadOneDone = true
+        } else {
+          if (hadOneDone) throwError()
+          hadOneNotDone = true
+          values.push(result.value)
+        }
       }
+      if (hadOneDone) {
+        return { done: true, value: undefined }
+      } else {
+        return { done: false, value: values }
+      }
+    },
+    [Symbol.iterator] () {
+      return this
     },
   }
 }

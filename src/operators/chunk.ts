@@ -33,7 +33,7 @@ export function chunk<T> (chunkSize: number): Operator<T, Array<T>> {
   if (!Number.isInteger(chunkSize)) throw new Error(`Chunk size must be an integer.`)
   if (chunkSize < 1) throw new Error(`Chunk size must be at least 1.`)
 
-  return function *(iterable: Iterable<T>): Iterable<Array<T>> {
+  return function *(iterable: Iterable<T>): IterableIterator<Array<T>> {
     const buffer: Array<T> = []
     let count: number = 0
     for (const item of iterable) {

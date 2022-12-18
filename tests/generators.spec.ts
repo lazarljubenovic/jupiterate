@@ -7,9 +7,7 @@ describe(`Generators`, () => {
   describe(`Integers`, () => {
 
     it(`works without arguments`, () => {
-      const actual = j.pipe(j.Integers(),
-        j.takeFirst(10),
-      )
+      const actual = j.pipe(j.Integers(), j.takeFirst(10))
       const expected = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
       chai.assert.sameOrderedMembers([...actual], expected)
     })
@@ -31,7 +29,7 @@ describe(`Generators`, () => {
   describe(`From`, () => {
 
     it(`works for an array`, () => {
-      const actual = j.pipe(j.From([1, 2, 3]))
+      const actual = j.From([1, 2, 3])
       const expected = [1, 2, 3]
       chai.assert.sameOrderedMembers([...actual], [...expected])
     })

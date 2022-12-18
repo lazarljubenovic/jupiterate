@@ -1,6 +1,6 @@
 import { Operator as Op } from '../core/types'
 import { Zip as staticZip, ZipStrict as staticZipStrict } from '../static/zip'
-import { It, Un } from '../utils/types'
+import { It, ItIt, Un } from '../utils/types'
 
 
 export function zip<T> (): Op<T, [T]>
@@ -72,7 +72,7 @@ export function zip<T, A, B, C, D, E, F, G, H, I, J> (
 ): Op<T, [Un<T>, Un<A>, Un<B>, Un<C>, Un<D>, Un<E>, Un<F>, Un<G>, Un<H>, Un<I>, Un<J>]>
 export function zip (...otherIterables: Array<It<unknown>>): Op<unknown, unknown>
 export function zip (...otherIterables: Array<It<unknown>>): Op<unknown, Array<unknown>> {
-  return function (iterable: It<unknown>): It<Array<unknown>> {
+  return function (iterable: It<unknown>): ItIt<Array<unknown>> {
     const iterables = [iterable, ...otherIterables]
     return staticZip(...iterables)
   }
@@ -143,7 +143,7 @@ export function zipStrict<T, A, B, C, D, E, F, G, H, I, J> (
 ): Op<T, [T, A, B, C, D, E, F, G, H, I, J]>
 export function zipStrict (...otherIterables: Array<It<unknown>>): Op<unknown, unknown>
 export function zipStrict (...otherIterables: Array<It<unknown>>): Op<unknown, unknown> {
-  return function (iterable: It<unknown>): It<Array<unknown>> {
+  return function (iterable: It<unknown>): ItIt<Array<unknown>> {
     const iterables = [iterable, ...otherIterables]
     return staticZipStrict(...iterables)
   }

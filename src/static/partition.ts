@@ -38,9 +38,9 @@ import { not } from '../utils'
  * )
  * // => [ [], [1, 2, 3] ]
  */
-export function Partition<T, U extends T> (iterable: Iterable<T>, guard: (t: T) => t is U): [Iterable<U>, Iterable<Exclude<T, U>>]
-export function Partition<T> (iterable: Iterable<T>, condition: (t: T) => boolean): [Iterable<T>, Iterable<T>]
-export function Partition<T> (iterable: Iterable<T>, condition: (t: T) => boolean): [Iterable<T>, Iterable<T>] {
+export function Partition<T, U extends T> (iterable: Iterable<T>, guard: (t: T) => t is U): [IterableIterator<U>, IterableIterator<Exclude<T, U>>]
+export function Partition<T> (iterable: Iterable<T>, condition: (t: T) => boolean): [IterableIterator<T>, IterableIterator<T>]
+export function Partition<T> (iterable: Iterable<T>, condition: (t: T) => boolean): [IterableIterator<T>, IterableIterator<T>] {
   return [
     filter(condition)(iterable),
     filter(not(condition))(iterable),

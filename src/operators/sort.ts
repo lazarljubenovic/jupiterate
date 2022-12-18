@@ -3,7 +3,7 @@ import { identity } from '../utils'
 
 
 export function sortWith<T> (compareFn: (a: T, b: T) => number): Operator<T, T> {
-  return function *(iterable: Iterable<T>): Iterable<T> {
+  return function *(iterable: Iterable<T>): IterableIterator<T> {
     const array = Array.from(iterable)
     array.sort(compareFn)
     yield *array

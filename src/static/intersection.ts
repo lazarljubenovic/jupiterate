@@ -1,7 +1,7 @@
 import { Empty } from './empty'
 
 
-export function Intersection<T> (...iterables: Array<Iterable<T>>): Iterable<T> {
+export function *Intersection<T> (...iterables: Array<Iterable<T>>): IterableIterator<T> {
   if (iterables.length == 0) return Empty<T>()
   const inAllIterablesUntilNow = new Set<T>(iterables[0])
 
@@ -19,5 +19,5 @@ export function Intersection<T> (...iterables: Array<Iterable<T>>): Iterable<T> 
     }
   }
 
-  return inAllIterablesUntilNow
+  yield *inAllIterablesUntilNow
 }

@@ -3,7 +3,7 @@ import { identity } from '../utils'
 
 
 export function sortUniqueBy<T, U> (map: Unary<T, U>): Operator<T, T> {
-  return function *(iterable: Iterable<T>): Iterable<T> {
+  return function *(iterable: Iterable<T>): IterableIterator<T> {
     let prevItemMapped: U | undefined
     for (const item of iterable) {
       const mappedItem = map(item)

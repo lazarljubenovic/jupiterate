@@ -132,7 +132,7 @@ export interface PairOptions {
 export function *Pairs<T> (
   iterable: Iterable<T>,
   { orderImportant = false, withRepetition = false }: PairOptions = {},
-): Iterable<[T, T]> {
+): IterableIterator<[T, T]> {
   const arr = Array.from(iterable)
   if (orderImportant && !withRepetition) {
     for (let i = 0; i < arr.length; i++) {

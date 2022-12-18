@@ -1,7 +1,3 @@
-import { compose } from '../core'
-import { skipUntil } from './skip-until'
-
-
 /**
  * @short
  * *Skip* first few elements.
@@ -42,10 +38,14 @@ import { skipUntil } from './skip-until'
  * )
  * // => []
  */
-export const skip = (count: number) => compose(
-  skipUntil((_, i) => i >= count),
-)
-
-export const skip1 = skip(1)
-export const skip2 = skip(2)
-export const skip3 = skip(3)
+export function skip (count: number) {
+  return function *<T> (iterable: Iterable<T>): IterableIterator<T> {
+    let index = 0
+    for (const item of iterable) {
+      if (index >= count) {
+        yield item
+      }
+      index++
+    }
+  }
+}

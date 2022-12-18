@@ -35,7 +35,7 @@
  * j.Concat()
  * // => []
  */
-export function *Concat<T> (...iterables: Array<Iterable<T>>): Iterable<T> {
+export function *Concat<T> (...iterables: Array<Iterable<T>>): IterableIterator<T> {
   for (const iterable of iterables) {
     yield *iterable
   }

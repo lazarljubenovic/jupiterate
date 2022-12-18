@@ -29,9 +29,9 @@ import { Operator } from '../core/types'
  * // => 'evil'
  */
 export function reverse<T> (): Operator<T, T> {
-  return function (iterable: Iterable<T>): Iterable<T> {
+  return function *(iterable: Iterable<T>): IterableIterator<T> {
     const array = Array.from(iterable)
     array.reverse()
-    return array
+    yield *array
   }
 }

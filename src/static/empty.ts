@@ -15,5 +15,5 @@
  * j.Empty()
  * // => []
  */
-export function *Empty<T> (): Iterable<T> {
+export function *Empty<T> (): IterableIterator<T> {
 }

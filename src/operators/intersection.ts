@@ -51,7 +51,7 @@ export function intersectionUsing<T> (
   eq: (a: T, b: T) => boolean,
 ): Operator<T, T> {
   const otherItems: Set<T> = new Set(otherIterable)
-  return function *(iterable: Iterable<T>): Iterable<T> {
+  return function *(iterable: Iterable<T>): IterableIterator<T> {
     outer: for (const item of iterable) {
       for (const otherItem of otherItems) {
         if (eq(otherItem, item)) {
