@@ -912,4 +912,22 @@ describe(`Operators`, () => {
 
   })
 
+  describe(`segmentizeBy`, () => {
+
+    it(`works`, () => {
+      const input = [1, 2, 3, -4, -5, -6, -7, -8, 9, -10, NaN, NaN, 13]
+      const actual = j.pipe(input, j.segmentizeBy(x => Math.sign(x)))
+      const expected = [
+        [1, 2, 3],
+        [-4, -5, -6, -7, -8],
+        [9],
+        [-10],
+        [NaN, NaN],
+        [13],
+      ]
+      chai.assert.deepEqual([...actual], expected)
+    })
+
+  })
+
 })
