@@ -50,6 +50,12 @@ describe(`Generators`, () => {
       chai.assert.sameOrderedMembers([...actual], expected)
     })
 
+    it(`uses the correct index with three seeds`, () => {
+      const actual = j.pipe(j.Unfold(-1, -1, -1, (_, __, ___, index) => index), j.takeFirst(6))
+      const expected = [-1, -1, -1, 3, 4, 5]
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
   })
 
 })

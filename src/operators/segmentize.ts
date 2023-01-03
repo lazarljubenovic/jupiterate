@@ -2,6 +2,7 @@ import { Operator } from '../core/types'
 import { Empty } from '../static'
 import { identity } from '../utils'
 
+// TODO: if we let the consumer see index, we're getting a generalization of the chunk operator
 export function segmentizeBy<T> (
   project: (item: T) => unknown,
 ): Operator<T, Array<T>> {
