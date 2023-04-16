@@ -10,9 +10,9 @@ import { skipUntil } from './skip-until'
  * operator predicate-based
  *
  * @description
- * The given predicate is applied to each value in a sequence. As long as the predicate returns true, the values are
- * discarded (skipped). Once the result of the given function is finally false, the value is passed through unchanged,
- * along with all further values (without being checked).
+ * The given predicate is applied to each value yielded from the source iterable. As long as the predicate returns
+ * true, the values are discarded (skipped). Once the result of the given function is finally false, the value is
+ * passed through unchanged, along with all further values (without being checked).
  *
  * @since
  * 0.0.1
@@ -35,11 +35,24 @@ import { skipUntil } from './skip-until'
  *
  * @example
  * j.pipe(
- *   "  leading spaces,
+ *   "    leading spaces,
  *   j.skipWhile(v => v == ' '),
  * )
  * // => "leading spaces"
  */
 export function skipWhile<T> (predicate: (t: T, i: number) => boolean): Operator<T, T> {
-  return skipUntil((t, i) => !predicate(t, i))
+  return function *(iterable: Iterable<T>): IterableIterator<T> {
+    let index = 0
+    let isFound = false
+    for (const item of iterable) {
+      if (isFound) {
+        yield item
+      } else {
+        if (!predicate(item, index++)) {
+          isFound = true
+          yield item
+        }
+      }
+    }
+  }
 }

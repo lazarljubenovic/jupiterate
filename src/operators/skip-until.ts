@@ -9,9 +9,9 @@ import { Operator } from '../core/types'
  * operator predicate-based
  *
  * @description
- * The given predicate is applied to each value in a sequence. As long as the predicate returns false, the values are
- * discarded (skipped). Once the result of the given function is finally true, the value is passed through unchanged,
- * along with all further values (without being checked).
+ * The given predicate is applied to each value yielded from the source iterable. As long as the predicate returns
+ * false, the values are discarded (skipped). Once the result of the given function is finally true, the value is
+ * passed through unchanged, along with all further values (without being checked).
  *
  * @since
  * 0.0.1
@@ -34,7 +34,7 @@ import { Operator } from '../core/types'
  *
  * @example
  * j.pipe(
- *   "  leading spaces",
+ *   "    leading spaces",
  *   j.skipUntil(v => v != ' '),
  * )
  * // => "leading spaces"

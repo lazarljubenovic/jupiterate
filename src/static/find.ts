@@ -13,9 +13,9 @@
  * If the provided condition is a type guard, the value of the result will be
  * scoped accordingly.
  *
- * If you expect to find a value, you can use {@link findOrThrow}. To get
- * index of the value instead the value itself, check out {@link findIndex} or
- * {@link findIndexOrThrow}. To find multiple yielded values, use operator
+ * If you expect to find a value, you can use {@link FindOrThrow}. To get
+ * index of the value instead the value itself, check out {@link FindIndex} or
+ * {@link FindIndexOrThrow}. To find multiple yielded values, use operator
  * {@link filter}.
  *
  * @operator

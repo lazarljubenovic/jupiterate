@@ -2,18 +2,22 @@ import { Unary } from '../core/types'
 import { gt, lt } from '../utils'
 
 
-export function ExtremeBy<T> (iterable: Iterable<T>, map: Unary<T, number>, compare: (a: number, b: number) => boolean): T {
+export function ExtremeBy<T> (
+  iterable: Iterable<T>,
+  project: Unary<T, number>,
+  compare: (a: number, b: number) => boolean,
+): T {
   let extreme: T | undefined
   let mappedExtreme: number | undefined
   for (const item of iterable) {
-    const mappedItem = map(item)
+    const mappedItem = project(item)
     if (mappedExtreme == null || compare(mappedItem, mappedExtreme)) {
       extreme = item
       mappedExtreme = mappedItem
     }
   }
   if (extreme == null) {
-    throw new Error(`Cannot do minBy or maxBy on an empty iterable.`)
+    throw new Error(`Cannot do MinBy or MaxBy on an empty iterable.`)
   }
   return extreme
 }
@@ -28,14 +32,14 @@ export function ExtremeBy<T> (iterable: Iterable<T>, map: Unary<T, number>, comp
  *
  * @description
  * The function finds the minimum value among the yielded values. The values
- * are compared after being mapped via the provided function `map`.
+ * are compared after being mapped via the provided function `project`.
  *
  * If you already have an iterable of numbers that you want to compare directly
- * (i.e. if the `map` is an identity function), you can use the simpler version
+ * (i.e. if the `project` is an identity function), you can use the simpler version
  * of this operator, `min`.
  *
  * @parameter
- * map
+ * project
  * (t: T) => number
  *
  * @returns
@@ -55,8 +59,8 @@ export function ExtremeBy<T> (iterable: Iterable<T>, map: Unary<T, number>, comp
  * )
  * // => 'e'
  */
-export function MinBy<T> (iterable: Iterable<T>, map: Unary<T, number>): T {
-  return ExtremeBy(iterable, map, lt)
+export function MinBy<T> (iterable: Iterable<T>, project: Unary<T, number>): T {
+  return ExtremeBy(iterable, project, lt)
 }
 
 /**
@@ -85,14 +89,14 @@ export function MinBy<T> (iterable: Iterable<T>, map: Unary<T, number>): T {
  * @example
  * j.pipe(
  *   [2, 3, 9, 6],
- *   j.e.maxBy(x => Math.abs(5 - x))
+ *   j.MaxBy(x => Math.abs(5 - x))
  * )
  * // => 9
  *
  * @example
  * j.pipe(
  *   'jupiter',
- *   j.e.maxBy(x => x.charAt(0)),
+ *   j.MaxBy(x => x.charAt(0)),
  * )
  * // => 't'
  */

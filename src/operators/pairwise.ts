@@ -3,7 +3,7 @@ import { Operator } from '../core/types'
 
 /**
  * @short
- * Get *pairwise* values.
+ * Get *pairwise* adjacent values.
  *
  * @categories
  * operator no-parameters
@@ -29,6 +29,13 @@ import { Operator } from '../core/types'
  * @example
  * j.pipe(
  *   [1],
+ *   j.pairwise(),
+ * )
+ * // => []
+ *
+ * @example
+ * j.pipe(
+ *   [],
  *   j.pairwise(),
  * )
  * // => []
@@ -77,6 +84,13 @@ export function pairwise<T> (): Operator<T, [T, T]> {
  *   j.pairwiseCyclic(),
  * )
  * // => [[1, 1]]
+ *
+ * @example
+ * j.pipe(
+ *   [],
+ *   j.pairwiseCyclic(),
+ * )
+ * // => []
  */
 export function pairwiseCyclic<T> (): Operator<T, [T, T]> {
   return function *(iterable: Iterable<T>): IterableIterator<[T, T]> {

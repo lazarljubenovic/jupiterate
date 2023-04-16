@@ -12,16 +12,17 @@ import { Operator } from '../core/types'
  * The given function takes a value as an argument, and returns an iterable. Instead of simply yielding this “inner
  * iterable”, the values of this iterable itself are iterated over.
  *
- * One way to look at it is to say that `flatMap` allows you to `map` a single value into multiple values, but without
- * making the structure of the iterable more complex.
+ * One way to look at it is to say that `flatMap` allows you to project a single value into multiple values, but
+ * without making the structure of the iterable more complex. In other words, the values are “freed” from the iterable
+ * they are packed into after passing being projected.
  *
- * This is similar to `Array#flatMap`.
+ * This is a similar behavior as `Array#flatMap`.
  *
  * @sine
  * 0.0.1
  *
  * @parameter
- * fn
+ * project
  * (t: T, index: number) => Iterable<U>
  *
  * @returns
@@ -55,11 +56,11 @@ import { Operator } from '../core/types'
  * )
  * // => [1, 2, 10, 1, 2, 20]
  */
-export function flatMap<T, U> (fn: (t: T, index: number) => Iterable<U>): Operator<T, U> {
+export function flatMap<T, U> (project: (t: T, index: number) => Iterable<U>): Operator<T, U> {
   return function *(iterable: Iterable<T>): IterableIterator<U> {
     let index = 0
     for (const item of iterable) {
-      yield *fn(item, index++)
+      yield *project(item, index++)
     }
   }
 }

@@ -6,12 +6,11 @@
  * operator
  *
  * @description
- * Given a number, that many values are skipped over in the iterable this
- * operator is applied to. After that, the iterable yields the rest of the
- * values normally.
+ * Given a number, that many values are skipped over in the source iterable.
+ * After that, the iterable yields the rest of the values normally.
  *
- * If the given number is greater than the size of the iterable, the resulting
- * iterable will be empty.
+ * If the given number is greater than the size of the source iterable,
+ * the resulting iterable will be empty.
  *
  * @since
  * 0.0.1
@@ -22,7 +21,7 @@
  * Determines how many elements to skip.
  *
  * @returns
- * Operator<T>
+ * Operator<T, T>
  *
  * @example
  * j.pipe(

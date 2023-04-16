@@ -21,7 +21,7 @@
  *
  * @example
  * j.Sum(j.Integers())
- * // infinite loop
+ * // (!) infinite loop
  */
 export function Sum (iterable: Iterable<number>): number {
   let sum = 0

@@ -1,14 +1,15 @@
 import { Operator } from '../core/types'
 
+
 /**
  * @short
- * *Take* elements *while* they satisfy a condition.
+ * *Take* values *while* they satisfy a condition.
  *
  * @categories
- * operator
+ * operator predicate-based type-guard
  *
  * @description
- * The elements yielded from the source iterable are propagated through this
+ * The values yielded from the source iterable are propagated through this
  * operator as long as they satisfy the given predicate.
  *
  * The predicate signature is guard-friendly.
@@ -22,8 +23,9 @@ import { Operator } from '../core/types'
  * @parameter
  * predicate
  * (t: T, i: number) => boolean
- * The function applied to each element, used to determine if the value should
- * be propagated through, or if propagation should be stopped.
+ * The function applied to each yielded value, used to determine if it should
+ * be propagated through, or if propagation should be stopped. Type guards are
+ * appropriately respected as well.
  *
  * @returns
  * Operator<T, T>

@@ -13,6 +13,9 @@
  * ...iterables
  * Array<Iterable<T>>
  *
+ * @returns
+ * Iterable<T>
+ *
  * @example
  * j.Concat(
  *   [1, 2, 3],

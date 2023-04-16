@@ -1,6 +1,5 @@
 import * as chai from 'chai'
 import * as j from '../src'
-import exp = require('constants')
 
 
 const isNumber = (x: unknown): x is number => typeof x == 'number'
@@ -25,6 +24,135 @@ describe(`Static`, () => {
       const actual = j.Concat()
       const expected = [] as unknown[]
       chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+    it(`@example 1`, () => {
+      const actual = j.Concat([1, 2, 3], [4, 5, 6], [7, 8, 9])
+      const expected = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.Concat([1], [2, 3], [], [], [4])
+      const expected = [1, 2, 3, 4]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 3`, () => {
+      const actual = j.Concat()
+      const expected: unknown[] = []
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`Contains`, () => {
+
+    it(`returns true when an element exists, no comparison given`, () => {
+      const input = [1, 2, 3, 4]
+      const actual = j.Contains(input, 2)
+      chai.assert.isTrue(actual)
+    })
+
+    it(`returns false when no element exists, no comparison given`, () => {
+      const input = [1, 2, 3, 4]
+      const actual = j.Contains(input, 6)
+      chai.assert.isFalse(actual)
+    })
+
+    it(`@example 1`, () => {
+      const actual = j.Contains([1, 2, 3, 4], 2)
+      chai.assert.isTrue(actual)
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.Contains([1, 2, 3, 4], 6)
+      chai.assert.isFalse(actual)
+    })
+
+    it(`@example 3`, () => {
+      const input = [
+        { id: 1, name: 'foo' },
+        { id: 2, name: 'bar' },
+      ]
+      const actual = j.Contains(input, { id: 1 }, (a, b) => a.id == b.id)
+      chai.assert.isTrue(actual)
+    })
+
+    it(`@example 4`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4],
+        j.andFinally(j.Contains, 2),
+      )
+      chai.assert.isTrue(actual)
+    })
+
+  })
+
+  describe(`Count`, () => {
+
+    it(`@example 1`, () => {
+      const actual = j.Count([1, 2, 3])
+      const expected = 3
+      chai.assert.equal(actual, expected)
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.Count([])
+      const expected = 0
+      chai.assert.equal(actual, expected)
+    })
+
+    it(`@example 3`, () => {
+      const actual = j.Count([1, 2, 3, 4], a => a % 2 == 0)
+      const expected = 2
+      chai.assert.equal(actual, expected)
+    })
+
+  })
+
+  describe(`Every`, () => {
+
+    it(`returns true when every item satisfies the given condition`, () => {
+      const input = [1, 2, 3]
+      const visited: number[] = []
+      const predicate = (x: any) => {
+        visited.push(x)
+        return x > 0
+      }
+      const actual = j.Every(input, predicate)
+      chai.assert.isTrue(actual)
+      chai.assert.sameOrderedMembers(visited, [1, 2, 3], `Visited [${visited.join(', ')}] instead of [1, 2, 3].`)
+    })
+
+    it(`returns false when at least one item doesn't satisfy the given condition`, () => {
+      const input = [0, 1, 2, 3]
+      const visited: number[] = []
+      const predicate = (x: any) => {
+        visited.push(x)
+        return x % 2 == 0
+      }
+      const actual = j.Every(input, predicate)
+      chai.assert.isFalse(actual)
+      chai.assert.sameOrderedMembers(visited, [0, 1], `Visited [${visited.join(', ')}] instead of [0, 1].`)
+    })
+
+    it(`@example 1`, () => {
+      const actual = j.Every([1, 2, 3, 4], x => x > 0)
+      chai.assert.isTrue(actual)
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.Every([1, 2, 3, 4], x => x % 2 == 0)
+      chai.assert.isFalse(actual)
+    })
+
+    it(`@example 3`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4],
+        j.andFinally(j.Every, x => x > 0),
+      )
+      chai.assert.isTrue(actual)
     })
 
   })
@@ -111,6 +239,34 @@ describe(`Static`, () => {
 
   })
 
+  describe(`Integers`, () => {
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        j.Integers(),
+        j.takeFirst(4),
+      )
+      const expected = [0, 1, 2, 3]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        j.Integers(3),
+        j.takeFirst(4),
+      )
+      const expected = [3, 4, 5, 6]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 3`, () => {
+      const actual = j.Integers(5, 8)
+      const expected = [5, 6, 7]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
   describe(`GetSingleOrThrow`, () => {
 
     it(`works when iterable has a single item`, () => {
@@ -130,59 +286,6 @@ describe(`Static`, () => {
         j.GetSingleOrThrow([1, 2])
       }
       chai.assert.throws(fn, `Expected only one item, but found more than one.`)
-    })
-
-  })
-
-  describe(`Contains`, () => {
-
-    it(`returns true when an element exists, no comparison given`, () => {
-      const input = [1, 2, 3, 4]
-      const actual = j.Contains(input, 2)
-      chai.assert.isTrue(actual)
-    })
-
-    it(`returns false when no element exists, no comparison given`, () => {
-      const input = [1, 2, 3, 4]
-      const actual = j.Contains(input, 6)
-      chai.assert.isFalse(actual)
-    })
-
-    it(`returns true when an element exists, using the comparator`, () => {
-      const input = [
-        { id: 1, name: 'foo' },
-        { id: 2, name: 'bar' },
-      ]
-      const actual = j.Contains(input, { id: 1 }, (a, b) => a.id == b.id)
-      chai.assert.isTrue(actual)
-    })
-
-  })
-
-  describe(`Every`, () => {
-
-    it(`returns true when every item satisfies the given condition`, () => {
-      const input = [1, 2, 3]
-      const visited: number[] = []
-      const predicate = (x: any) => {
-        visited.push(x)
-        return x > 0
-      }
-      const actual = j.Every(input, predicate)
-      chai.assert.isTrue(actual)
-      chai.assert.sameOrderedMembers(visited, [1, 2, 3], `Visited [${visited.join(', ')}] instead of [1, 2, 3].`)
-    })
-
-    it(`returns false when at least one item doesn't satisfy the given condition`, () => {
-      const input = [0, 1, 2, 3]
-      const visited: number[] = []
-      const predicate = (x: any) => {
-        visited.push(x)
-        return x % 2 == 0
-      }
-      const actual = j.Every(input, predicate)
-      chai.assert.isFalse(actual)
-      chai.assert.sameOrderedMembers(visited, [0, 1], `Visited [${visited.join(', ')}] instead of [0, 1].`)
     })
 
   })
@@ -802,6 +905,28 @@ describe(`Static`, () => {
       })
       const expected = [1, 2]
       chai.assert.sameOrderedMembers(indexes, expected)
+    })
+
+  })
+
+  describe(`Unfold`, () => {
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        j.Unfold(1, x => 2 * x),
+        j.takeFirst(6),
+      )
+      const expected = [1, 2, 4, 8, 16, 32]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        j.Unfold(1, 1, (a, b) => a + b),
+        j.takeFirst(8),
+      )
+      const expected = [1, 1, 2, 3, 5, 8, 13, 21]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
     })
 
   })

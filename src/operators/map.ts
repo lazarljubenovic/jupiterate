@@ -32,14 +32,14 @@ import { Operator } from '../core/types'
  *
  * @example
  * j.pipe(
- *   'jupiterate',
+ *   'Jupiterate',
  *   j.map((c, i) => {
  *     return i % 2 == 0
- *       ? c.toUpperCase()
- *       : c.toLowerCase()
+ *       ? c.toLowerCase()
+ *       : c.toUpperCase()
  *   },
  * )
- * // => 'JuPiTeRaTe'
+ * // => 'jUpItErAtE'
  */
 export function map<T, V> (mapper: (t: T, i: number) => V): Operator<T, V> {
   return function *(iterable: Iterable<T>): IterableIterator<V> {

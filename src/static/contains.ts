@@ -11,7 +11,7 @@ import { qqq } from '../utils'
  * @description
  * Check each yielded value from the source iterable against the given needle,
  * until the needle is found. By default, the strict equality operator is used;
- * this can be customized with the second argument.
+ * this can be customized with the optional parameter.
  *
  * @parameter
  * needle
@@ -19,7 +19,7 @@ import { qqq } from '../utils'
  * The value whose presence we're checking.
  *
  * @parameter
- * comparison
+ * comparison [optional]
  * (needle: T, yielded: T) => boolean
  * The function used to check equality. The first argument is always the needle
  * given through the first parameter. The second argument is the value yielded

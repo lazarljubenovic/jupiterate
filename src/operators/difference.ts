@@ -1,5 +1,5 @@
 import { Operator } from '../core/types'
-import { compareBy, identity, qqq } from '../utils'
+import { identity } from '../utils'
 
 
 /**
@@ -11,10 +11,12 @@ import { compareBy, identity, qqq } from '../utils'
  *
  * @description
  * Yields values not included in the given iterable, using a custom function for the equality check between items. The
- * order of values is determined by the iterable on which the returned operator is used, i.e. the “first argument” (not
- * the argument of this function).
+ * order of values is determined by the source iterable.
  *
- * This is a generalization of {@link differenceBy} and {@link difference}.
+ * This is a generalization of {@link differenceBy}, and therefore of {@link difference} as well.
+ *
+ * Note that this operator will run through the entire given iterable for each yielded value in the source iterable.
+ * Consider using {@link differenceBy} if performance is of concern.
  *
  * @since
  * 0.0.1
@@ -42,9 +44,9 @@ import { compareBy, identity, qqq } from '../utils'
  * @example
  * j.pipe(
  *   [300, 301, 302, 303, 304, 305, 306, 307],
- *   j.differenceUsing([1, 2], (t, u) => t % 3 == u),
+ *   j.differenceUsing([2, 4], (t, u) => t % 5 == u),
  * )
- * // => [300, 303, 306]
+ * // => [301, 303, 305, 306]
  */
 export function differenceUsing<T, U = T> (
   otherIterable: Iterable<U>,
@@ -72,10 +74,10 @@ export function differenceUsing<T, U = T> (
  *
  * @description
  * Yields values not included in the given iterable, using a custom function to transform the items before comparing
- * them using strict equality. The order of values is determined by the iterable on which the returned operator is used,
- * ie. the “first argument” (not the argument of this function).
+ * them using [the SameValueZero algorithm](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#same-value-zero_equality).
+ * The order of values is determined by the source iterable.
  *
- * This is a specialization of {@link differenceUsing} and generalization of {@link difference}.
+ * This is a specialization of {@link differenceUsing} and a generalization of {@link difference}.
  *
  * @since
  * 0.0.1
@@ -86,9 +88,9 @@ export function differenceUsing<T, U = T> (
  * The “second argument” of the difference operator.
  *
  * @parameter
- * map
- * (t: T) => any
- * The function used to transform each item before comparing them using strict equality.
+ * project
+ * (t: T) => unknown
+ * The function used to transform each item before comparing them.
  *
  * @returns
  * Operator<T, T>
@@ -103,12 +105,23 @@ export function differenceUsing<T, U = T> (
  * @example
  * j.pipe(
  *   [300, 301, 302, 303, 304, 305, 306, 307],
- *   j.differenceBy([1, 2], t => t % 3),
+ *   j.differenceBy([2, 4], t => t % 5),
  * )
- * // => [300, 303, 306]
+ * // => [300, 303, 305, 306]
  */
-export function differenceBy<T> (otherIterable: Iterable<T>, map: (t: T) => any): Operator<T, T> {
-  return differenceUsing(otherIterable, compareBy(map, qqq))
+export function differenceBy<T> (otherIterable: Iterable<T>, project: (t: T) => unknown): Operator<T, T> {
+  const otherItems = new Map<unknown, T>()
+  for (const otherItem of otherIterable) {
+    otherItems.set(project(otherItem), otherItem)
+  }
+  return function *(iterable: Iterable<T>): IterableIterator<T> {
+    for (const item of iterable) {
+      if (otherItems.has(project(item))) {
+        continue
+      }
+      yield item
+    }
+  }
 }
 
 /**
@@ -119,10 +132,10 @@ export function differenceBy<T> (otherIterable: Iterable<T>, map: (t: T) => any)
  * operator trigger
  *
  * @description
- * Yields values not included in the given iterable, using strict equality. The order of values is determined by the
- * iterable on which the returned operator is used, ie. the “first argument” (not the argument of this function).
+ * Yields values not included in the given iterable, using [the SameValueZero algorithm](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#same-value-zero_equality).
+ * The order of values is determined by the source iterable.
  *
- * This is a specialization of {@link differenceUsing} and of {@link differenceBy}.
+ * This is a specialization of {@link differenceUsing}, and therefore of {@link differenceBy} as well.
  *
  * @since
  * 0.0.1
@@ -143,5 +156,13 @@ export function differenceBy<T> (otherIterable: Iterable<T>, map: (t: T) => any)
  * // => [1, 3, 5]
  */
 export function difference<T> (otherIterable: Iterable<T>): Operator<T, T> {
-  return differenceBy(otherIterable, identity)
+  const otherItems = new Set<T>(otherIterable)
+  return function *(iterable: Iterable<T>): IterableIterator<T> {
+    for (const item of iterable) {
+      if (otherItems.has(item)) {
+        continue
+      }
+      yield item
+    }
+  }
 }

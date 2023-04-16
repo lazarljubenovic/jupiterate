@@ -3,12 +3,12 @@ import { Operator } from '../core/types'
 
 /**
  * @short
- * Applies a *filter* and gets *indexes* of matching valuers.
+ * Applies a *filter* and gets *indexes* of matching values.
  *
  * @categories
- * operator type-guard
+ * operator predicate-based
  *
- * @describe
+ * @description
  * Applies the given predicate function to every value. If the result of the predicate is `true`, the index of the
  * value is propagated further, unchanged. Otherwise, the value is skipped over.
  *

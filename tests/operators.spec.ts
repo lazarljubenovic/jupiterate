@@ -26,12 +26,12 @@ describe(`pipe`, () => {
 
     it(`works with one operator`, () => {
       const result = j.pipe(input, j.map(numberToString))
-      type Test1 = AssertTrue<IsExact<typeof result, Iterable<string>>>
+      type Test1 = AssertTrue<IsExact<typeof result, IterableIterator<string>>>
     })
 
     it(`works with two operators`, () => {
       const result = j.pipe(input, j.map(numberToString), j.map(stringToBoolean))
-      type Test1 = AssertTrue<IsExact<typeof result, Iterable<boolean>>>
+      type Test1 = AssertTrue<IsExact<typeof result, IterableIterator<boolean>>>
     })
 
     it(`works with 10 operators`, () => {
@@ -53,13 +53,13 @@ describe(`pipe`, () => {
 
     it(`works with one operator as array`, () => {
       const result = j.pipe(input, [j.map(numberToString)])
-      type Test1 = AssertTrue<IsExact<typeof result, Iterable<string>>>
-      type Test2 = AssertFalse<IsExact<typeof result, Iterable<number>>>
+      type Test1 = AssertTrue<IsExact<typeof result, IterableIterator<string>>>
+      type Test2 = AssertFalse<IsExact<typeof result, IterableIterator<number>>>
     })
 
     it(`works with two operators as array`, () => {
       const result = j.pipe(input, [j.map(numberToString), j.map(stringToBoolean)])
-      type Test1 = AssertTrue<IsExact<typeof result, Iterable<boolean>>>
+      type Test1 = AssertTrue<IsExact<typeof result, IterableIterator<boolean>>>
     })
 
     it(`works with a finalizer only`, () => {
@@ -80,25 +80,43 @@ describe(`Operators`, () => {
 
   describe(`chunk`, () => {
 
-    it(`creates chunks of size 2`, () => {
+    it(`creates chunks of size 3`, () => {
       const actual = j.pipe(
         [1, 2, 3, 4, 5, 6, 7],
-        j.chunk(2),
+        j.chunk(3),
       )
-      const expected = [[1, 2], [3, 4], [5, 6], [7]]
+      const expected = [[1, 2, 3], [4, 5, 6], [7]]
       chai.assert.sameDeepOrderedMembers([...actual], [...expected])
     })
 
-    it(`throws when chunk size is not an integer`, () => {
-      chai.assert.throws(() => j.chunk(1.5))
+    it(`throws a RangeError when chunk size is not an integer`, () => {
+      chai.assert.throws(() => j.chunk(1.5), RangeError)
     })
 
-    it(`throws when chunk size is zero`, () => {
-      chai.assert.throws(() => j.chunk(0))
+    it(`throws a RangeError when chunk size is zero`, () => {
+      chai.assert.throws(() => j.chunk(0), RangeError)
     })
 
-    it(`throws when chunk size is less than zero`, () => {
-      chai.assert.throws(() => j.chunk(-1))
+    it(`throws a RangeError when chunk size is less than zero`, () => {
+      chai.assert.throws(() => j.chunk(-1), RangeError)
+    })
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4],
+        j.chunk(2),
+      )
+      const expected = [[1, 2], [3, 4]]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4, 5],
+        j.chunk(2),
+      )
+      const expected = [[1, 2], [3, 4], [5]]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
     })
 
   })
@@ -117,18 +135,36 @@ describe(`Operators`, () => {
     it(`concatenates several arrays`, () => {
       const actual = j.pipe(
         [1, 2],
-        j.concat([3, 4], [5, 6], [7, 8]),
+        j.concat([3, 4], [5], [], [6, 7, 8]),
       )
       const expected = [1, 2, 3, 4, 5, 6, 7, 8]
       chai.assert.sameOrderedMembers([...actual], [...expected])
     })
 
-    it(`concatenates an empty array`, () => {
+    it(`concatenates no arrays`, () => {
       const actual = j.pipe(
         [1, 2],
-        j.concat([] as number[]),
+        j.concat(),
       )
       const expected = [1, 2]
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 2],
+        j.concat([3, 4]),
+      )
+      const expected = [1, 2, 3, 4]
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        [1],
+        j.concat([2], [3, 4], [], [5]),
+      )
+      const expected = [1, 2, 3, 4, 5]
       chai.assert.sameOrderedMembers([...actual], [...expected])
     })
 
@@ -153,26 +189,29 @@ describe(`Operators`, () => {
     })
 
     it(`works when the second argument is an empty iterable`, () => {
-      const a = [1, 2, 3]
-      const b: number[] = []
-      const actual = j.pipe(a, j.differenceUsing(b, qqq))
+      const actual = j.pipe(
+        [1, 2, 3],
+        j.differenceUsing([], qqq),
+      )
       const expected = [1, 2, 3]
       chai.assert.sameOrderedMembers([...actual], expected)
     })
 
     it(`@example 1`, () => {
-      const a = [1, 2, 3, 4, 5]
-      const b = [4, 2, 6]
-      const actual = j.pipe(a, j.differenceUsing(b, qqq))
+      const actual = j.pipe(
+        [1, 2, 3, 4, 5],
+        j.differenceUsing([4, 2, 6], qqq),
+      )
       const expected = [1, 3, 5]
       chai.assert.sameOrderedMembers([...actual], expected)
     })
 
     it(`@example 2`, () => {
-      const a = [300, 301, 302, 303, 304, 305, 306, 307]
-      const b = [1, 2]
-      const actual = j.pipe(a, j.differenceUsing(b, (t, u) => t % 3 == u))
-      const expected = [300, 303, 306]
+      const actual = j.pipe(
+        [300, 301, 302, 303, 304, 305, 306, 307],
+        j.differenceUsing([2, 4], (t, u) => t % 5 == u),
+      )
+      const expected = [300, 301, 303, 305, 306]
       chai.assert.sameOrderedMembers([...actual], expected)
     })
 
@@ -181,18 +220,19 @@ describe(`Operators`, () => {
   describe(`differenceBy`, () => {
 
     it(`@example 1`, () => {
-      const a = [1, 2, 3, 4, 5]
-      const b = [4, 2, 6]
-      const actual = j.pipe(a, j.differenceBy(b, t => t))
+      const actual = j.pipe(
+        [1, 2, 3, 4, 5],
+        j.differenceBy([4, 2, 6], t => t),
+      )
       const expected = [1, 3, 5]
       chai.assert.sameOrderedMembers([...actual], expected)
     })
 
     it(`@example 2`, () => {
-      const a = [300, 301, 302, 303, 304, 305, 306, 307]
-      const b = [1, 2]
-      const actual = j.pipe(a, j.differenceBy(b, t => t % 3))
-      const expected = [300, 303, 306]
+      const actual = j.pipe(
+        [300, 301, 302, 303, 304, 305, 306, 307],
+        j.differenceBy([2, 4], t => t % 5))
+      const expected = [300, 301, 303, 305, 306]
       chai.assert.sameOrderedMembers([...actual], expected)
     })
 
@@ -206,6 +246,34 @@ describe(`Operators`, () => {
       const actual = j.pipe(a, j.difference(b))
       const expected = [1, 3, 5]
       chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+  })
+
+  describe(`endWith`, () => {
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4],
+        j.endWith(5),
+      )
+      const expected = [1, 2, 3, 4, 5]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        [2, 4, 6],
+        j.endWith(8, 10),
+      )
+      const expected = [2, 4, 6, 8, 10]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`doesn't impact the source iterable when there are no additional values to yield`, () => {
+      const input = [1, 2, 3, 4]
+      const actual = j.pipe(input, j.endWith<number>())
+
     })
 
   })
@@ -224,15 +292,19 @@ describe(`Operators`, () => {
     })
 
     it(`@example 1`, () => {
-      const input = [1, 2, 3, 4, 5]
-      const actual = j.pipe(input, j.filter(x => x % 2 == 0))
+      const actual = j.pipe(
+        [1, 2, 3, 4, 5],
+        j.filter(x => x % 2 == 0),
+      )
       const expected = [2, 4]
       chai.assert.sameOrderedMembers([...actual], expected)
     })
 
     it(`@example 2`, () => {
-      const input = 'abCdEFG'
-      const actual = j.pipe(input, j.filter(x => x.toLowerCase() == x))
+      const actual = j.pipe(
+        'abCdEFG',
+        j.filter(x => x.toLowerCase() == x),
+      )
       const expected = 'abd'
       chai.assert.sameOrderedMembers([...actual], [...expected])
     })
@@ -251,6 +323,24 @@ describe(`Operators`, () => {
       chai.assert.sameOrderedMembers([...actual], [...expected])
     })
 
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4, 5],
+        j.filterIndex(x => x % 2 == 0),
+      )
+      const expected = [1, 3]
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        'abCdEFG',
+        j.filterIndex(c => c.toLowerCase() == c),
+      )
+      const expected = [0, 1, 3]
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
   })
 
   describe(`flatMap`, () => {
@@ -265,6 +355,42 @@ describe(`Operators`, () => {
       chai.assert.sameOrderedMembers([...actual], [...expected])
     })
 
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 2, 3],
+        j.flatMap(t => [t, t]),
+      )
+      const expected = [1, 1, 2, 2, 3, 3]
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        'yes! no!',
+        j.flatMap(t => t == '!' ? [] : [t, t, t]),
+      )
+      const expected = 'yyyeeesss   nnnooo'
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 3`, () => {
+      const actual = j.pipe(
+        [1, 2, 3],
+        j.flatMap(t => [t - 1, t + 1]),
+      )
+      const expected = [0, 2, 1, 3, 2, 4]
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 4`, () => {
+      const actual = j.pipe(
+        [10, 20],
+        j.flatMap(t => [1, 2, t]),
+      )
+      const expected = [1, 2, 10, 1, 2, 20]
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
   })
 
   describe(`flatten`, () => {
@@ -272,6 +398,64 @@ describe(`Operators`, () => {
     it(`throws when depth is less than zero`, () => {
       const operation = () => [...j.pipe([[1]], j.flatten(-1))]
       chai.assert.throws(operation)
+    })
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [[1, 2], [3], [4, 5, 6]],
+        j.flatten<number>(1),
+      )
+      const expected = [1, 2, 3, 4, 5, 6]
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        [
+          [
+            [111, 112],
+            [121],
+            [131, 132],
+          ],
+          [
+            [211, 212, 213],
+            [],
+          ],
+        ],
+        j.flatten<Iterable<number>>(1),
+      )
+      const expected = [
+        [111, 112],
+        [121],
+        [131, 132],
+        [211, 212, 213],
+        [],
+      ]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 3`, () => {
+      const actual = j.pipe(
+        [
+          [
+            [111, 112],
+            [121],
+            [131, 132],
+          ],
+          [
+            [211, 212, 213],
+            [],
+          ],
+        ],
+        j.flatten<number>(2),
+      )
+      const expected = [
+        111, 112,
+        121,
+        131, 132,
+        211, 212, 213,
+      ]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
     })
 
     describe(`depth 1`, () => {
@@ -333,6 +517,129 @@ describe(`Operators`, () => {
 
   })
 
+  describe(`intersectionUsing`, () => {
+
+    it(`works`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4, 5],
+        j.intersectionUsing([4, 2, 5, 0, 10, 1], qqq),
+      )
+      const expected = [1, 2, 4, 5]
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4],
+        j.intersectionUsing([1, 3, 5, 7], (t, u) => t == u),
+      )
+      const expected = [1, 3]
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        'jupiterate',
+        j.intersectionUsing('aeiou', (t, u) => t == u),
+      )
+      const expected = 'uieae'
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 3`, () => {
+      const actual = j.pipe(
+        ['foo', 'bar', 'baz', 'qux', 'quux'],
+        j.intersectionUsing(['a', 'b', 'c'], (t, u) => t.startsWith(u)),
+      )
+      const expected = ['bar', 'baz']
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 4`, () => {
+      const actual = j.pipe(
+        ['a', 'aa', 'aaa', 'aaaa', 'b', 'bb', 'bbb', 'bbbb', 'c', 'cc', 'ccc', 'cccc'],
+        j.intersectionUsing([1, 6, 11], (t, u) => t.length == u % 5),
+      )
+      const expected = ['a', 'b', 'c']
+      chai.assert.sameOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`intersectionBy`, () => {
+
+    it(`works`, () => {
+      const t = <T> (t: T) => ({ t })
+      const a = [1, 2, 3, 4, 5].map(t)
+      const b = [4, 2, 5, 0, 10, 1].map(t)
+      const actual = j.pipe(a, j.intersectionBy(b, ({ t }) => t))
+      const expected = [1, 2, 4, 5].map(t)
+      chai.assert.sameDeepOrderedMembers([...actual], expected)
+    })
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4],
+        j.intersectionBy([1, 3, 5, 7], t => t),
+      )
+      const expected = [1, 3]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        'jupiterate',
+        j.intersectionBy('aeiou', t => t),
+      )
+      const expected = 'uieae'
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`intersection`, () => {
+
+    it(`works`, () => {
+      const a = [1, 2, 3, 4, 5]
+      const b = [4, 2, 5, 0, 10, 1]
+      const actual = j.pipe(a, j.intersection(b))
+      const expected = [1, 2, 4, 5]
+      chai.assert.sameDeepOrderedMembers([...actual], expected)
+    })
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4],
+        j.intersection([1, 3, 5, 7]),
+      )
+      const expected = [1, 3]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        'jupiterate',
+        j.intersection('aeiou'),
+      )
+      const expected = 'uieae'
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`join`, () => {
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 2, 3],
+        j.join(0),
+      )
+      const expected = [1, 0, 2, 0, 3]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
   describe(`map`, () => {
 
     it(`maps all values`, () => {
@@ -357,189 +664,10 @@ describe(`Operators`, () => {
     it(`@example 2`, () => {
       const actual = j.pipe(
         'jupiterate',
-        j.map((c, i) => i % 2 == 0 ? c.toUpperCase() : c.toLowerCase()),
+        j.map((c, i) => i % 2 == 0 ? c.toLowerCase() : c.toUpperCase()),
       )
-      const expected = 'JuPiTeRaTe'
+      const expected = 'jUpItErAtE'
       chai.assert.sameOrderedMembers([...actual], [...expected])
-    })
-
-  })
-
-  describe(`takeWhile`, () => {
-
-    it(`should be lazy`, () => {
-      const visited: number[] = []
-      const input = [-4, -6, -1, 6, -7, -5, 3, 1]
-      const actual = j.pipe(
-        input,
-        j.takeWhile(x => {
-          visited.push(x)
-          return x < 0
-        }),
-      )
-      const expected = [-4, -6, -1]
-      const expectedVisited = [-4, -6, -1, 6]
-      chai.assert.sameOrderedMembers(visited, [])
-      chai.assert.sameOrderedMembers([...actual], expected)
-      chai.assert.sameOrderedMembers(visited, expectedVisited)
-    })
-
-  })
-
-  describe(`takeUntil`, () => {
-
-    it(`works`, () => {
-      const input = [1, 2, 3, 2, 3, 2, 1]
-      const actual = j.pipe(input, j.takeUntil(x => x == 3))
-      chai.assert.sameOrderedMembers([...actual], [1, 2])
-    })
-
-  })
-
-  describe(`takeFirst`, () => {
-
-    it(`gives empty iterable when taking first 0 from a non-empty iterable`, () => {
-      const input = [1, 2, 3, 4, 5]
-      const actual = j.pipe(input, j.takeFirst(0))
-      chai.assert.sameOrderedMembers([...actual], [])
-    })
-
-    it(`gives empty iterable when taking first 0 from an empty iterable`, () => {
-      const actual = j.pipe([], j.takeFirst(0))
-      chai.assert.sameOrderedMembers([...actual], [])
-    })
-
-    it(`gives max possible iterable when trying to take more than available`, () => {
-      const input = [1, 2, 3, 4]
-      const actual = j.pipe(input, j.takeFirst(20))
-      chai.assert.sameOrderedMembers([...actual], [1, 2, 3, 4])
-    })
-
-    it(`gives empty iterable when trying to take a few but the source is empty`, () => {
-      const actual = j.pipe([], j.takeFirst(3))
-      chai.assert.sameOrderedMembers([...actual], [])
-    })
-
-    it(`takes a single value`, () => {
-      const input = [1, 2, 3]
-      const actual = j.pipe(input, j.takeFirst(1))
-      chai.assert.sameOrderedMembers([...actual], [1])
-    })
-
-    it(`works for several`, () => {
-      const input = [1, 2, 3, 4, 5, 6, 7]
-      const actual = j.pipe(input, j.takeFirst(3))
-      const expected = [1, 2, 3]
-      chai.assert.sameOrderedMembers([...actual], expected)
-    })
-
-  })
-
-  describe(`skip`, () => {
-    it(`should work`, () => {
-      const input = [1, 2, 3, 4]
-      const actual = j.pipe(input, j.skip(2))
-      const expected = [3, 4]
-      chai.assert.sameOrderedMembers([...actual], expected)
-    })
-  })
-
-  describe(`skipUntil`, () => {
-
-    it(`should work`, () => {
-      const input = [1, 2, 5, 3, 0, 6, 3, 2, 1]
-      const actual = j.pipe(input, j.skipUntil(x => x == 0))
-      const expected = [0, 6, 3, 2, 1]
-      chai.assert.sameOrderedMembers([...actual], expected)
-    })
-
-  })
-
-  describe(`skipWhile`, () => {
-
-    it(`should work`, () => {
-      const input = [1, 2, 5, 3, 0, 6, 3, 2, 1]
-      const actual = j.pipe(input, j.skipWhile(x => x > 0))
-      const expected = [0, 6, 3, 2, 1]
-      chai.assert.sameOrderedMembers([...actual], expected)
-    })
-
-  })
-
-  describe(`intersectionUsing`, () => {
-
-    it(`works`, () => {
-      const a = [1, 2, 3, 4, 5]
-      const b = [4, 2, 5, 0, 10, 1]
-      const actual = j.pipe(a, j.intersectionUsing(b, qqq))
-      const expected = [1, 2, 4, 5]
-      chai.assert.sameOrderedMembers([...actual], expected)
-    })
-
-  })
-
-  describe(`intersectionBy`, () => {
-
-    it(`works`, () => {
-      const t = <T> (t: T) => ({ t })
-      const a = [1, 2, 3, 4, 5].map(t)
-      const b = [4, 2, 5, 0, 10, 1].map(t)
-      const actual = j.pipe(a, j.intersectionBy(b, ({ t }) => t))
-      const expected = [1, 2, 4, 5].map(t)
-      chai.assert.sameDeepOrderedMembers([...actual], expected)
-    })
-
-  })
-
-  describe(`Intersection`, () => {
-
-    it(`works`, () => {
-      const a = [1, 2, 3, 4, 5]
-      const b = [4, 2, 5, 0, 10, 1]
-      const actual = j.pipe(a, j.intersection(b))
-      const expected = [1, 2, 4, 5]
-      chai.assert.sameDeepOrderedMembers([...actual], expected)
-    })
-
-  })
-
-  describe(`flatten`, () => {
-
-    it(`works without argument`, () => {
-      const input = [[1, 2], [5], [6, 7, [8, 9]]]
-      const actual = j.pipe(input, j.flatten())
-      const expected = [1, 2, 5, 6, 7, [8, 9]]
-      chai.assert.sameDeepOrderedMembers([...actual], expected)
-    })
-
-    it(`works with argument`, () => {
-      const input = [
-        [
-          [1, 2],
-          [3, 4],
-          [5],
-        ],
-        [
-          [6, 7, 8],
-        ],
-        [
-          [9],
-        ],
-      ]
-      const actual = j.pipe(input, j.flatten(2))
-      const expected = j.Integers(1, 10)
-      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
-    })
-
-  })
-
-  describe(`flattenDeep`, () => {
-
-    it(`works`, () => {
-      const input = [1, [2, 3, [4, 5, [6, 7, [8]]], 9]]
-      const actual = j.pipe(input, j.flattenDeep())
-      const expected = j.Integers(1, 10)
-      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
     })
 
   })
@@ -672,6 +800,33 @@ describe(`Operators`, () => {
       chai.assert.deepEqual([...actual], expected)
     })
 
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4, 5],
+        j.pairwise(),
+      )
+      const expected = [[1, 2], [2, 3], [3, 4], [4, 5]]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        [1],
+        j.pairwise(),
+      )
+      const expected: number[][] = []
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 3`, () => {
+      const actual = j.pipe(
+        [],
+        j.pairwise(),
+      )
+      const expected: number[][] = []
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
   })
 
   describe(`pairwiseCyclic`, () => {
@@ -709,6 +864,260 @@ describe(`Operators`, () => {
       chai.assert.deepEqual([...actual], expected)
     })
 
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4, 5],
+        j.pairwiseCyclic(),
+      )
+      const expected = [[1, 2], [2, 3], [3, 4], [4, 5], [5, 1]]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        [1],
+        j.pairwiseCyclic(),
+      )
+      const expected = [[1, 1]]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 3`, () => {
+      const actual = j.pipe(
+        [],
+        j.pairwiseCyclic(),
+      )
+      const expected: unknown[][] = []
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`passThrough`, () => {
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 2, 3],
+        j.passThrough(),
+      )
+      const expected = [1, 2, 3]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`reverse`, () => {
+
+    it(`returns an empty iterable given an empty iterable`, () => {
+      const actual = j.pipe([], j.reverse())
+      chai.assert.sameDeepOrderedMembers([...actual], [])
+    })
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4],
+        j.reverse(),
+      )
+      const expected = [4, 3, 2, 1]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        'live',
+        j.reverse(),
+      )
+      const expected = 'evil'
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`scan`, () => {
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4],
+        j.scan((a, b) => a + b),
+      )
+      const expected = [1, 3, 6, 10]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4],
+        j.scan((a, b) => a + b, 0),
+      )
+      const expected = [1, 3, 6, 10]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 3`, () => {
+      const actual = j.pipe(
+        [] as number[],
+        j.scan((a, b) => a + b),
+      )
+      const expected = [] as number[]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 4`, () => {
+      const actual = j.pipe(
+        ['one', 'two', 'three'],
+        j.scan((result, value) => result + value.length, 0),
+      )
+      const expected = [3, 6, 11]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`segmentizeBy`, () => {
+
+    it(`works`, () => {
+      const input = [1, 2, 3, -4, -5, -6, -7, -8, 9, -10, NaN, NaN, 13]
+      const actual = j.pipe(input, j.segmentizeBy(x => Math.sign(x)))
+      const expected = [
+        [1, 2, 3],
+        [-4, -5, -6, -7, -8],
+        [9],
+        [-10],
+        [NaN, NaN],
+        [13],
+      ]
+      chai.assert.deepEqual([...actual], expected)
+    })
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 5, 3, -1, -2, 1, -4],
+        j.segmentizeBy(n => Math.sign(n)),
+      )
+      const expected = [
+        [1, 5, 3],
+        [-1, -2],
+        [1],
+        [-4],
+      ]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        ['foo', 'bar', 'Foo', 'bar', 'Bar'],
+        j.segmentizeBy(n => n[0] == n[0].toUpperCase()),
+      )
+      const expected = [
+        ['foo', 'bar'],
+        ['Foo'],
+        ['bar'],
+        ['Bar'],
+      ]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 3`, () => {
+      const actual = j.pipe(
+        [10, 20, 30, 40, 50, 60, 70, 80, 90],
+        j.segmentizeBy((n, i) => Math.floor(i / 4)),
+      )
+      const expected = [
+        [10, 20, 30, 40],
+        [50, 60, 70, 80],
+        [90],
+      ]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`doesn't leave the last segment empty`, () => {
+      const actual = j.pipe(
+        [10, 20, 30, 40, 50, 60, 70, 80],
+        j.segmentizeBy((n, i) => Math.floor(i / 4)),
+      )
+      const expected = [
+        [10, 20, 30, 40],
+        [50, 60, 70, 80],
+      ]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`skip`, () => {
+
+    it(`@example 1`, () => {
+      const input = [1, 2, 3, 4]
+      const actual = j.pipe(input, j.skip(2))
+      const expected = [3, 4]
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+    it(`@example 2`, () => {
+      const input = [1, 2, 3, 4]
+      const actual = j.pipe(input, j.skip(10))
+      const expected: number[] = []
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+  })
+
+  describe(`skipUntil`, () => {
+
+    it(`should work`, () => {
+      const input = [1, 2, 5, 3, 0, 6, 3, 2, 1]
+      const actual = j.pipe(input, j.skipUntil(x => x == 0))
+      const expected = [0, 6, 3, 2, 1]
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [-4, -2, 1, 3, 8, -5, 1],
+        j.skipUntil(v => v > 0),
+      )
+      const expected = [1, 3, 8, -5, 1]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        '    leading spaces',
+        j.skipUntil(v => v != ' '),
+      )
+      const expected = 'leading spaces'
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`skipWhile`, () => {
+
+    it(`should work`, () => {
+      const input = [1, 2, 5, 3, 0, 6, 3, 2, 1]
+      const actual = j.pipe(input, j.skipWhile(x => x > 0))
+      const expected = [0, 6, 3, 2, 1]
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [-4, -2, 1, 3, 8, -5, 1],
+        j.skipWhile(v => v < 0),
+      )
+      const expected = [1, 3, 8, -5, 1]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        '    leading spaces',
+        j.skipWhile(v => v == ' '),
+      )
+      const expected = 'leading spaces'
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
   })
 
   describe(`slice`, () => {
@@ -717,27 +1126,346 @@ describe(`Operators`, () => {
       const input = [1, 2, 3]
       const actual = j.pipe(input, j.slice())
       const expected = [1, 2, 3]
-      chai.assert.sameOrderedMembers([...actual], expected)
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
     })
 
     it(`slices from the start only`, () => {
       const input = 'abcdefgh'
       const actual = j.pipe(input, j.slice(2))
       const expected = 'cdefgh'.split('')
-      chai.assert.sameOrderedMembers([...actual], expected)
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
     })
 
     it(`slices fom the start and end`, () => {
       const input = 'abcdefgh'
       const actual = j.pipe(input, j.slice(3, 5))
       const expected = ['d', 'e']
-      chai.assert.sameOrderedMembers([...actual], expected)
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
     })
 
     it(`reports an error when an impossible start-end combination is given`, () => {
       const input = 'abc'
       const operation = () => [...j.pipe(input, j.slice(2, 1))]
       chai.assert.throws(operation)
+    })
+
+    it(`doesn't mind a start too little`, () => {
+      const input = 'abcdefgh'
+      const actual = j.pipe(input, j.slice(-666, 4))
+      const expected = 'abcd'
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`doesn't mind an end too great`, () => {
+      const input = 'abcdefgh'
+      const actual = j.pipe(input, j.slice(3, 666))
+      const expected = 'defgh'
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [0, 1, 2, 3, 4, 5],
+        j.slice(1, 4),
+      )
+      const expected = [1, 2, 3]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        [0, 1, 2, 3, 4, 5],
+        j.slice(2, 2),
+      )
+      const expected: number[] = []
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`sortUsing`, () => {
+
+    it(`@example 1`, () => {
+      const input = [5, 2, 6, 3, 1, 6]
+      const actual = j.pipe(input, j.sortUsing((a, b) => a - b))
+      const expected = [1, 2, 3, 5, 6, 6]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const input = [
+        { name: 'foo-1', age: 19 },
+        { name: 'bar', age: 21 },
+        { name: 'foo-2', age: 19 },
+        { name: 'baz', age: 18 },
+      ]
+      const actual = j.pipe(input, j.sortUsing((a, b) => b.age - a.age))
+      const expected = [
+        { name: 'bar', age: 21 },
+        { name: 'foo-1', age: 19 },
+        { name: 'foo-2', age: 19 },
+        { name: 'baz', age: 18 },
+      ]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`sortBy`, () => {
+
+    it(`works with a function`, () => {
+      const input = [{ x: 1, y: 2 }, { x: 5, y: 3 }, { x: 2, y: 1 }]
+      const actual = j.pipe(input, j.sortBy(item => item.x, 'desc'))
+      const expected = [{ x: 5, y: 3 }, { x: 2, y: 1 }, { x: 1, y: 2 }]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`works with a prop`, () => {
+      const input = [{ x: 1, y: 2 }, { x: 5, y: 3 }, { x: 2, y: 1 }]
+      const actual = j.pipe(input, j.sortBy('y', 'asc'))
+      const expected = [{ x: 2, y: 1 }, { x: 1, y: 2 }, { x: 5, y: 3 }]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 1`, () => {
+      const input = [5, 2, 6, 3, 1, 6]
+      const actual = j.pipe(input, j.sortBy(t => t, 'asc'))
+      const expected = [1, 2, 3, 5, 6, 6]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const input = [
+        { name: 'foo-1', age: 19 },
+        { name: 'bar', age: 21 },
+        { name: 'foo-2', age: 19 },
+        { name: 'baz', age: 18 },
+      ]
+      const actual = j.pipe(input, j.sortBy(t => t.age, 'desc'))
+      const expected = [
+        { name: 'bar', age: 21 },
+        { name: 'foo-1', age: 19 },
+        { name: 'foo-2', age: 19 },
+        { name: 'baz', age: 18 },
+      ]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`sort`, () => {
+
+    it(`works for ascending order`, () => {
+      const input = [1, 3, 2, 5, 4]
+      const actual = j.pipe(input, j.sort('asc'))
+      const expected = [1, 2, 3, 4, 5]
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+    it(`works for descending order`, () => {
+      const input = [1, 3, 2, 5, 4]
+      const actual = j.pipe(input, j.sort('desc'))
+      const expected = [5, 4, 3, 2, 1]
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+    it(`@example 1`, () => {
+      const input = [5, 2, 6, 3, 1, 6]
+      const actual = j.pipe(input, j.sort('asc'))
+      const expected = [1, 2, 3, 5, 6, 6]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`startWith`, () => {
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4],
+        j.startWith(0),
+      )
+      const expected = [0, 1, 2, 3, 4]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        [6, 8, 10],
+        j.startWith(2, 4),
+      )
+      const expected = [2, 4, 6, 8, 10]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`takeFirst`, () => {
+
+    it(`gives empty iterable when taking first 0 from a non-empty iterable`, () => {
+      const input = [1, 2, 3, 4, 5]
+      const actual = j.pipe(input, j.takeFirst(0))
+      chai.assert.sameOrderedMembers([...actual], [])
+    })
+
+    it(`gives empty iterable when taking first 0 from an empty iterable`, () => {
+      const actual = j.pipe([], j.takeFirst(0))
+      chai.assert.sameOrderedMembers([...actual], [])
+    })
+
+    it(`gives max possible iterable when trying to take more than available`, () => {
+      const input = [1, 2, 3, 4]
+      const actual = j.pipe(input, j.takeFirst(20))
+      chai.assert.sameOrderedMembers([...actual], [1, 2, 3, 4])
+    })
+
+    it(`gives empty iterable when trying to take a few but the source is empty`, () => {
+      const actual = j.pipe([], j.takeFirst(3))
+      chai.assert.sameOrderedMembers([...actual], [])
+    })
+
+    it(`takes a single value`, () => {
+      const input = [1, 2, 3]
+      const actual = j.pipe(input, j.takeFirst(1))
+      chai.assert.sameOrderedMembers([...actual], [1])
+    })
+
+    it(`works for several`, () => {
+      const input = [1, 2, 3, 4, 5, 6, 7]
+      const actual = j.pipe(input, j.takeFirst(3))
+      const expected = [1, 2, 3]
+      chai.assert.sameOrderedMembers([...actual], expected)
+    })
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        'jupiterate',
+        j.takeFirst(7),
+      )
+      const expected = 'jupiter'
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`takeWhile`, () => {
+
+    it(`should be lazy`, () => {
+      const visited: number[] = []
+      const input = [-4, -6, -1, 6, -7, -5, 3, 1]
+      const actual = j.pipe(
+        input,
+        j.takeWhile(x => {
+          visited.push(x)
+          return x < 0
+        }),
+      )
+      const expected = [-4, -6, -1]
+      const expectedVisited = [-4, -6, -1, 6]
+      chai.assert.sameOrderedMembers(visited, [])
+      chai.assert.sameOrderedMembers([...actual], expected)
+      chai.assert.sameOrderedMembers(visited, expectedVisited)
+    })
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4],
+        j.takeWhile(x => x < 3),
+      )
+      const expected = [1, 2]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`takeUntil`, () => {
+
+    it(`works`, () => {
+      const input = [1, 2, 3, 2, 3, 2, 1]
+      const actual = j.pipe(input, j.takeUntil(x => x == 3))
+      chai.assert.sameOrderedMembers([...actual], [1, 2])
+    })
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4],
+        j.takeUntil(x => x >= 3),
+      )
+      const expected = [1, 2]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`flatten`, () => {
+
+    it(`works without argument`, () => {
+      const input: any = [[1, 2], [5], [6, 7, [8, 9]]]
+      const actual = j.pipe(input, j.flatten())
+      const expected = [1, 2, 5, 6, 7, [8, 9]]
+      chai.assert.sameDeepOrderedMembers([...actual], expected)
+    })
+
+    it(`works with argument`, () => {
+      const input = [
+        [
+          [1, 2],
+          [3, 4],
+          [5],
+        ],
+        [
+          [6, 7, 8],
+        ],
+        [
+          [9],
+        ],
+      ]
+      const actual = j.pipe(input, j.flatten(2))
+      const expected = j.Integers(1, 10)
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`flattenDeep`, () => {
+
+    it(`works`, () => {
+      const input = [1, [2, 3, [4, 5, [6, 7, [8]]], 9]]
+      const actual = j.pipe(input, j.flattenDeep())
+      const expected = j.Integers(1, 10)
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`uniqueBy`, () => {
+
+    it(`works`, () => {
+      const input = [
+        { a: 1, b: 1 },
+        { a: 1, b: 2 },
+        { a: 1, b: 3 },
+        { a: 2, b: 1 },
+        { a: 2, b: 2 },
+        { a: 2, b: 3 },
+      ]
+      const actual = j.pipe(input, j.uniqueBy(t => t.a + t.b))
+      const expected = [
+        { a: 1, b: 1 },
+        { a: 1, b: 2 },
+        { a: 1, b: 3 },
+        { a: 2, b: 3 },
+      ]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [2, 0, 2, 3],
+        j.uniqueBy(t => t % 2),
+      )
+      const expected = [2, 3]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
     })
 
   })
@@ -751,15 +1479,13 @@ describe(`Operators`, () => {
       chai.assert.sameOrderedMembers([...actual], expected)
     })
 
-  })
-
-  describe(`sortedUnique`, () => {
-
-    it(`works`, () => {
-      const input = [1, 1, 1, 4, 4, 5, 5, 6, 7, 8, 8, 9, 9, 9]
-      const actual = j.pipe(input, j.sortUnique())
-      const expected = [1, 4, 5, 6, 7, 8, 9]
-      chai.assert.sameOrderedMembers([...actual], expected)
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [2, 0, 2, 3],
+        j.unique(),
+      )
+      const expected = [2, 0, 3]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
     })
 
   })
@@ -834,17 +1560,6 @@ describe(`Operators`, () => {
 
   })
 
-  describe(`reverse`, () => {
-
-    it(`reverses the iterable`, () => {
-      const input = [1, 2, 3, 4]
-      const actual = j.pipe(input, j.reverse())
-      const expected = [4, 3, 2, 1]
-      chai.assert.sameOrderedMembers([...actual], expected)
-    })
-
-  })
-
   describe(`tap`, () => {
 
     it(`iterates over every item in the iterator and returns the same items`, () => {
@@ -861,71 +1576,6 @@ describe(`Operators`, () => {
       ]
       chai.assert.deepEqual([...actual], expected)
       chai.assert.deepEqual(collected, expectedCollection)
-    })
-
-  })
-
-  describe(`sort`, () => {
-
-    it(`works for ascending order`, () => {
-      const input = [1, 3, 2, 5, 4]
-      const actual = j.pipe(input, j.sort('asc'))
-      const expected = [1, 2, 3, 4, 5]
-      chai.assert.sameOrderedMembers([...actual], expected)
-    })
-
-    it(`works for descending order`, () => {
-      const input = [1, 3, 2, 5, 4]
-      const actual = j.pipe(input, j.sort('desc'))
-      const expected = [5, 4, 3, 2, 1]
-      chai.assert.sameOrderedMembers([...actual], expected)
-    })
-
-  })
-
-  describe(`sortWith`, () => {
-
-    it(`works`, () => {
-      const input = [5, 3, 4, 1, 2]
-      const actual = j.pipe(input, j.sortWith((a, b) => a - b))
-      const expected = [1, 2, 3, 4, 5]
-      chai.assert.sameOrderedMembers([...actual], expected)
-    })
-
-  })
-
-  describe(`sortBy`, () => {
-
-    it(`works with a function`, () => {
-      const input = [{ x: 1, y: 2 }, { x: 5, y: 3 }, { x: 2, y: 1 }]
-      const actual = j.pipe(input, j.sortBy(item => item.x, 'desc'))
-      const expected = [{ x: 5, y: 3 }, { x: 2, y: 1 }, { x: 1, y: 2 }]
-      chai.assert.sameDeepOrderedMembers([...actual], expected)
-    })
-
-    it(`works with a prop`, () => {
-      const input = [{ x: 1, y: 2 }, { x: 5, y: 3 }, { x: 2, y: 1 }]
-      const actual = j.pipe(input, j.sortBy('y', 'asc'))
-      const expected = [{ x: 2, y: 1 }, { x: 1, y: 2 }, { x: 5, y: 3 }]
-      chai.assert.sameDeepOrderedMembers([...actual], expected)
-    })
-
-  })
-
-  describe(`segmentizeBy`, () => {
-
-    it(`works`, () => {
-      const input = [1, 2, 3, -4, -5, -6, -7, -8, 9, -10, NaN, NaN, 13]
-      const actual = j.pipe(input, j.segmentizeBy(x => Math.sign(x)))
-      const expected = [
-        [1, 2, 3],
-        [-4, -5, -6, -7, -8],
-        [9],
-        [-10],
-        [NaN, NaN],
-        [13],
-      ]
-      chai.assert.deepEqual([...actual], expected)
     })
 
   })

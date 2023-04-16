@@ -9,7 +9,7 @@ import { Operator } from '../core/types'
  * operator trigger
  *
  * @description
- * Takes all values of the iterable, and then reverses them.
+ * Takes all values of the iterable, and then yields them in reverse.
  *
  * @returns
  * Iterable<T>
@@ -17,7 +17,7 @@ import { Operator } from '../core/types'
  * @example
  * j.pipe(
  *   [1, 2, 3, 4],
- *   j.reverse()
+ *   j.reverse(),
  * )
  * // => [4, 3, 2, 1]
  *

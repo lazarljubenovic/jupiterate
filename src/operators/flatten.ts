@@ -24,6 +24,9 @@ import { passThrough } from './pass-through'
  * @returns
  * Operator<U, T>
  *
+ * @throws
+ * `RangeError` when the given `depth` parameter is not an integer, or is less than zero.
+ *
  * @example
  * j.pipe(
  *   [[1, 2], [3], [4, 5, 6]],
@@ -41,30 +44,30 @@ import { passThrough } from './pass-through'
  *     ],
  *     [
  *       [211, 212, 213],
+ *       [],
  *     ]
  *   ],
- *   j.flatten(1),
+ *   j.flatten(2),
  * )
- * // => [[111, 112], [121], [131], [211, 212, 213]]
+ * // => [111, 112, 121, 131, 132, 211, 212, 213]
  */
 export function flatten<T> (): Operator<IterableIterator<T>, T>
 export function flatten<T> (depth: 0): Operator<T, T>
-export function flatten<T> (depth: 1): Operator<IterableIterator<T>, T>
-export function flatten<T> (depth: 2): Operator<IterableIterator<IterableIterator<T>>, T>
-export function flatten<T> (depth: 3): Operator<IterableIterator<IterableIterator<IterableIterator<T>>>, T>
-export function flatten<T> (depth: 4): Operator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<T>>>>, T>
-export function flatten<T> (depth: 5): Operator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<T>>>>>, T>
-export function flatten<T> (depth: 6): Operator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<T>>>>>>, T>
-export function flatten<T> (depth: 7): Operator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<T>>>>>>>, T>
-export function flatten<T> (depth: 8): Operator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<T>>>>>>>>, T>
-export function flatten<T> (depth: 9): Operator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<IterableIterator<T>>>>>>>>>, T>
+export function flatten<T> (depth: 1): Operator<Iterable<T>, T>
+export function flatten<T> (depth: 2): Operator<Iterable<Iterable<T>>, T>
+export function flatten<T> (depth: 3): Operator<Iterable<Iterable<Iterable<T>>>, T>
+export function flatten<T> (depth: 4): Operator<Iterable<Iterable<Iterable<Iterable<T>>>>, T>
+export function flatten<T> (depth: 5): Operator<Iterable<Iterable<Iterable<Iterable<Iterable<T>>>>>, T>
+export function flatten<T> (depth: 6): Operator<Iterable<Iterable<Iterable<Iterable<Iterable<Iterable<T>>>>>>, T>
+export function flatten<T> (depth: 7): Operator<Iterable<Iterable<Iterable<Iterable<Iterable<Iterable<Iterable<T>>>>>>>, T>
+export function flatten<T> (depth: 8): Operator<Iterable<Iterable<Iterable<Iterable<Iterable<Iterable<Iterable<Iterable<T>>>>>>>>, T>
+export function flatten<T> (depth: 9): Operator<Iterable<Iterable<Iterable<Iterable<Iterable<Iterable<Iterable<Iterable<Iterable<T>>>>>>>>>, T>
 export function flatten<T> (depth: number): Operator<T, any>
 export function flatten<T> (depth: number = 1): Operator<T, any> {
-  if (depth < 0) throw new RangeError(`depth must be >= 0`)
+  if (!Number.isInteger(depth) || depth < 0) throw new RangeError(`Depth must be an integer not less than 0; an attempt was made to define depth as ${depth}.`)
   if (depth == 0) return passThrough()
   return function *(iterable: Iterable<T>): IterableIterator<any> {
     for (const item of iterable) {
-      console.log(item)
       if (!isIterable(item)) {
         throw new TypeError(`Cannot iterate over ${item}.`)
       }

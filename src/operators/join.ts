@@ -1,5 +1,5 @@
 import { Operator } from '../core/types'
-import { JoinWith as staticJoinWith } from '../static/join-with'
+import { JoinWith } from '../static'
 
 
 /**
@@ -33,6 +33,6 @@ import { JoinWith as staticJoinWith } from '../static/join-with'
  */
 export function join<T, U> (joiner: U): Operator<T, T | U> {
   return function (iterable: Iterable<T>): IterableIterator<T | U> {
-    return staticJoinWith(joiner, iterable)
+    return JoinWith(joiner, iterable)
   }
 }

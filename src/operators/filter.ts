@@ -6,9 +6,9 @@ import { Operator } from '../core/types'
  * Applies a *filter*.
  *
  * @categories
- * predicate-based type-guard
+ * operator predicate-based type-guard
  *
- * @describe
+ * @description
  * Applies the given predicate function to every value. If the result of the predicate is `true`, the value is
  * propagated further, unchanged. Otherwise, the value is skipped over.
  *

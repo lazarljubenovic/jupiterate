@@ -11,7 +11,8 @@
  * @description
  * Returns the number of yielded items from the given iterable.
  *
- * To take into account only items which satisfy a certain condition, use {@link Count} instead.
+ * To take into account only items which satisfy a certain condition,
+ * use {@link Count} instead.
  *
  * @parameter
  * iterable

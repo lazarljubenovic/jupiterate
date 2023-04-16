@@ -12,9 +12,11 @@ import { all } from '../utils'
  * 0.0.2
  *
  * @description
- * Returns the number of yielded items from the given iterable which satisfy the given condition.
+ * Returns the number of yielded items from the given iterable which
+ * satisfy the given condition.
  *
- * When no condition is given, all items are accounted for, and the function behaves exactly like {@link Size}.
+ * When no condition is given, all items are accounted for, and the
+ * function behaves exactly like {@link Size}.
  *
  * @parameter
  * iterable
@@ -24,7 +26,8 @@ import { all } from '../utils'
  * @parameter
  * predicate
  * (t: T, i: number) => boolean
- * The function applied to each yielded item, used to determine whether the item will be counted or not.
+ * The function applied to each yielded item, used to determine whether
+ * the item will be counted or not.
  *
  * @returns
  * number
@@ -34,12 +37,16 @@ import { all } from '../utils'
  * // => 3
  *
  * @example
- * j.Size([])
+ * j.Count([])
  * // => 0
  *
  * @example
- * j.Size(j.Integers())
- * // infinite loop
+ * j.Count([1, 2, 3, 4], a => a % 2 == 0)
+ * // => 2
+ *
+ * @example
+ * j.Count(j.Integers())
+ * // (!) infinite loop
  */
 export function Count<T> (
   iterable: Iterable<T>,

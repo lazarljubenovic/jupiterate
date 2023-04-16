@@ -23,16 +23,16 @@ import { Operator } from '../core/types'
  * @example
  * j.pipe(
  *   [1, 2],
- *   j.Concat([3, 4]),
+ *   j.concat([3, 4]),
  * )
  * // => [1, 2, 3, 4]
  *
  * @example
  * j.pipe(
  *   [1],
- *   j.Concat([2], [3], [4]),
+ *   j.concat([2], [3, 4], [], [5]),
  * )
- * // => [1, 2, 3, 4]
+ * // => [1, 2, 3, 4, 5]
  */
 export function concat<T> (...otherIterables: Array<Iterable<T>>): Operator<T, T> {
   return function *(iterable: Iterable<T>): IterableIterator<T> {
