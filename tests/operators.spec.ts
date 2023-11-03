@@ -101,6 +101,16 @@ describe(`Operators`, () => {
       chai.assert.throws(() => j.chunk(-1), RangeError)
     })
 
+    it(`infers the correct type for chunk size 1`, () => {
+      const result = j.pipe([1, 2, 3], j.chunk(1))
+      type Test = AssertTrue<IsExact<typeof result, IterableIterator<[number]>>>
+    })
+
+    it(`infers the correct type for chunk size 2`, () => {
+      const result = j.pipe([1, 2, 3], j.chunk(2))
+      type Test = AssertTrue<IsExact<typeof result, IterableIterator<[number] | [number, number]>>>
+    })
+
     it(`@example 1`, () => {
       const actual = j.pipe(
         [1, 2, 3, 4],

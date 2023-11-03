@@ -40,13 +40,24 @@ import { Operator } from '../core/types'
  * )
  * // => [[1, 2], [3, 4], [5]]
  */
+export function chunk<T> (chunkSize: 1): Operator<T, [T]>
+export function chunk<T> (chunkSize: 2): Operator<T, [T] | [T, T]>
+export function chunk<T> (chunkSize: 3): Operator<T, [T] | [T, T] | [T, T, T]>
+export function chunk<T> (chunkSize: 4): Operator<T, [T] | [T, T] | [T, T, T] | [T, T, T, T]>
+export function chunk<T> (chunkSize: 5): Operator<T, [T] | [T, T] | [T, T, T] | [T, T, T, T] | [T, T, T, T, T]>
+export function chunk<T> (chunkSize: 6): Operator<T, [T] | [T, T] | [T, T, T] | [T, T, T, T] | [T, T, T, T, T] | [T, T, T, T, T, T]>
+export function chunk<T> (chunkSize: 7): Operator<T, [T] | [T, T] | [T, T, T] | [T, T, T, T] | [T, T, T, T, T] | [T, T, T, T, T, T] | [T, T, T, T, T, T, T]>
+export function chunk<T> (chunkSize: 8): Operator<T, [T] | [T, T] | [T, T, T] | [T, T, T, T] | [T, T, T, T, T] | [T, T, T, T, T, T] | [T, T, T, T, T, T, T] | [T, T, T, T, T, T, T, T]>
+export function chunk<T> (chunkSize: 9): Operator<T, [T] | [T, T] | [T, T, T] | [T, T, T, T] | [T, T, T, T, T] | [T, T, T, T, T, T] | [T, T, T, T, T, T, T] | [T, T, T, T, T, T, T, T] | [T, T, T, T, T, T, T, T, T]>
+export function chunk<T> (chunkSize: 10): Operator<T, [T] | [T, T] | [T, T, T] | [T, T, T, T] | [T, T, T, T, T] | [T, T, T, T, T, T] | [T, T, T, T, T, T, T] | [T, T, T, T, T, T, T, T] | [T, T, T, T, T, T, T, T, T] | [T, T, T, T, T, T, T, T, T, T]>
+export function chunk<T> (chunkSize: number): Operator<T, Array<T>>
 export function chunk<T> (chunkSize: number): Operator<T, Array<T>> {
 
   if (!Number.isInteger(chunkSize) || chunkSize < 1) {
     throw new RangeError(`Chunk size must be an integer not less than 1; an attempt was made to define the chunk size as ${chunkSize}.`)
   }
 
-  return function *(iterable: Iterable<T>): IterableIterator<Array<T>> {
+  return function* (iterable: Iterable<T>): IterableIterator<Array<T>> {
     const buffer: Array<T> = []
     let count: number = 0
     for (const item of iterable) {
