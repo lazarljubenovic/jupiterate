@@ -16,7 +16,7 @@ type Opt<T> = T | undefined
  * as at least one iterable has values to yield. `undefined` will be used for missing
  * values.
  *
- * To ensure all iterables are of same size (at runtime), use {@link ZipStrict}.
+ * To ensure all iterables are of the same size (at runtime), use {@link ZipStrict}.
  *
  * @since
  * 0.0.1
@@ -27,7 +27,7 @@ type Opt<T> = T | undefined
  * Iterables to zip together.
  *
  * @returns
- * Operator<T, [...U]>
+ * IterableIterator<[...T]>
  *
  * @example
  * j.Zip(

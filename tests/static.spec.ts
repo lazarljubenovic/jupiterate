@@ -111,6 +111,16 @@ describe(`Static`, () => {
 
   })
 
+  describe(`CreateString`, () => {
+
+    it(`@example 1`, () => {
+      const actual = j.CreateString(['a', 'b', 'c'])
+      const expected = 'abc'
+      chai.assert.equal(actual, expected)
+    })
+
+  })
+
   describe(`Every`, () => {
 
     it(`returns true when every item satisfies the given condition`, () => {
@@ -637,6 +647,11 @@ describe(`Static`, () => {
       chai.assert.throws(operation)
     })
 
+    it(`@example 1`, () => {
+      const actual = j.MinBy([2, 3, 9, 6], x => Math.abs(5 - x))
+      chai.assert.equal(actual, 6)
+    })
+
   })
 
   describe(`MaxBy`, () => {
@@ -907,6 +922,11 @@ describe(`Static`, () => {
       chai.assert.sameOrderedMembers(indexes, expected)
     })
 
+    it(`throws an error when trying to invoke with less than two or more than three arguments`, () => {
+      chai.assert.throws(() => (j.Reduce as any)(1))
+      chai.assert.throws(() => (j.Reduce as any)(1, 2, 3, 4))
+    })
+
   })
 
   describe(`Unfold`, () => {
@@ -927,6 +947,73 @@ describe(`Static`, () => {
       )
       const expected = [1, 1, 2, 3, 5, 8, 13, 21]
       chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`Zip`, () => {
+
+    it(`works with iterables with same item count`, () => {
+      const iterables = [
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+        [true, false, true],
+      ]
+      const actual = j.Zip(...iterables)
+      const expected = [
+        [1, 'a', true],
+        [2, 'b', false],
+        [3, 'c', true],
+      ]
+      chai.assert.deepEqual([...actual], expected)
+    })
+
+    it(`works with iterables with different item count`, () => {
+      const iterables = [
+        [1, 2, 3, 4, 5, 6],
+        ['a', 'b'],
+        [true, false, true, true, false, false, false],
+      ]
+      const actual = j.Zip(...iterables)
+      const expected = [
+        [1, 'a', true],
+        [2, 'b', false],
+        [3, undefined, true],
+        [4, undefined, true],
+        [5, undefined, false],
+        [6, undefined, false],
+        [undefined, undefined, false],
+      ]
+      chai.assert.deepEqual([...actual], expected)
+    })
+
+  })
+
+  describe(`ZipStrict`, () => {
+
+    it(`works with iterables with same item count`, () => {
+      const iterables = [
+        [1, 2, 3],
+        ['a', 'b', 'c'],
+        [true, false, true],
+      ]
+      const actual = j.ZipStrict(...iterables)
+      const expected = [
+        [1, 'a', true],
+        [2, 'b', false],
+        [3, 'c', true],
+      ]
+      chai.assert.deepEqual([...actual], expected)
+    })
+
+    it(`throws with iterables with different item count`, () => {
+      const iterables = [
+        [1, 2, 3, 4, 5, 6],
+        ['a', 'b'],
+        [true, false, true, true, false, false, false],
+      ] as const
+      const getActual = () => [...j.ZipStrict(...iterables)]
+      chai.assert.throws(getActual)
     })
 
   })

@@ -1,10 +1,9 @@
 import { Operator } from '../core/types'
-import { segmentizeBy } from './segmentize'
 
 
 /**
  * @short
- * *Chunk* iterable into tuples.
+ * *Chunk* an iterable into tuples.
  *
  * @categories
  * operator

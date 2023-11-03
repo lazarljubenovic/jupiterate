@@ -3,17 +3,19 @@
   "version": "0.0.1",
   "description": "A tree-shakable iteration library.",
   "main": "dst/cjs/index.js",
-  "module": "dst/es6/index.js",
-  "types": "dst/es6/index.d.ts",
+  "module": "dst/esm/index.js",
+  "types": "dst/esm/index.d.ts",
   "repository": "https://github.com/lazarljubenovic/jupiterate",
   "author": "Lazar Ljubenović <lazar.ljubenovic.1995@gmail.com>",
   "license": "MIT",
   "private": false,
+  "files": [
+    "dst"
+  ],
   "scripts": {
-    "build:esn": "tsc -p tsconfig.esn.json",
-    "build:es6": "tsc -p tsconfig.es6.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build": "yarn build:cjs && yarn build:esn && yarn build:es6",
+    "build": "yarn build:cjs && yarn build:esm",
     "test": "ts-mocha -p tsconfig.json tests/**/*.spec.ts",
     "test:w": "ts-mocha -p tsconfig.json tests/**/*.spec.ts -w --watch-extensions ts",
     "test:c": "nyc --reporter=html --reporter=text --reporter=text-summary yarn test"

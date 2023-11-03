@@ -1,5 +1,4 @@
 import { Operator } from '../core/types'
-import { identity } from '../utils'
 
 
 /**
@@ -10,8 +9,9 @@ import { identity } from '../utils'
  * operator accepts-iterable equality-function trigger
  *
  * @description
- * Yields values not included in the given iterable, using a custom function for the equality check between items. The
- * order of values is determined by the source iterable.
+ * Yields only those values from the source iterable which are not included in the given iterable, using a custom
+ * function for the equality check between items. The order of values is determined by the source
+ * iterable.
  *
  * This is a generalization of {@link differenceBy}, and therefore of {@link difference} as well.
  *

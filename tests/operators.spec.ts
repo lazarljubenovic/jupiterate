@@ -231,7 +231,8 @@ describe(`Operators`, () => {
     it(`@example 2`, () => {
       const actual = j.pipe(
         [300, 301, 302, 303, 304, 305, 306, 307],
-        j.differenceBy([2, 4], t => t % 5))
+        j.differenceBy([2, 4], t => t % 5),
+      )
       const expected = [300, 301, 303, 305, 306]
       chai.assert.sameOrderedMembers([...actual], expected)
     })
@@ -971,6 +972,11 @@ describe(`Operators`, () => {
       chai.assert.sameDeepOrderedMembers([...actual], [...expected])
     })
 
+    it(`throws an error when trying to invoke with none or more than two arguments`, () => {
+      chai.assert.throws(() => (j.scan as any)())
+      chai.assert.throws(() => (j.scan as any)(1, 2, 3))
+    })
+
   })
 
   describe(`segmentizeBy`, () => {
@@ -1038,6 +1044,43 @@ describe(`Operators`, () => {
       const expected = [
         [10, 20, 30, 40],
         [50, 60, 70, 80],
+      ]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`works with a single item`, () => {
+      const actual = j.pipe(
+        [1],
+        j.segmentizeBy((n, i) => n),
+      )
+      const expected = [
+        [1],
+      ]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`works with no items`, () => {
+      const actual = j.pipe(
+        [],
+        j.segmentizeBy(() => null),
+      )
+      const expected: never[] = []
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`segmentize`, () => {
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 1, 2, 2, 2, 3],
+        j.segmentize(),
+      )
+      const expected = [
+        [1, 1],
+        [2, 2, 2],
+        [3],
       ]
       chai.assert.sameDeepOrderedMembers([...actual], [...expected])
     })
@@ -1337,6 +1380,14 @@ describe(`Operators`, () => {
       chai.assert.sameOrderedMembers([...actual], expected)
     })
 
+    it(`throws if you try to take a negative number of items`, () => {
+      chai.assert.throws(() => j.takeFirst(-2))
+    })
+
+    it(`throws if you try to take half an item`, () => {
+      chai.assert.throws(() => j.takeFirst(0.5))
+    })
+
     it(`@example 1`, () => {
       const actual = j.pipe(
         'jupiterate',
@@ -1547,12 +1598,23 @@ describe(`Operators`, () => {
       chai.assert.deepEqual([...actual], [...expected])
     })
 
-    it(`throws with iterables of different item count`, () => {
+    it(`throws with iterables of different item count (source is not the shortest)`, () => {
       const input = [1, 2, 3, 4]
       const iterables = [
         ['a', 'b', 'c', 'd', 'e', 'f'],
         [10, 20, 30],
         [true],
+      ] as const
+      const getActual = () => [...j.pipe(input, j.zipStrict(...iterables))]
+      chai.assert.throws(getActual)
+    })
+
+    it(`throws with iterables of different item count (first is shortest)`, () => {
+      const input = [1, 2, 3, 4]
+      const iterables = [
+        ['a', 'b', 'c', 'd', 'e', 'f'],
+        [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+        [true, false, true, true, false, false, false, true, true, true, true, true],
       ] as const
       const getActual = () => [...j.pipe(input, j.zipStrict(...iterables))]
       chai.assert.throws(getActual)

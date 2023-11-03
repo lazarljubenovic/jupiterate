@@ -1,10 +1,6 @@
 {
-  "exclude": [
-    "tests",
-    "dst"
-  ],
-  "include": [
-    "src"
+  "files": [
+    "src/index.ts"
   ],
   "compilerOptions": {
     "target": "es2015",

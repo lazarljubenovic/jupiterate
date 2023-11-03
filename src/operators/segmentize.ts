@@ -4,17 +4,17 @@ import { identity } from '../utils'
 
 /**
  * @short
- * Breaks the iterable into *segments* which project into the same value.
+ * Breaks the iterable into *segments* whose items project into the same value.
  *
  * @categories
  * operator
  *
  * @description
  * Applies the given projection function to each value of the source iterable. As long as these projections are
- * equal (using `Object.is`, i.e. `SameValue` equality), values are collected into sub-arrays, which are yielded
+ * equal (using `SameValue` equality, i.e. `Object.is`), values are collected into sub-arrays, which are yielded
  * together whenever the result of the projection function changes.
  *
- * This is a generalization of {@link chunk}.
+ * This is a generalization of {@link segmentize} and {@link chunk}.
  *
  * @since
  * 0.0.1
@@ -102,6 +102,40 @@ export function segmentizeBy<T> (
 
 }
 
+/**
+ * @short
+ * Breaks the iterable into *segments* with equal items.
+ *
+ * @categories
+ * operator
+ *
+ * @description
+ * As long as items from the source iterable are equal (using `SameValue` equality, i.e. `Object.is`),
+ * they will be collected into sub-arrays, which are yielded together whenever a different value
+ * is encountered.
+ *
+ * This is a specialization of {@link segmentizeBy}.
+ *
+ * @since
+ * 0.0.1
+ *
+ * @parameter
+ * project: (item: T, index: number) => unknown
+ *
+ * @returns
+ * Operator<T, Array<T>>
+ *
+ * @example
+ * j.pipe(
+ *   [1, 1, 2, 2, 2, 3],
+ *   j.segmentize(),
+ * )
+ * // => [
+ * //   [1, 1],
+ * //   [2, 2, 2],
+ * //   [3],
+ * // ]
+ */
 export function segmentize () {
   return function *<T> (iterable: Iterable<T>): IterableIterator<Array<T>> {
     yield *segmentizeBy(identity)<T>(iterable)

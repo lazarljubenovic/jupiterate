@@ -2,7 +2,7 @@ import { Unary } from '../core/types'
 import { gt, lt } from '../utils'
 
 
-export function ExtremeBy<T> (
+function ExtremeBy<T> (
   iterable: Iterable<T>,
   project: Unary<T, number>,
   compare: (a: number, b: number) => boolean,
@@ -24,8 +24,7 @@ export function ExtremeBy<T> (
 
 /**
  * @short
- * Get *min* yielded value, guided *by* the provided function to know what to
- * compare.
+ * Get *min* yielded value, guided *by* a comparison function.
  *
  * @categories
  * static mapped
@@ -34,9 +33,7 @@ export function ExtremeBy<T> (
  * The function finds the minimum value among the yielded values. The values
  * are compared after being mapped via the provided function `project`.
  *
- * If you already have an iterable of numbers that you want to compare directly
- * (i.e. if the `project` is an identity function), you can use the simpler version
- * of this operator, `min`.
+ * This is a generalization of {@link Min}.
  *
  * @parameter
  * project
@@ -65,8 +62,7 @@ export function MinBy<T> (iterable: Iterable<T>, project: Unary<T, number>): T {
 
 /**
  * @short
- * Get *max* yielded value, guided *by* the provided function to know what to
- * compare.
+ * Get *max* yielded value, guided *by* a comparison function.
  *
  * @categories
  * static mapped
@@ -75,9 +71,7 @@ export function MinBy<T> (iterable: Iterable<T>, project: Unary<T, number>): T {
  * The operator finds the maximum value among the yielded values. The values
  * are compared after being mapped via the provided function.
  *
- * If you already have an iterable of numbers that you want to compare directly
- * (i.e. if the `map` is an identity function), you can use the simpler version
- * of this operator, `max`.
+ * This is a generalization of {@link Max}.
  *
  * @parameter
  * map
@@ -104,12 +98,78 @@ export function MaxBy<T> (iterable: Iterable<T>, map: Unary<T, number>): T {
   return ExtremeBy(iterable, map, gt)
 }
 
+/**
+ * @short
+ * Get *min* yielded value
+ *
+ * @categories
+ * static
+ *
+ * @description
+ * The function finds the minimum value among the yielded values.
+ *
+ * This is a specialization of {@link MinBy}.
+ *
+ * @parameter
+ * project
+ * (t: T) => number
+ *
+ * @returns
+ * T
+ *
+ * @example
+ * j.MinBy(
+ *   [2, 3, 9, 6],
+ *   x => Math.abs(5 - x),
+ * )
+ * // => 6
+ *
+ * @example
+ * j.MinBy(
+ *   'jupiter',
+ *   x => x.charAt(0),
+ * )
+ * // => 'e'
+ */
 export function Min (iterable: Iterable<number>): number {
   const array = Array.from(iterable)
   if (array.length == 0) throw new Error(`Cannot find min of an empty iterable.`)
   return Math.min(...array)
 }
 
+/**
+ * @short
+ * Get *max* yielded value.
+ *
+ * @categories
+ * static
+ *
+ * @description
+ * The operator finds the maximum value among the yielded values.
+ *
+ * This is a specialization of {@link MaxBy}.
+ *
+ * @parameter
+ * map
+ * (t: T) => number
+ *
+ * @returns
+ * T
+ *
+ * @example
+ * j.pipe(
+ *   [2, 3, 9, 6],
+ *   j.MaxBy(x => Math.abs(5 - x))
+ * )
+ * // => 9
+ *
+ * @example
+ * j.pipe(
+ *   'jupiter',
+ *   j.MaxBy(x => x.charAt(0)),
+ * )
+ * // => 't'
+ */
 export function Max (iterable: Iterable<number>): number {
   const array = Array.from(iterable)
   if (array.length == 0) throw new Error(`Cannot find max of an empty iterable.`)
