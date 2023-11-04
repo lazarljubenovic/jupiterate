@@ -16,6 +16,7 @@
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build": "yarn build:cjs && yarn build:esm",
+    "prepublishOnly": "yarn test:c && yarn build",
     "test": "ts-mocha --type-check -p tsconfig.spec.json tests/**/*.spec.ts",
     "test:w": "ts-mocha --type-check -p tsconfig.spec.json tests/**/*.spec.ts -w --watch-extensions ts",
     "test:c": "nyc --reporter=html --reporter=text --reporter=text-summary yarn test"
