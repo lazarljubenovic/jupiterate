@@ -2,6 +2,7 @@ import * as chai from 'chai'
 import * as j from '../src'
 import { qqq } from '../src/utils'
 import { AssertFalse, AssertTrue, IsExact } from 'conditional-type-checks'
+import { exists } from 'fs'
 
 
 const isNumber = (x: unknown): x is number => typeof x == 'number'
@@ -327,7 +328,8 @@ describe(`Operators`, () => {
     it(`doesn't impact the source iterable when there are no additional values to yield`, () => {
       const input = [1, 2, 3, 4]
       const actual = j.pipe(input, j.endWith<number>())
-
+      const expected = [1, 2, 3, 4]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
     })
 
   })
