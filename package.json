@@ -1,6 +1,6 @@
 {
   "name": "jupiterate",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A tree-shakable iteration library.",
   "main": "dst/cjs/index.js",
   "module": "dst/esm/index.js",
