@@ -131,6 +131,49 @@ describe(`Operators`, () => {
 
   })
 
+  describe(`chunkStrict`, () => {
+
+    it(`throws a RangeError when chunk size is not an integer`, () => {
+      chai.assert.throws(() => j.chunkStrict(1.5), RangeError)
+    })
+
+    it(`throws a RangeError when chunk size is zero`, () => {
+      chai.assert.throws(() => j.chunkStrict(0), RangeError)
+    })
+
+    it(`throws a RangeError when chunk size is less than zero`, () => {
+      chai.assert.throws(() => j.chunkStrict(-1), RangeError)
+    })
+
+    it(`infers the correct type for chunk size 1`, () => {
+      const result = j.pipe([1, 2, 3], j.chunkStrict(1))
+      type Test = AssertTrue<IsExact<typeof result, IterableIterator<[number]>>>
+    })
+
+    it(`infers the correct type for chunk size 2`, () => {
+      const result = j.pipe([1, 2, 3], j.chunkStrict(2))
+      type Test = AssertTrue<IsExact<typeof result, IterableIterator<[number, number]>>>
+    })
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4],
+        j.chunkStrict(2),
+      )
+      const expected = [[1, 2], [3, 4]]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4, 5],
+        j.chunkStrict(2),
+      )
+      chai.assert.throws(() => [...actual], Error)
+    })
+
+  })
+
   describe(`concat`, () => {
 
     it(`concatenates one array`, () => {
