@@ -10,7 +10,7 @@ import { identity } from '../utils'
  * operator trigger
  *
  * @description
- * Returns a new iterable which emits all the same values as the source iterable,
+ * Returns a new iterable which yields all the same values as the source iterable,
  * but in different order. The order is determined by invoking the `compareFn`.
  *
  * This is a generalization of {@link sortBy}, and therefore of {@link sort} as well.
@@ -67,7 +67,7 @@ export function sortUsing<T> (compareFn: (a: T, b: T) => number): Operator<T, T>
  * operator trigger
  *
  * @description
- * Returns a new iterable which emits all the same values as the source iterable,
+ * Returns a new iterable which yields all the same values as the source iterable,
  * but in different order. The order is determined by the values' projections.
  *
  * This is a generalization of {@link sort}, and a specialization of {@link sortUsing}.
@@ -132,7 +132,7 @@ export function sortBy<T> (projectOrPick: ViableKeys<T> | Unary<T, number>, orde
  * operator trigger
  *
  * @description
- * Returns a new iterable which emits all the same values as the source iterable,
+ * Returns a new iterable which yields all the same values as the source iterable,
  * but in different order.
  *
  * This is a specialization of {@link sortBy}, and therefore of {@link sortUsing} as well.
