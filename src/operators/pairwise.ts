@@ -16,6 +16,8 @@ import { Operator } from '../core/types'
  * Empty iterator and an iterator with a single value will both result in an
  * empty iterator.
  *
+ * This is a specialization of {@link slideThrough}.
+ *
  * @returns
  * Operator<T, [T, T]>
  *
@@ -67,6 +69,8 @@ export function pairwise<T> (): Operator<T, [T, T]> {
  * third and fourth, fourth and fifth, and so forth. Additionally, the last
  * yielded pair will consist of the last and the first value of the source
  * iterator.
+ *
+ * This is a specialization of {@link slideThroughCyclic}.
  *
  * @returns
  * Operator<T, [T, T]>

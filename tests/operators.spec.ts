@@ -1281,6 +1281,164 @@ describe(`Operators`, () => {
 
   })
 
+  describe(`slideThrough`, () => {
+
+    it(`throws a RangeError when the window size is not an integer`, () => {
+      chai.assert.throws(() => j.slideThrough(1.5), RangeError)
+    })
+
+    it(`throws a RangeError when the window size is zero`, () => {
+      chai.assert.throws(() => j.slideThrough(0), RangeError)
+    })
+
+    it(`gives empty iterable for a given empty iterable`, () => {
+      const actual = j.pipe([], j.slideThrough(1))
+      chai.assert.deepEqual([...actual], [])
+    })
+
+    it(`gives empty iterable for a given iterable of size 1 and window of size 2`, () => {
+      const actual = j.pipe(['a'], j.slideThrough(2))
+      chai.assert.deepEqual([...actual], [])
+    })
+
+    it(`yields a singleton for a given iterable of size 1 and window of size 1`, () => {
+      const actual = j.pipe(['a'], j.slideThrough(1))
+      chai.assert.deepEqual([...actual], [['a']])
+    })
+
+    it(`gives a single pair for a given iterable of size 2 and window of size 2`, () => {
+      const actual = j.pipe(['a', 'b'], j.slideThrough(2))
+      chai.assert.deepEqual([...actual], [['a', 'b']])
+    })
+
+    it(`gives two singletons for a given iterable of size 2 and window of size 1`, () => {
+      const actual = j.pipe(['a', 'b'], j.slideThrough(1))
+      chai.assert.deepEqual([...actual], [['a'], ['b']])
+    })
+
+    it(`works for several items and a larger window size`, () => {
+      const actual = j.pipe(['a', 'b', 'c', 'd', 'e', 'f'], j.slideThrough(4))
+      const expected = [
+        ['a', 'b', 'c', 'd'],
+        ['b', 'c', 'd', 'e'],
+        ['c', 'd', 'e', 'f'],
+      ]
+      chai.assert.deepEqual([...actual], expected)
+    })
+
+    it(`yields a single tuple when the iterable size and the window size are equal`, () => {
+      const actual = j.pipe([1, 2, 3, 4, 5], j.slideThrough(5))
+      const expected = [
+        [1, 2, 3, 4, 5],
+      ]
+      chai.assert.deepEqual([...actual], [...expected])
+    })
+
+    it(`@example 1`, () => {
+      const actual = j.pipe(
+        [1, 2, 3, 4, 5],
+        j.slideThrough(3),
+      )
+      const expected = [[1, 2, 3], [2, 3, 4], [3, 4, 5]]
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+    it(`@example 2`, () => {
+      const actual = j.pipe(
+        [1, 2, 3],
+        j.slideThrough(4),
+      )
+      const expected: number[][] = []
+      chai.assert.sameDeepOrderedMembers([...actual], [...expected])
+    })
+
+  })
+
+  describe(`slideThroughCyclic`, () => {
+
+    it(`throws a RangeError when the window size is not an integer`, () => {
+      chai.assert.throws(() => j.slideThroughCyclic(1.5), RangeError)
+    })
+
+    it(`throws a RangeError when the window size is zero`, () => {
+      chai.assert.throws(() => j.slideThroughCyclic(0), RangeError)
+    })
+
+    it(`yields nothing for a given empty iterable`, () => {
+      const actual = j.pipe([], j.slideThroughCyclic(1))
+      chai.assert.deepEqual([...actual], [])
+    })
+
+    it(`yields one quadruple for a given iterable of size one`, () => {
+      const actual = j.pipe([1], j.slideThroughCyclic(4))
+      const expected = [[1, 1, 1, 1]]
+      chai.assert.deepEqual([...actual], [...expected])
+    })
+
+    it(`yields five tuples given an iterable of five elements and a window size of five`, () => {
+      const actual = j.pipe([1, 2, 3, 4, 5], j.slideThroughCyclic(5))
+      const expected = [
+        [1, 2, 3, 4, 5],
+        [2, 3, 4, 5, 1],
+        [3, 4, 5, 1, 2],
+        [4, 5, 1, 2, 3],
+        [5, 1, 2, 3, 4],
+      ]
+      chai.assert.deepEqual([...actual], [...expected])
+    })
+
+    it(`yields five tuples given an iterable of five elements and a window size of three`, () => {
+      const actual = j.pipe([1, 2, 3, 4, 5], j.slideThroughCyclic(3))
+      const expected =[
+        [1, 2, 3],
+        [2, 3, 4],
+        [3, 4, 5],
+        [4, 5, 1],
+        [5, 1, 2],
+      ]
+      chai.assert.deepEqual([...actual], [...expected])
+    })
+
+    it(`yields five tuples given an iterable of five elements and a window size of seven`, () => {
+      const actual = j.pipe([1, 2, 3, 4, 5], j.slideThroughCyclic(7))
+      const expected = [
+        [1, 2, 3, 4, 5, 1, 2],
+        [2, 3, 4, 5, 1, 2, 3],
+        [3, 4, 5, 1, 2, 3, 4],
+        [4, 5, 1, 2, 3, 4, 5],
+        [5, 1, 2, 3, 4, 5, 1],
+      ]
+      chai.assert.deepEqual([...actual], [...expected])
+    })
+
+    it(`correctly wraps around the iterable several times if needed`, () => {
+      const actual = j.pipe([1, 2, 3], j.slideThroughCyclic(10))
+      const expected = [
+        [1, 2, 3, 1, 2, 3, 1, 2, 3, 1],
+        [2, 3, 1, 2, 3, 1, 2, 3, 1, 2],
+        [3, 1, 2, 3, 1, 2, 3, 1, 2, 3],
+      ]
+      chai.assert.deepEqual([...actual], [...expected])
+    })
+
+    it(`yields two tuples for a given iterable of size two`, () => {
+      const actual = j.pipe([1, 2], j.slideThroughCyclic(5))
+      const expected = [[1, 2, 1, 2, 1], [2, 1, 2, 1, 2]]
+      chai.assert.deepEqual([...actual], [...expected])
+    })
+
+    it(`yields three tuples given an iterable of three elements and a window size of five`, () => {
+      const actual = j.pipe([1, 2, 3], j.slideThroughCyclic(5))
+      const expected = [
+        [1, 2, 3, 1, 2],
+        [2, 3, 1, 2, 3],
+        [3, 1, 2, 3, 1],
+      ]
+      chai.assert.deepEqual([...actual], [...expected])
+    })
+
+  })
+
   describe(`sortUsing`, () => {
 
     it(`@example 1`, () => {
